@@ -1,0 +1,25 @@
+Desarrollo de contenido para sesiones
+    
+
+----[ Planteamiento del problema ]----
+
+
+'Mitigar los efectos de las caidas de proveedores de Cloud Computing en la etapa previa al despliegue
+
+Hablar acerca de las caidas de los proveedores 
+¿Porqué integrar varios provedores en un solo lugar?
+
+
+1. ¿Porque usar un solo provedor no es confiable?
+ -¿Para quién no es confiable?
+   Para las empresas de servicios que se ven gravemente afectadas por las caidas
+ -Efectos a nivel financiero de las caidas de un proveedor CC
+   -¿Que servicios financieron dependen de los provedores Cloud?
+     -Qué es un servicio financiero
+¿Porqué integrar los costos?
+
+
+
+CCM
+
+CloudStack -> Cloud Software para la administración y el alquiler de servicios CC 
