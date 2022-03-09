@@ -3,6 +3,20 @@
 \label{ch:objetivos} % For referencing the chapter elsewhere, use \autoref{ch:introduction} 
 
 %----------------------------------------------------------------------------------------
+
+\graffito{El lenguaje \acs{XPath} es un recurso que permite describir patrones para hallar coincidencias en los \acs{Endpoints} de un sitio Web. \bigskip}
+
+\graffito{La recuperación de información en la web inicia con el Crawling que permite obtener las páginas web de objetivo para luego aplicar Web Scraping que recopila información de interés.\bigskip}
+
 \section{Objetivo general}
-Diseñar, construir y probar una aplicación web responsiva para hacer uso de la \acs{API} de LibCloud para la interacción con las capas de Compute, Storage y Container de \acs{aws} e integrar una API externa para  la consulta de tarifas en los principales proveedores de servicios de Cloud Computing.
-ara 
+Diseñar, e implementar un prototipo de aplicación web para informar las tarifas de aprovisionamiento de recursos tipo \textit{Compute}, \textit{Storage} y \textit{Container} en el Cloud Computing y administrar su orquestación.\bigskip
+
+\section{Objetivos específicos}
+\begin{enumerate}
+    \item Definir un modelo general de evaluación de costos para el análisis de los servicios en el Cloud Computing usando la mayor cantidad de información recuperable y relevante de la Web de sus proveedores.
+    
+    \item Diseñar e implementar una aplicación basada en microservicios que recopile periodicamente y almacene las tarifas de los principales proveedores de Cloud Computing usando técnicas de \textit{Web Scraping} y \textit{Crawling} con \textit{XPath}, bases de datos relacionales y una \acs{API REST}.
+    
+    \item Diseñar e implementar una aplicación web basada en microservicios para acceder a la información de costos de los proveedores y administrar los recursos de un usuario usando la \acs{API} de \textit{LibCloud}.
+    
+\end{enumerate}
