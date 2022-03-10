@@ -4,14 +4,14 @@
 
 %----------------------------------------------------------------------------------------
 
-\graffito{El archivo \texttt{robots.txt} ubicado en la raiz de un sitio web indica a los \acs{Bots} que información es de caracter privado o no debe ser indexada.\bigskip}
+\graffito{El archivo \texttt{robots.txt} ubicado en la raiz de un sitio web indica a los \glspl{Bot} que información es de caracter privado o no debe ser indexada.\bigskip}
 
-\appName pretende recuperar de la Web información de los principales proveedores de Cloud entre los que están \acs{aws}, \acs{Azure}, \acs{Google Cloud}, \acs{IBM Cloud} y \acs{DigitalOcean}. \appName también tiene en cuenta proveedores locales (en Colombia) como \acs{HostDime}, \acs{HostingRED}; Se espera que el registro de nuevos proveedores se haga por cualquier usuario y se valide por el administrador de la aplicación.\bigskip
+\appName pretende recuperar de la Web información de los principales \acrshortpl{CCSP} entre los que están \acrshort{AWS}, \gls{Microsoft Azure}, \gls{Google Cloud}, \gls{IBM Cloud} y \gls{Digital Ocean}. \appName también tiene en cuenta proveedores locales (en Colombia) como \gls{Host Dime}, \gls{Hosting RED}; Se espera que el registro de nuevos proveedores se haga por cualquier usuario y se valide por el administrador de la aplicación.\bigskip
 
-\appName tiene soporte básico de admistración para los recursos de tipo \textit{Compute}, \textit{Storage} y \textit{Container} solamente para el proveedor \acs{aws} pero con la posibilidad de extender el proyecto a nuevos tipos de servicios teniendo en cuenta las disponibilidad de controladores\footnote{\url{https://libcloud.readthedocs.io/en/stable/supported_providers.html}} de la API de \textit{LibCloud}. \bigskip
+\appName tiene soporte básico de admistración para los recursos de tipo \emph{Compute}, \emph{Storage} y \emph{Container} solamente para el proveedor \acrshort{AWS} pero con la posibilidad de extender el proyecto a nuevos tipos de servicios teniendo en cuenta las disponibilidad de controladores\footnote{\url{https://libcloud.readthedocs.io/en/stable/supported_providers.html}} de la API de \gls{LibCloud}. \bigskip
 
-La implementación de la interfaz web se construye en \acs{React} a partir de la librería \textit{CoreUI}\footnote{\url{https://github.com/coreui/coreui-react/}}, es la razón por la que esta propuesta no considera el diseño de interfaz de usuario \acs{UI} o experiencia de usuario \acs{UX} como un componente principal.\bigskip
+La implementación de la interfaz web se construye en \gls{React} a partir de la librería \gls{CoreUI}\footnote{\url{https://github.com/coreui/coreui-react/}}, es la razón por la que esta propuesta no considera el diseño \acrshort{UI} y \acrshort{UX} como un componente principal.\bigskip
 
-La información que se pretende recuperar de la Web de los proveedores de Cloud tiene en cuenta las limitaciones técnicas y legales que los mismos proveedores incluyen en sus politicas y en el archivo \texttt{robots.txt} para evitar incurrir en problemas legales. \bigskip
+La información que se pretende recuperar de la Web de los \acrshort{CCSP} tiene en cuenta las limitaciones técnicas y legales que los mismos proveedores incluyen en sus politicas y en el archivo \texttt{robots.txt} para evitar incurrir en problemas legales. \bigskip
 
 La implementación de la aplicación con todos sus componentes tiene como objetivo mostrar la aplcación en funcionamiento, sin embargo los aspectos técnicos adicionales referentes a su despliegue como pruebas de rendimiento, pentesting y mantenimiento no se tienen en cuenta en esta propuesta.

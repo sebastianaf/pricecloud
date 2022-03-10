@@ -4,7 +4,7 @@ Desarrollo de contenido para sesiones
 ----[ Planteamiento del problema ]----
 
 
-'Mitigar los efectos de las caidas de proveedores de Cloud Computing en la etapa previa al despliegue
+'Mitigar los efectos de las caidas de proveedores de \acrshort{CC} en la etapa previa al despliegue
 
 Hablar acerca de las caidas de los proveedores 
 ¿Porqué integrar varios proveedores en un solo lugar?

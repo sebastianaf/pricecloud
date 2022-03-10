@@ -34,11 +34,11 @@
 		numbers=noenddot,
 		headinclude,
 		headlines,
-	 	%footinclude=true,
+	 	footinclude=true,
 		%cleardoublepage=empty,
 		dottedtoc, % Make page numbers in the table of contents flushed right with dots leading to them
 		BCOR=5mm,
-		paper=letter,
+		paper=A4,
 		fontsize=12pt, % Binding correction, paper type and font size
 		spanish, % Languages, change this to your language(s)
 		]{scrreprt} 
@@ -50,6 +50,9 @@
 %\addbibresource[label=ownpubs]{Self_Publications.bib} % Uncomment for optional self-publications
 
 %\hyphenation{Put special hyphenation here}
+
+\include{Chapters/07_01_Acronimos.tex}
+\include{Chapters/07_02_Glosario.tex}
 
 \begin{document}
 
@@ -146,6 +149,7 @@
 %----------------------------------------------------------------------------------------
 %	POST-CONTENT THESIS PAGES
 %----------------------------------------------------------------------------------------
+\printnoidxglossaries
 
 %\cleardoublepage
 \include{FrontBackMatter/Bibliography} % Bibliography

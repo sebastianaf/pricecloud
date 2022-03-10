@@ -2,18 +2,18 @@
 
 \label{ch:resultados} % For referencing the chapter elsewhere, use \autoref{ch:introduction} 
 
-\graffito{El servicio principal de la aplicación también podrá ser desplegado en un stack de contenedores dispuesto en Dockerhub solo si el usuario está interesado en recuperar por sus propios médios la información de los proveedores.\bigskip}
+\graffito{El servicio principal de la aplicación también podrá ser desplegado en un stack de contenedores dispuesto en \gls{Docker Hub} solo si el usuario está interesado en recuperar por sus propios médios la información de los proveedores.\bigskip}
 
-\graffito{La comunicación de todos los web services estará encriptada usando el protocolo \acs{HTTPS} con certificados libres de \acs{Let'sEncrypt}, los datos sensibles almacenados usarán el algoritmo de encriptación simétrica \acs{AES-256}. \bigskip}
+\graffito{La comunicación de todos los web services estará encriptada usando el protocolo \acrshort{HTTPS} con certificados libres de \gls{Let's Encrypt}, los datos sensibles almacenados usarán el algoritmo de encriptación simétrica \acrshort{AES}. \bigskip}
 
 Cuando se culmine el proyecto propuesto en este escrito se espera cumplir los objetivos específicos mencionados anteriormente como se describe a continuación.
 
 \begin{enumerate}
   \item Este modelo permite tener un punto de referencia para medir los proveedores equitativamente teniendo en cuenta la mayor información que se pueda recuperar de manera pública, se espera poder incluir en todos los casos los costos para cada tipo de servicio, e información adicional como el tiempo en linea y la proximidad geográfica de cada provedor que permitan tener un criterio mas amplio para tomar una decisión. Este modelo se incorporará al servicio web principal del proyecto.
   
-  \item Esta parte del proyecto permite manejar de manera centralizada, actualizada y con una trazabilidad la información relevante de los proveedores de cloud, se pretende construir un servicio en linea que funcione sin interrupciones pues su responsabilidad es responder a las consultas hechas por las instancias de la interfaz web.
+  \item Esta parte del proyecto permite manejar de manera centralizada, actualizada y con una trazabilidad la información relevante de los \acrshort{CCSP}, se pretende construir un servicio en linea que funcione sin interrupciones pues su responsabilidad es responder a las consultas hechas por las instancias de la interfaz web.
   
-  \item Esta parte de la aplicación puede ser desplegada a discreción de cualquier usuario sobre su propia infraestructura para poder usar la solución propuesta en una interfaz Web, se pretende que esté disponible en una imagen pública en \textit{Dockerhub} con su respectiva documentación y parámetros de configuración usando \acs{Docker-compose}.
+  \item Esta parte de la aplicación puede ser desplegada a discreción de cualquier usuario sobre su propia infraestructura para poder usar la solución propuesta en una interfaz Web, se pretende que esté disponible en una imagen pública en \gls{Docker Hub} con su respectiva documentación y parámetros de configuración usando \gls{Docker Compose}.
   
 \end{enumerate}
 
