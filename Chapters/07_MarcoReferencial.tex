@@ -4,16 +4,43 @@
 
 \label{ch:marcoReferencial} % For referencing the chapter elsewhere, use \autoref{ch:introduction} 
 
+Este documento toma como referencia dos ejes temáticos principalmente, las variables de modelos de precios de los \acrshortpl{CCSP} y las tecnologías referentes a la administración, despliegue y orquestación de recursos de \acrshort{CC} bajo un esquema de iteroperabilidad.\bigskip
 
-
-%\refstepcounter{dummy}
-%\addcontentsline{toc}{chapter}{Glosario} % Uncomment if you would like the acronyms to appear in the table of contents
-
-%----------------------------------------------------------------------------------------
 \section{Estado del arte}
-Este documento toma como referencia dos ejes temáticos principalmente, los modelos de cobro de los servicios de \acrshort{CC} y las tecnologías referentes a la administración, despliegue y orquestación de recursos de \acrshort{CC} bajo un esquema de iteroperabilidad.\bigskip
+Actualmente existen recursos de software para la orquestación de recursos en la nube, estos son bien conocidos como \acrfullpl{CROF}, han surgido como sistemas para gestionar el ciclo de vida de los recursos de multiples \acrshortpl{CCSP} y que cada vez exigen mecanismos de orquestación de recursos capaces de tratar con la heterogeneidad subyacente. \cite{tomarchio2020cloud}.\bigskip
 
-Los modelos de precios definidos son usados
+\subsection{LibCloud}
+Es una librería escrita en Python tiene licencia \emph{Apache 2.0}. Es una de las mas completas para administrar recursos de \acrshort{CC} teniendo unicamente carencias en el soporte de \acrshortpl{DBaaS} \footnote{\hyperref{https://medium.com/@anthonypjshaw/multi-cloud-what-are-the-options-part-1-low-level-abstraction-libraries-ce500f29120f}{}{}{https://medium.com/@anthonypjshaw}}. Esta librería oculta las diferencias entre las API de los \acrshortpl{CCSP} y permite administrar diferentes recursos de la nube a través de una \acrshort{API} unificada y facil de usar. \bigskip
+
+Esta librería divide sus funciones en seis principales categorías\footnote{\url{https://libcloud.readthedocs.io/en/stable/index.html}}. La primera permite administrar Servidores en la nube y \emph{Block Storage}, este componente permite ejecutar secuencias de comandos para preparar al servidor recién creado. Otro tipo de recurso administrable es el almacenamiento de objetos en la nube \emph{Object Storage} y la administración de \acrshortpl{CDN}, Los servicios de balanceadores de carga \emph{Load Balancer}, la \acrshort{API} para administración de \acrshortpl{DNS} como servicio y los servicios de administración de Contenedores que permiten a los usuarios implementar y administrar contenedores usando software como \gls{Docker} con los proveedores que ofrecen una \acrshort{API} de \acrshort{CaaS}.
+
+\subsection{Modelos de precios}
+Los \acrshortpl{CCSP} definen sus cobros a partir de diferentes
+
 
 \section{Marco teórico}
-En esta sección se hace una corta descripción de los servicios ofrecidos por los proveedores \acrshort{CC}
+\subsection{Conceptos de Cloud}
+Según el \acrshort{NIST} la computación en la nube está definida como  Un modelo que permite el acceso de red conveniente y bajo demanda a un grupo compartido de recursos informáticos configurables como redes, servidores, almacenamiento, aplicaciones y servicios que pueden aprovisionarse y librerarse rápidamente con un mínimo esfuerzo de gestión o interacción con el \acrshort{CCSP}\cite{liu2011nist}.
+\bigskip
+
+%Hablar de los tipos de nubes
+En el \acrshort{CC} existen varios tipos de configuración según la ubicación de los servicios
+
+%Hablar de los tipos de servicios
+Los servicios servicios de \acrshort{CC} ofrecen mas beneficios que la computación tradicional, ahorro de costos, escalabilidad, almacenamiento movil, acceso desde cualquier momento o cualquier lugar, mejor seguridad, ahorro de energía\cite{sether2016cloud}. En terminos de taxonomía el \acrshort{CC} está divido en tres principales tipos de servicios, \acrfull{IaaS} que puede verse como una evolución de los \acrfullpl{VPS} la cual ofrece plataformas de virtualización donde los clientes deben configurar sus propio software, estos servicios son facturados con base en los recursos consumidos, el modelo de pago por alquiler permite usar hasta mínimo una hora en algunos casos donde la cantidad de instancias se duplican para satisfacer las necesidades los clientes. Entre los tipos de soluciones que se encuentran en esta categoría están \acrfull{EC2}, \emph{Rackspace Cloud}, \emph{IBM Smart Bussiness Cloud solutions}, \emph{Oracle Cloud Computing}, \emph{Google Compute Engine}. \cite[p.2]{sether2016cloud}\bigskip
+
+Otro esquema de servicios ofrecidos por el \acrshort{CC} son las  \acrfullpl{PaaS}, como características principales tenemos que son proveidas a los clientes por una interfaz en un navegador para editar, depurar, desplegar y monitorear una aplicación.\cite[p.1]{lawton2008developing} A diferencia de las \acrshortpl{IaaS} permiten una interacción de alto nivel con el cliente porque abstraen la configuración del entorno donde se ejecutan las aplicaciones, ademas de permitir la preconfiguración de un entorno de ejecución para un lenguaje de programación específico. Entre los \acrshortpl{CCSP} mas conocidos se encuentra también \acrshort{EC2} con la posibilidad de preconfigurar los entornos,  \emph{Salesforce.com} y \emph{Google App Engine}. \bigskip
+
+El siguiente nivel en terminos de abstracción son las \acrfullpl{FaaS} conocidas también como computación \emph{Serverless} \cite[p.1]{lynn2017preliminary} que emerge como un paradigma conveniente para el despliegue de aplicaciones y servicios donde el desarrollador no se preocupa acerca de los aspectos operacionales, de despliegue, y mantenimiento y espera de este que sea tolerante a fallos y auto escalable especialmente el código que es escalable a cero donde no hay servidores corriendo cuando la función del usuario no está siendo usada. \acrshort{FaaS} a diferencia de \acrfullpl{PaaS} evita que el cliente reciba cobros en los periodos de inactividad de la función.\cite[p.5]{Baldini2017} Entre los servicios mas conocidos están \emph{Azure Functions}, \acrshort{AWS} \emph{Lambda}, \emph{Google Cloud Functions} y \emph{Oracle Cloud Functions}.\bigskip
+
+Por último y mas cerca del usuario se encuentran el \acrfull{SaaS}, en este modelo de servicios el cliente interactúa con una aplicación que da soporte a los procesos de su modelo de negocío o le ofrece un servicio, el cliente paga recurrentemente por las funcionalidades y la cantidad de usuarios que usan el servicio, el \acrshort{SaaS} presenta ventajas frente al software tradicional, el cliente compra una suscripción y no una licencia perpetua, además el software tradicional tarda algunos años en publicar una nueva versión que el \acrshort{SaaS} puede poner a disposición en cuanto esté completa \cite[p.1]{choudhary2007software}. Algunos ejemplos de \acrshortpl{SaaS} son \emph{Google Workspace}, \emph{Microsoft 365}
+
+
+\subsection{Modelos de precios}
+De manera general existen dos grupos de modelos de precios, los modelos de precios dinámicos y los modelos de precios fijos \cite{al2013cloud}; En los modelos fijos el costo no cambia por un largo tiempo en contraposición de los modelos dinámicos que cambian con respecto a objetos medibles por el \acrshort{CCSP} como las peticiones de los usuarios o la condición del mercado.\bigskip
+
+La mayoría de los \acrshortpl{CCSP} usan modelos de precios dinámicos con esquema de pago por uso \cite{al2013cloud}, sin embargo es pertinente hacer una corta revisión para conocer los esquemas de precios de los principales proveedores.\bigskip 
+La empresa ...
+
+\subsubsection{Modelo de pago por uso \emph{Pay-as-you-go}}
+En este modelo es el mas común y 
