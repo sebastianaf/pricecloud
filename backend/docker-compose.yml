@@ -1,0 +1,68 @@
+version: "3.8"
+
+services:
+  uv-pricecloud-app:
+    container_name: uv-pricecloud-app
+    restart: always
+    environment:
+      API_PORT: ${API_PORT}
+      API_TOKEN: ${API_TOKEN}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      TZ: ${TZ}
+    build:
+      context: ./api
+      dockerfile: uv-pricecloud.Dockerfile
+      args:
+        API_PORT: ${API_PORT}
+#    ports: #uncomment both lines in case of util
+#      - 8080:${API_PORT}
+    networks:
+      - uv-pricecloud
+
+  uv-pricecloud-duckdns:
+    container_name: uv-pricecloud-duckdns
+    restart: always
+    image: ghcr.io/linuxserver/duckdns
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+      SUBDOMAINS: ${SUBDOMAINS}
+      DUCKDNS_TOKEN: ${DUCKDNS_TOKEN}
+      LOG_FILE: ${LOG_FILE}
+    networks:
+      - uv-pricecloud
+
+  uv-pricecloud-db:
+    container_name: uv-pricecloud-db
+    restart: always
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+      TZ: ${TZ}
+    volumes:
+      - ../db:/var/lib/postgresql/data
+    networks:
+      - uv-pricecloud
+
+  uv-pricecloud-pgadmin:
+    container_name: uv-pricecloud-pgadmin
+    restart: always
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PG_ADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PG_ADMIN_PASSWORD}
+    depends_on:
+      - uv-pricecloud-db
+#    ports: #uncomment both lines in case of util
+#      - 8081:80
+    networks:
+      - uv-pricecloud
+
+networks:
+  uv-pricecloud:
+    name: uv-pricecloud
