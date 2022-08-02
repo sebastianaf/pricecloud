@@ -1,0 +1,98 @@
+version: "3.8"
+
+services:
+  org-project-api:
+    container_name: org-project-api
+    image: org-project-api
+    restart: always
+    environment:
+      API_PORT: ${API_PORT}
+      API_CLIENT: ${API_CLIENT}
+      API_LOG: ${API_LOG}
+      API_CREATE_ADMIN: ${API_CREATE_ADMIN}
+      API_TOKEN: ${API_TOKEN}
+      API_TOKEN_EXPIRATION_TIME: ${API_TOKEN_EXPIRATION_TIME}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: ${DB_HOST}
+      TZ: ${TZ}
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+      args:
+        API_PORT: ${API_PORT}
+    ports:
+      - 9010:${API_PORT}
+    depends_on:
+      - org-project-db
+    networks:
+      - org-project
+
+  org-project-db:
+    container_name: org-project-db
+    restart: always
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+      TZ: ${TZ}
+    volumes:
+      - ./db-files:/var/lib/postgresql/data
+    ports:
+      - 9020:5432
+    networks:
+      - org-project
+
+  org-project-ui:
+    container_name: org-project-ui
+    image: org-project-ui
+    restart: always
+    environment:
+      REACT_APP_UI_PORT: ${REACT_APP_UI_PORT}
+      REACT_APP_API_HOST: ${REACT_APP_API_HOST}
+    build:
+      context: ./ui
+      dockerfile: Dockerfile
+      args:
+        REACT_APP_UI_PORT: ${REACT_APP_UI_PORT}
+        REACT_APP_API_HOST: ${REACT_APP_API_HOST}
+    depends_on:
+      - org-project-api
+    ports:
+      - 9030:${REACT_APP_UI_PORT}
+    networks:
+      - org-project
+
+  org-project-pgadmin:
+    container_name: org-project-pgadmin
+    restart: always
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PG_ADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PG_ADMIN_PASSWORD}
+    depends_on:
+      - org-project-db
+    ports:
+      - 9040:80
+    networks:
+      - org-project
+
+  org-project-duckdns:
+    container_name: org-project-duckdns
+    restart: always
+    image: ghcr.io/linuxserver/duckdns
+    environment:
+      PUID: ${PUID}
+      PGID: ${PGID}
+      TZ: ${TZ}
+      SUBDOMAINS: ${SUBDOMAINS}
+      DUCKDNS_TOKEN: ${DUCKDNS_TOKEN}
+      LOG_FILE: ${LOG_FILE}
+    networks:
+      - org-project
+
+networks:
+  org-project:
+    name: org-project
