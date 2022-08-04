@@ -13,34 +13,55 @@ A continuación se adjunta información referente al las actividades desarrollad
 Las actividades de este objetivo específico tienen como propósito \emph{definir un modelo general de evaluación de costos para el análisis de los servicios en el \acrshort{CC} usando información recuperable y relevante de la Web de sus proveedores.} El resultado obtenido son las ecuaciones del modelo de evaluación de costos listas para implementación. A continuación el resumen de cada actividad.
 
 \subsection{Actividad 1.}
-Investigar acerca de las los modelos de precios en los \acrshortpl{CCSP}.
+\emph{Investigar acerca de las los modelos de precios en los \acrshortpl{CCSP}:} \newline\newline
+Como conclusión de esta actividad se obtuvo
 
 \subsection{Actividad 2.}
-Comparar los criterios de cobro entre cada \acrshort{CCSP}.
+\emph{Comparar los criterios de cobro entre cada \acrshort{CCSP}:}
+\newline\newline
+Como conclusión de esta actividad se obtuvo 
 
 \subsection{Actividad 3.}
-Identificar las variables principales que usan los \acrshortpl{CCSP} para el cobro de los servicios.
+\emph{Identificar las variables principales que usan los \acrshortpl{CCSP} para el cobro de los servicios:}
+\newline\newline
+Como conclusión y resultado de esta actividad se definieron Las variables principales dentro el cobro de los serviciso de los servicios de \acrshort{CC} están, \emph{El ancho de banda}, El 
 
 \subsection{Actividad 4.}
-Efectuar pruebas de escritorio del modelo para 5 \acrshortpl{CCSP}.
+\emph{Efectuar pruebas de escritorio del modelo para 5 \acrshortpl{CCSP}}:
+\newline\newline
 
 \section{2do Objetivo específico.}
 Las actividades de este objetivo específico tienen como propósito \emph{diseñar e implementar un prototipo basado en microservicios que recopile periodicamente y almacene las tarifas de los principales \acrshortpl{CCSP}}. El resultado obtenido es un Web service que desempeña las tareas mencionadas. A continuación el resumen de cada actividad.
 
 \subsection{Actividad 5.}
-Diseñar el modelo de datos para almacenar la información de costos.
+\emph{Diseñar el modelo de datos para almacenar la información de costos:}
+\newline\newline
+Como resultado de esta actividad se diseñó el esquema de la base de datos usando el \acrshort{ORM} \gls{Sequelize} 
 
 \subsection{Actividad 6.}
-Diseñar un microservicio que use técnicas de \emph{Crawling} y \emph{Scraping} para recuperar datos de precios de los \acrshortpl{CCSP}.
+\emph{Diseñar un microservicio que use técnicas de \emph{Crawling} y \emph{Scraping} para recuperar datos de precios de los \acrshortpl{CCSP}}:
+\newline\newline
+Como resultado de esta actividad se costruyó el servicio escrito en \emph{Python} ubicado en \url{https://github.com/sebastianaf/pricecloud/blob/master/api-02/app.py} el servicio es capaz de recuperar información de \gls{Microsoft Azure}, se continúa trabajando en recuperar información de los demás \acrshortpl{CCSP} mencionados en la \emph{sección 1.1}
 
 \subsection{Actividad 7.}
-Implementar el modelo de evaluación de costos usando un microservicio.
+\emph{Implementar el modelo de evaluación de costos usando un microservicio:}\newline\newline
 
 \subsection{Actividad 8.}
-Diseñar una configuración de microservicios en \gls{Docker Compose}.
+\emph{Diseñar una configuración de microservicios en \gls{Docker Compose}:}
+\newline\newline
+ Como resultado de esta actividad se codificó el archivo \emph{docker-compose.yml} ubicado en \url{https://github.com/sebastianaf/pricecloud/blob/master/docker-compose.yml} donde están configurados todos los servicios de la primera parte de la aplicación,
 
 \subsection{Actividad 9.}
-Desplegar la configuración de microservicios en \gls{Docker Compose}.
+\emph{Desplegar la configuración de microservicios en \gls{Docker Compose}:}
+\newline\newline
+Como resultado de esta actividad se desplegaron tres \acrshortpl{API REST} ejecutando los servicios descritos en la \emph{sección 1.2}.
+\newline\newline
+Los servicios se encuentran desplegados en las siguientes ubicaciones:
+\begin{itemize}
+    \item \url{https://pricecloud.enerfris.com}
+    \item \url{https://api.pricecloud.enerfris.com}
+    \item \url{https://db.pricecloud.enerfris.com}
+\end{itemize}
 
 
 \newpage

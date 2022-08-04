@@ -7,7 +7,12 @@ const errorCodes = {
   OK: {
     code: 10000,
     title: `La autenticación es correcta`,
-    description: `El Token coincide es válido para comunicarse con la API REST`,
+    description: `El Token coincide y es válido para comunicarse con la API REST`,
+  },
+  INTERNAL_ERROR_SERVER: {
+    code: 10020,
+    title: `Error al procesar la petición`,
+    description: `HubO un error interno en el servidor`,
   },
 };
 

@@ -37,7 +37,7 @@ services:
       context: ./api-02
       dockerfile: Dockerfile
 #    ports:
-#      - 9011:5000
+#      - 9011:5001
     depends_on:
       - uv-pricecloud-db
     networks:
