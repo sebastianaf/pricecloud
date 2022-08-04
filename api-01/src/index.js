@@ -43,10 +43,12 @@ app.use(morgan(morganOptions));
 toInteger(process.env.API_CREATE_ADMIN) === 1 &&
   (async () => {
     try {
-      const user = await service.createfirstUser();
-      console.log(`First user created succesfully ${user}`);
+      setTimeout(async () => {
+        const user = await service.createfirstUser();
+        console.log(`Admin user... OK`);
+      }, 10000);
     } catch (error) {
-      console.log(`Error creating first user: ${error}`);
+      console.log(`Admin user... FAIL`);
     }
   })();
 

@@ -1,0 +1,28 @@
+% Abstract
+
+%\renewcommand{\abstractname}{Abstract} % Uncomment to change the name of the abstract
+\pdfbookmark[1]{Resumen}{Resumen} % Bookmark name visible in a PDF viewer
+
+\begingroup
+\let\clearpage\relax
+\let\cleardoublepage\relax
+\let\cleardoublepage\relax
+
+\graffito{
+    Las tecnologías usadas en la primera parte del proyecto fueron \gls{NodeJS} con \gls{Sequelize}, \gls{React}, \gls{XPath} y \gls{PostgreSQL}.\bigskip}
+
+\graffito{\gls{Docker Compose} permitió el despligue sobre Internet de los servicios en un stack de contenedores, el depligue realizado puede encontrarse en la web \url{https://api.pricecloud.enerfris.com}.\bigskip}
+
+\chapter*{Resumen}
+La aplicación web \appName propone integrar la fase de evaluación de costos de los principales proveedores de servicios de \acrfull{CC} junto con su despligue en una única interfaz para dar un criterio informado que ayude a minimizar los costos de funcionamiento de un proyecto de software con respecto a sus necesidades iniciales.\bigskip
+
+La primera parte de este trabajo tuvo como objetivo pricipal resolver los objectivos específicos propuestos en el anteproyecto y nombrados a continuación.
+
+\begin{itemize}
+    \item Definir un modelo general de evaluación de costos para el análisis de los servicios en el \acrshort{CC} usando información recuperable y relevante de la Web de sus proveedores.
+    \item Diseñar e implementar un prototipo basado en microservicios que recopile periodicamente y almacene las tarifas de los principales \acrshortpl{CCSP}.
+\end{itemize}
+
+\endgroup			
+
+\vfill
