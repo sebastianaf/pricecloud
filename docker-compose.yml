@@ -29,7 +29,7 @@ services:
     networks:
       - uv-pricecloud
 
-    uv-pricecloud-api-02:
+  uv-pricecloud-api-02:
     container_name: uv-pricecloud-api-02
     image: uv-pricecloud-api-02
     restart: always

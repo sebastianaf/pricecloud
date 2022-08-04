@@ -16,7 +16,7 @@ class UserService {
 
     const firstUser = {
       alias: "admin",
-      password: `admin`,
+      password: `price22cloud`,
       idUser: 1,
       name: "Admin",
       role: "admin",
