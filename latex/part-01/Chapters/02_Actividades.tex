@@ -13,24 +13,63 @@ A continuación se adjunta información referente al las actividades desarrollad
 Las actividades de este objetivo específico tienen como propósito \emph{definir un modelo general de evaluación de costos para el análisis de los servicios en el \acrshort{CC} usando información recuperable y relevante de la Web de sus proveedores.} El resultado obtenido son las ecuaciones del modelo de evaluación de costos listas para implementación. A continuación el resumen de cada actividad.
 
 \subsection{Actividades 1 y 2.}
-\emph{Investigar acerca de las los modelos de precios en los \acrshortpl{CCSP} y comparar los criterios de cobro entre cada \acrshort{CCSP}:} \newline\newline
-Como conclusión de esta actividad y teniendo en cuenta las variables de costo de cada tipo de servicio se formuló el siguiente criterio.
+\emph{Investigar acerca de las los modelos de precios en los \acrshortpl{CCSP} y comparar los criterios de cobro entre cada \acrshort{CCSP}:}
+\newline
+\newline
+Como resultado de esta actividad y teniendo en cuenta las \emph{variables de costo} de cada tipo de tipo de servicio en la \emph{sección 2.2.2} se formuló el siguiente criterio.
+\newline
+\newline
+Dado un servicio bajo demanda \(s\) que tienen en común una pareja $ccsp$ donde $ccsp_i$ es un \acrshort{CCSP} con $i \in [1,2]$ se define que:
+
+\subsubsection{\emph{Compute} o \emph{Container}}
+Si $s$ es del tipo \emph{Compute} o \emph{Container} la \emph{variable de costo} principal es la $demanda$ definida como el tiempo en que se usará el servicio. Si se conocen los \emph{rangos de costo} para las variables $cpu$ y $ram$ entonces la \emph{función de costo} del servicio es:
+
+\[ costo_i(s,ccsp_i, demanda, cpu, ram) = (costoCPU +costoRAM)*demanda \]
+
+Donde:
+\begin{itemize}
+    \item $ccsp_i:$ Se define como uno de los \acrfullpl{CCSP} comparados.
+    \item $demanda:$ Es el tiempo en horas que se requiere el servicio.
+    \item $cpu:$ Es la cantidad de núcleos de procesamiento requeridos.
+    \item $ram:$ Es la cantidad de memoria RAM requerida en unidades de $GB$.
+    \item $costoCPU(s,ccsp_i, cpu)$ Es el costo de la cantidad de $cpu$ según el \emph{rango de costo} del $ccsp_i$.
+    \item $costoRAM(s,ccsp_i, ram)$ Es el costo de la cantidad de $ram$ según el \emph{rango de costo} del $ccsp_i$.
+\end{itemize}
+
+El puntaje comparativo $score$ que tiene el $ccsp_1$ con respecto al $ccsp_2$ es:
+\[ score = \frac{costo_1(s,ccsp_1,demanda,cpu,ram)}{costo_2(s,ccsp_2,demanda,cpu,ram)} \]
+
+Finalmente, si $score < 1$ entonces se dice que el $ccsp_1$ tiene preferencia sobre $ccsp_2$ para el servicio $s$ según un requerimiento de $cpu$, $ram$ y $demanda$.
+
+\subsubsection{\emph{Storage} o \emph{SQL}}
+Si $s$ es del tipo \emph{Storage} o \emph{SQL} la \emph{variable de costo} principal es la $cuota$ de almacenamiento. Si se conocen los \emph{rangos de costo} para la variable de disponibilidad del recurso llamada $disp$ entonces la \emph{función de costo} del servicio es:
+
+\[ costo_i(s,ccsp_i, cuota, disp) = costoDisponibilidad*cuota \]
+
+Donde:
+\begin{itemize}
+    \item $ccsp_i:$ Se define como uno de los \acrfullpl{CCSP} comparados.
+    \item $cuota:$ Es el espacio en GB que se requiere.
+    \item $disp:$ Es el tipo de disponibilidad del recurso (Ej: Modo frio, alta velocidad).
+    \item $costoDisponibilidad(s,ccsp_i,cuota,disp)$ Es el costo del tamaño de la $cuota$ para una disponibilidad específica según el \emph{rango de costo} del $ccsp_i$.
+\end{itemize}
 
 \subsection{Actividad 3.}
 \emph{Identificar las variables principales que usan los \acrshortpl{CCSP} para el cobro de los servicios:}
 \newline\newline
 Como conclusión y resultado de esta actividad se definieron las variables principales que usan los \acrshortpl{CCSP} para el cobro de cada tipo de servicio. Cada variable depende del servicio en cuestión.
-\newline\newline
+\newline
 
-En el caso de el servicios tipo \emph{Compute} y \emph{Container} relacionados con máquinas virtuales y contenedores, la variable de costo principal es el \emph{tiempo de uso} en producto con la \emph{cantidad de CPU's}, la \emph{memoria RAM}.
-\newline\newline
+En el caso de el servicios tipo \emph{Compute} y \emph{Container} relacionados con máquinas virtuales y contenedores, la variable de costo principal es el \emph{demanda temporal} del recurso en producto con la \emph{cantidad de CPU's} y la \emph{cantidad de memoria RAM}.
+\newline
 
-Si se habla de un recurso tipo \emph{Storage} y \emph{SQL} la variable de costo principal es el \emph{tamaño de almacenamiento} en producto con la \emph{disponibilidad}, este último se relaciona con lo que será almacenado y cómo será recuperado. (Ej: Archivos, objetos o bases de datos. Modo frio o alta velocidad).
-\newline\newline
+Si se habla de un recurso tipo \emph{Storage} y \emph{SQL} la variable de costo principal es la \emph{cuota de almacenamiento} en producto con la \emph{disponibilidad}, este último se relaciona con lo que será almacenado y cómo será recuperado. (Ej: Archivos, objetos o bases de datos. Modo frio o alta velocidad).
+\newline
 
 \subsection{Actividad 4.}
 \emph{Efectuar pruebas de escritorio del modelo para 5 \acrshortpl{CCSP}}:
 \newline\newline
+Como resultado de este ejercició se concluye que el modelo definido en la \emph{Actividad 1 y 2} puede aplicarse para los servicios básicos de la mayoría de los \acrshortpl{CCSP}.
 
 \section{2do Objetivo específico.}
 Las actividades de este objetivo específico tienen como propósito \emph{diseñar e implementar un prototipo basado en microservicios que recopile periodicamente y almacene las tarifas de los principales \acrshortpl{CCSP}}. El resultado obtenido es un Web service que desempeña las tareas mencionadas. A continuación el resumen de cada actividad.
@@ -47,17 +86,17 @@ Como resultado de esta actividad se costruyó el servicio escrito en \emph{Pytho
 
 \subsection{Actividad 7.}
 \emph{Implementar el modelo de evaluación de costos usando un microservicio:}\newline\newline
-Como resultado de esta actividad se creó el endpoint ubicado en \url{https://api.pricecloud.enerfris.com/evaluate}. El código referente a este endpoint se encuentra en \url{https://api.pricecloud.enerfris.com/evaluate}
+Como resultado de esta actividad se creó el endpoint ubicado en \url{https://api.pricecloud.enerfris.com/evaluate}. El código de este endpoint se encuentra en \url{https://github.com/sebastianaf/pricecloud/tree/master/api-01/src/routes}
 
 \subsection{Actividad 8.}
 \emph{Diseñar una configuración de microservicios en \gls{Docker Compose}:}
 \newline\newline
- Como resultado de esta actividad se codificó el archivo \emph{docker-compose.yml} ubicado en \url{https://github.com/sebastianaf/pricecloud/blob/master/docker-compose.yml} donde están configurados todos los servicios de la primera parte de la aplicación,
+Como resultado de esta actividad se codificó el archivo \emph{docker-compose.yml} ubicado en \url{https://github.com/sebastianaf/pricecloud/blob/master/docker-compose.yml} donde están configurados todos los servicios de la primera parte de la aplicación.
 
 \subsection{Actividad 9.}
 \emph{Desplegar la configuración de microservicios en \gls{Docker Compose}:}
 \newline\newline
-Como resultado de esta actividad se desplegaron tres \acrshortpl{API REST} ejecutando los servicios descritos en la \emph{sección 1.2}.
+Como resultado de esta actividad se desplegaron dos servicios \acrshort{API REST} y un servidor web, la descripcción de estos se encuentra en la sección \emph{sección 1.2} y su código fuente en \url{https://github.com/sebastianaf/pricecloud}.
 \newline\newline
 Los servicios se encuentran desplegados en las siguientes ubicaciones:
 \begin{itemize}

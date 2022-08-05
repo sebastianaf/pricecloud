@@ -21,6 +21,6 @@ setupModels(sequelize);
  * Sync the models with the database
  */
 console.log(`Syncing models... OK`);
-sequelize.sync({ force: false });
+sequelize.sync({ force: true });
 
 export default sequelize;
