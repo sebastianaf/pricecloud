@@ -1,6 +1,7 @@
 # pricecloud
 
-
+## Network scheme
+![network scheme](https://github.com/sebastianaf/pricecloud/blob/master/latex/part-01/gfx/darkSketch.png?raw=true)
 
 ## Requirements
 
