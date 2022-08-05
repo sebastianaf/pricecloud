@@ -88,8 +88,8 @@ services:
       PGADMIN_DEFAULT_PASSWORD: ${PG_ADMIN_PASSWORD}
     depends_on:
       - uv-pricecloud-db
-    ports:
-      - 9040:80
+#    ports:
+#      - 9040:80
     networks:
       - uv-pricecloud
 
