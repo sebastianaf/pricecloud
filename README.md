@@ -1,4 +1,5 @@
 # pricecloud
+Prototype web aplication for cost evaluation and provisioning with Libcloud on Amazon Web Services
 
 ## Network scheme
 ![network scheme](https://github.com/sebastianaf/pricecloud/blob/master/latex/part-01/gfx/darkSketch.png?raw=true)
@@ -14,7 +15,7 @@ Now let's follow the next steps.
 ### 1.Clone the repo
 
 First thing is to clone the whole proyect.
-```
+```shell
 git clone https://github.com/sebastianaf/pricecloud
 cd pricecloud
 ```
@@ -30,7 +31,7 @@ Inside `ui` make sure to create `.env.production` for production. (Based on [cre
 The `docker-compose.yml` file will deploy a extra service named `uv-pricecloud-duckdns`, it is a DDNS container named [DuckDNS](https://www.duckdns.org) which is very usefull  if you don`t have a static public IP. We highly recommend to use a reverse proxy like [nginx-proxy-manager](https://nginxproxymanager.com/) and to configure your port forwarding ISP modem, do not forget try to configure a firewall, (e.g. [OPNSense](https://opnsense.org/)).
 
 Make sure to include the reverse proxy container into the project network using the following setup in the reverse proxy `docker-compose.yml` file to reach the pricecloud's containers.
-```
+```yml
 version: "3.8"
     services:
         proxy-container
@@ -45,9 +46,9 @@ version: "3.8"
         .
 
 networks:
-  org-proxy:
-    name: org-proxy
-  org-project:
+  proxy-container-network:
+    name: proxy-container-network
+  uv-pricecloud:
     external: true
 ```
 
