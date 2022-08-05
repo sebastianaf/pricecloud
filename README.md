@@ -56,7 +56,7 @@ networks:
 
 Now is time to wake up the services and access it thought the `uv-pricecloud` docker netword.
 If you need to access it locally uncomment the local service's ports deleting the # charapter from the docker-compose.yml file and then run the app with: 
-```
+```shell
 docker compose -p uv-pricecloud -up -d --build
 ```
 This commands will wake up the services access it thought port specified as follow.
