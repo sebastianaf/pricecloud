@@ -1,4 +1,4 @@
-# pricecloud
+# pricecloud-api
 
 ## Description
 pricecloud-api is a Cloud Computing Service Provider Princing tool API,  it collects pricing data from some CCSP and show you the best way to take you next cloud decision.
