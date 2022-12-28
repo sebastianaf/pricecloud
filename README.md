@@ -1,6 +1,7 @@
 # pricecloud
 Prototype web aplication for cost evaluation and provisioning with Libcloud on Amazon Web Services
 
+
 ## Network scheme
 ![network scheme](https://github.com/sebastianaf/pricecloud/blob/master/latex/part-01/gfx/darkSketch.png?raw=true)
 
