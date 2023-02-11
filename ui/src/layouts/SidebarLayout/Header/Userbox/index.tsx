@@ -60,9 +60,9 @@ const UserBoxDescription = styled(Typography)(
 
 function HeaderUserbox() {
   const user = {
-    name: 'Catherine Pike',
-    avatar: '/static/images/avatars/1.jpg',
-    jobtitle: 'Project Manager'
+    name: 'John Doe',
+    avatar: '/static/images/avatars/3.jpg',
+    jobtitle: 'Administrador'
   };
 
   const ref = useRef<any>(null);
@@ -137,7 +137,7 @@ function HeaderUserbox() {
         </List>
         <Divider />
         <Box sx={{ m: 1 }}>
-          <Button color="primary" fullWidth>
+          <Button color="primary" href='/' fullWidth>
             <LockOpenTwoToneIcon sx={{ mr: 1 }} />
             Sign out
           </Button>

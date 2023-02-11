@@ -184,7 +184,7 @@ function SidebarContent() {
             </InputAdornment>
           )
         }}
-        placeholder="Search..."
+        placeholder="Buscar..."
       />
 
       <Typography

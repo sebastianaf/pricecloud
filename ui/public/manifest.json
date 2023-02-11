@@ -1,10 +1,10 @@
 {
   "theme_color": "#1975ff",
-  "background_color": "#f2f5f9",
+  "background_color": "#ffffff",
   "display": "standalone",
-  "start_url": ".",
-  "short_name": "Tokyo",
-  "name": "Tokyo Free Black NextJS Typescript Admin Dashboard",
+  "start_url": "/login",
+  "short_name": "Pricecloud",
+  "name": "Pricecloud",
   "icons": [
     {
       "src": "/icon-192x192.png",

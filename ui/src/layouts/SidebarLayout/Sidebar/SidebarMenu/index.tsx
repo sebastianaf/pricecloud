@@ -187,15 +187,15 @@ function SidebarMenu() {
           <SubMenuWrapper>
             <List component="div">
               <ListItem component="div">
-                <NextLink href="/" passHref>
+                <NextLink href="/dashboard" passHref>
                   <Button
-                    className={currentRoute === '="/' ? 'active' : ''}
+                    className={currentRoute === '/dashboard' ? 'active' : ''}
                     disableRipple
                     component="a"
                     onClick={closeSidebar}
                     startIcon={<DesignServicesTwoToneIcon />}
                   >
-                    Overview
+                    Dashboard
                   </Button>
                 </NextLink>
               </ListItem>

@@ -98,11 +98,8 @@ function Logo() {
   const theme = useTheme();
 
   return (
-    <TooltipWrapper
-      title="Pricecloud"
-      arrow
-    >
-      <LogoWrapper href="/dashboard">
+    <TooltipWrapper title="Pricecloud" arrow>
+      <LogoWrapper href="/">
         <Badge
           sx={{
             '.MuiBadge-badge': {
@@ -115,11 +112,11 @@ function Logo() {
           color="success"
           badgeContent="1.0"
         >
-          <LogoSignWrapper>
-            <LogoSign>
-              <LogoSignInner />
-            </LogoSign>
-          </LogoSignWrapper>
+          <img
+            width="64px"
+            src="/static/images/logo/pricecloud-logo.png"
+            alt="Pricecloud"
+          />
         </Badge>
       </LogoWrapper>
     </TooltipWrapper>

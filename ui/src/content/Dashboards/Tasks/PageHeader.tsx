@@ -9,6 +9,7 @@ import {
 } from '@mui/material';
 import DocumentScannerTwoToneIcon from '@mui/icons-material/DocumentScannerTwoTone';
 import AddAlertTwoToneIcon from '@mui/icons-material/AddAlertTwoTone';
+import { Person, Settings } from '@mui/icons-material';
 
 const AvatarPageTitle = styled(Avatar)(
   ({ theme }) => `
@@ -36,8 +37,8 @@ const AvatarPageTitle = styled(Avatar)(
 
 function PageHeader() {
   const user = {
-    name: 'Catherine Pike',
-    avatar: '/static/images/avatars/1.jpg'
+    name: 'John Doe',
+    avatar: '/static/images/avatars/3.jpg'
   };
 
   return (
@@ -53,17 +54,16 @@ function PageHeader() {
         </AvatarPageTitle>
         <Box>
           <Typography variant="h3" component="h3" gutterBottom>
-            Welcome, {user.name}!
+            Bienvenido, {user.name}!
           </Typography>
           <Typography variant="subtitle2">
-            Manage your day to day tasks with style! Enjoy a well built UI
-            system.
+            Entérate de los cambios de precios en los principales servicios de Cloud.
           </Typography>
         </Box>
       </Box>
       <Box mt={{ xs: 3, md: 0 }}>
-        <Button variant="contained" startIcon={<DocumentScannerTwoToneIcon />}>
-          Export
+        <Button variant="contained" startIcon={<Settings />}>
+          Administrar perfil
         </Button>
       </Box>
     </Box>
