@@ -1,3 +1,4 @@
+import * as React from 'react';
 import {
   Box,
   Card,
@@ -6,13 +7,14 @@ import {
   Divider,
   Button,
   FormControl,
-  OutlinedInput,
   InputAdornment,
   styled,
-  TextField
+  IconButton,
+  FilledInput,
+  InputLabel
 } from '@mui/material';
 import Head from 'next/head';
-import { SupervisedUserCircle, PasswordRounded } from '@mui/icons-material';
+import { VisibilityOff, Visibility } from '@mui/icons-material';
 import type { ReactElement } from 'react';
 import BaseLayout from 'src/layouts/BaseLayout';
 
@@ -36,69 +38,65 @@ const TopWrapper = styled(Box)(
 `
 );
 
-const OutlinedInputWrapper = styled(OutlinedInput)(
-  ({ theme }) => `
-    background-color: ${theme.colors.alpha.white[100]};
-`
-);
-
-const ButtonSearch = styled(Button)(
-  ({ theme }) => `
-    margin-right: -${theme.spacing(1)};
-`
-);
-
 function Login() {
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
+  };
+
   return (
     <>
       <Head>
-        <title>Status - 404</title>
+        <title>Pricecloud | Login</title>
       </Head>
       <MainContent>
         <TopWrapper>
           <Container maxWidth="md">
-            <Box textAlign="center">
-              <img alt="404" height={180} src="/static/images/status/404.svg" />
-              <Typography variant="h2" sx={{ my: 2 }}>
-                The page you were looking for doesn't exist.
-              </Typography>
-              <Typography
-                variant="h4"
-                color="text.secondary"
-                fontWeight="normal"
-                sx={{ mb: 4 }}
-              >
-                It's on us, we moved the content to a different page. The search
-                below should help!
-              </Typography>
-            </Box>
             <Container maxWidth="sm">
-              <Card sx={{ textAlign: 'center', mt: 3, p: 2 }}>
-                <FormControl variant="outlined" fullWidth margin="normal">
-                  <TextField
-                    id="user"
-                    label="Correo electrónico"
-                    type="email"
-                    variant="filled"
+              <Card sx={{ textAlign: 'center', p: 2 }}>
+                <Box textAlign="center" sx={{ m: 4 }}>
+                  <img
+                    alt="Pricecloud"
+                    height={96}
+                    src="/static/images/logo/pricecloud-logo.png"
+                    draggable={false}
                   />
-                  <TextField
-                    id="user"
-                    label="Correo electrónico"
-                    type="password"
-                    variant='filled'
-                  />
-                  <OutlinedInputWrapper
-                    type="text"
-                    placeholder="Contraseña"
-                    startAdornment={
-                      <InputAdornment position="start">
-                        <PasswordRounded />
+                  <Typography variant="h1" sx={{ my: 2 }}>
+                    Pricecloud
+                  </Typography>
+                </Box>
+
+                <FormControl variant="filled" fullWidth sx={{ mb: 1 }}>
+                  <InputLabel htmlFor="email">Correo electrónico</InputLabel>
+                  <FilledInput id="email" type="email" />
+                </FormControl>
+
+                <FormControl variant="filled" fullWidth sx={{ mb: 1 }}>
+                  <InputLabel htmlFor="password">Contraseña</InputLabel>
+                  <FilledInput
+                    id="password"
+                    type={showPassword ? 'text' : 'password'}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                          edge="end"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
                       </InputAdornment>
                     }
                   />
                 </FormControl>
-                <Divider sx={{ my: 2 }}></Divider>
-                <Button href="/" variant="outlined">
+
+                <Button href="/dashboard" variant="outlined" sx={{ m: 2 }}>
                   Iniciar sesión
                 </Button>
               </Card>

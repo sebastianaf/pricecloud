@@ -99,10 +99,10 @@ function Logo() {
 
   return (
     <TooltipWrapper
-      title="Tokyo Free Black Next.js Typescript Admin Dashboard"
+      title="Pricecloud"
       arrow
     >
-      <LogoWrapper href="/">
+      <LogoWrapper href="/dashboard">
         <Badge
           sx={{
             '.MuiBadge-badge': {
