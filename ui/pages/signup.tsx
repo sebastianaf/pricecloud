@@ -124,7 +124,7 @@ function Login() {
                   </FormControl>
                 </Box>
                 <Divider sx={{ mb: 4 }}></Divider>
-                <Button href="/dashboard" variant="contained" fullWidth>
+                <Button href="/signin" variant="contained" fullWidth>
                   Registrase
                 </Button>
               </Card>
