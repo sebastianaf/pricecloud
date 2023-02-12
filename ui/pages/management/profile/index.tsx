@@ -12,7 +12,7 @@ import MyCards from '@/content/Management/Users/details/MyCards';
 import Addresses from '@/content/Management/Users/details/Addresses';
 
 function ManagementUserProfile() {
-  /* const user = {
+  const user = {
     savedCards: 7,
     name: 'Catherine Pike',
     coverImg: '/static/images/placeholders/covers/5.jpg',
@@ -22,8 +22,8 @@ function ManagementUserProfile() {
     jobtitle: 'Web Developer',
     location: 'Barcelona, Spain',
     followers: '465'
-  }; */
-  const user = undefined
+  };
+  //const user = undefined
 
   if(!user){
     return <>Loading...</>

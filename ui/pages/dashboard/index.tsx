@@ -112,8 +112,8 @@ function DashboardTasks() {
   const [currentTab, setCurrentTab] = useState<string>('analytics');
 
   const tabs = [
-    { value: 'analytics', label: 'Analytics Overview' },
-    { value: 'taskSearch', label: 'Task Search' }
+    { value: 'analytics', label: 'Indicadores' },
+    { value: 'newsSearch', label: 'Novedades' }
   ];
 
   const handleTabsChange = (_event: ChangeEvent<{}>, value: string): void => {
@@ -123,7 +123,7 @@ function DashboardTasks() {
   return (
     <>
       <Head>
-        <title>Tasks Dashboard</title>
+        <title>Pricecloud | Dashboard</title>
       </Head>
       <PageTitleWrapper>
         <PageHeader />
@@ -210,7 +210,7 @@ function DashboardTasks() {
                 </Grid>
               </>
             )}
-            {currentTab === 'taskSearch' && (
+            {currentTab === 'newsSearch' && (
               <Grid item xs={12}>
                 <Box p={4}>
                   <TaskSearch />

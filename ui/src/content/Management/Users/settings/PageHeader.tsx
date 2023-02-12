@@ -9,10 +9,10 @@ function PageHeader() {
   return (
     <>
       <Typography variant="h3" component="h3" gutterBottom>
-        User Settings
+        Configurar cuenta
       </Typography>
       <Typography variant="subtitle2">
-        {user.name}, this could be your user settings panel.
+        {user.name}, aquí puedes configurar las preferencias de tu cuenta.
       </Typography>
     </>
   );

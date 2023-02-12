@@ -70,11 +70,11 @@ function TaskSearch() {
       <FormControl variant="outlined" fullWidth>
         <OutlinedInputWrapper
           type="text"
-          placeholder="Search terms here..."
+          placeholder="¿Qué estás buscando?"
           endAdornment={
             <InputAdornment position="end">
               <Button variant="contained" size="small">
-                Search
+                Buscar
               </Button>
             </InputAdornment>
           }

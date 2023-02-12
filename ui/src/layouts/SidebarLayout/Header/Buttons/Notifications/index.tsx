@@ -86,7 +86,7 @@ function HeaderNotifications() {
           alignItems="center"
           justifyContent="space-between"
         >
-          <Typography variant="h5">Notifications</Typography>
+          <Typography variant="h5">Notificaciones</Typography>
         </Box>
         <Divider />
         <List sx={{ p: 0 }}>
@@ -96,7 +96,7 @@ function HeaderNotifications() {
             <Box flex="1">
               <Box display="flex" justifyContent="space-between">
                 <Typography sx={{ fontWeight: 'bold' }}>
-                  Messaging Platform
+                  Base de datos de precios actualizada
                 </Typography>
                 <Typography variant="caption" sx={{ textTransform: 'none' }}>
                   {formatDistance(subDays(new Date(), 3), new Date(), {
@@ -110,7 +110,7 @@ function HeaderNotifications() {
                 color="text.secondary"
               >
                 {' '}
-                new messages in your inbox
+                Hay actualizaciones en los precios del proveedor AWS
               </Typography>
             </Box>
           </ListItem>

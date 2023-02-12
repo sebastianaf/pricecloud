@@ -2,17 +2,19 @@ import * as React from 'react';
 import {
   Box,
   Card,
-  Typography,
   Container,
-  Divider,
   Button,
   FormControl,
   InputAdornment,
   styled,
   IconButton,
   FilledInput,
-  InputLabel
+  InputLabel,
+  Badge,
+  Typography,
+  Divider
 } from '@mui/material';
+import NextLink from 'next/link';
 import Head from 'next/head';
 import { VisibilityOff, Visibility } from '@mui/icons-material';
 import type { ReactElement } from 'react';
@@ -52,32 +54,46 @@ function Login() {
   return (
     <>
       <Head>
-        <title>Pricecloud | Login</title>
+        <title>Pricecloud | Registrarse</title>
       </Head>
       <MainContent>
         <TopWrapper>
           <Container maxWidth="md">
-            <Container maxWidth="sm">
-              <Card sx={{ textAlign: 'center', p: 2 }}>
-                <Box textAlign="center" sx={{ m: 4 }}>
+            <NextLink href="/">
+              <Box textAlign="center" sx={{ m: 4 }}>
+                <Badge
+                  overlap="circular"
+                  color="success"
+                  badgeContent="v1.0"
+                  sx={{ cursor: 'pointer' }}
+                >
                   <img
                     alt="Pricecloud"
                     height={96}
                     src="/static/images/logo/pricecloud-logo.png"
                     draggable={false}
                   />
-                  <Typography variant="h1" sx={{ my: 2 }}>
-                    Pricecloud
-                  </Typography>
-                </Box>
+                </Badge>
+                <Typography variant="h1" sx={{ mt: 2 }}>
+                  Pricecloud
+                </Typography>
+                <Typography variant="subtitle2">Crear una cuenta</Typography>
+              </Box>
+            </NextLink>
+            <Container maxWidth="sm">
+              <Card sx={{ textAlign: 'center', p: 4 }}>
+                <Box textAlign="center" sx={{ mb: 2 }}>
+                  <FormControl variant="filled" fullWidth sx={{ mb: 2 }}>
+                    <InputLabel htmlFor="name">Nombre</InputLabel>
+                    <FilledInput id="name" type="text" />
+                  </FormControl>
 
-                <Box textAlign="center" sx={{ mx: 2 }}>
-                  <FormControl variant="filled" fullWidth sx={{ mb: 1}}>
+                  <FormControl variant="filled" fullWidth sx={{ mb: 2 }}>
                     <InputLabel htmlFor="email">Correo electrónico</InputLabel>
                     <FilledInput id="email" type="email" />
                   </FormControl>
 
-                  <FormControl variant="filled" fullWidth sx={{ mb: 1}}>
+                  <FormControl variant="filled" fullWidth sx={{ mb: 2 }}>
                     <InputLabel htmlFor="password">Contraseña</InputLabel>
                     <FilledInput
                       id="password"
@@ -96,10 +112,20 @@ function Login() {
                       }
                     />
                   </FormControl>
-                </Box>
 
-                <Button href="/dashboard" variant="outlined" sx={{ m: 2 }}>
-                  Iniciar sesión
+                  <FormControl variant="filled" fullWidth sx={{ mb: 2 }}>
+                    <InputLabel htmlFor="passwordRepeat">
+                      Repita su contraseña
+                    </InputLabel>
+                    <FilledInput
+                      id="passwordRepeat"
+                      type={showPassword ? 'text' : 'password'}
+                    />
+                  </FormControl>
+                </Box>
+                <Divider sx={{ mb: 4 }}></Divider>
+                <Button href="/dashboard" variant="contained" fullWidth>
+                  Registrase
                 </Button>
               </Card>
             </Container>

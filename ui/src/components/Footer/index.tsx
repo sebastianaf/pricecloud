@@ -17,9 +17,7 @@ function Footer() {
         justifyContent="space-between"
       >
         <Box>
-          <Typography variant="subtitle1">
-            &copy; 2022 - Tokyo Free Black Next.js Typescript Admin Dashboard
-          </Typography>
+          <Typography variant="subtitle1">&copy; {new Date().toISOString().substring(0,4)} - Pricecloud</Typography>
         </Box>
         <Typography
           sx={{
@@ -29,11 +27,19 @@ function Footer() {
         >
           Crafted by{' '}
           <Link
+            href="https://github.com/sebastianaf"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            sebastianaf
+          </Link>{' '}
+          with{' '}
+          <Link
             href="https://bloomui.com"
             target="_blank"
             rel="noopener noreferrer"
           >
-            BloomUI.com
+            BloomUI template
           </Link>
         </Typography>
       </Box>

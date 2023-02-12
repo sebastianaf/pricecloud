@@ -1,11 +1,11 @@
 {
-  "name": "tokyo-free-black-nextjs-admin-dashboard",
+  "name": "pricecloud-ui",
   "version": "1.0.0",
-  "title": "Tokyo Free Black NextJS Typescript Admin Dashboard",
-  "description": "High performance React template built with lots of powerful MUI (Material-UI) components across multiple product niches for fast & perfect apps development processes",
+  "title": "Pricecloud",
+  "description": "Aplicación para comparar precios del Cloud",
   "author": {
-    "name": "BloomUI.com",
-    "url": "https://bloomui.com"
+    "name": "sebastianaf",
+    "url": "https://github.com/sebastianaf"
   },
   "private": false,
   "dependencies": {

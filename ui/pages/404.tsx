@@ -51,7 +51,7 @@ function Status404() {
   return (
     <>
       <Head>
-        <title>Status - 404</title>
+        <title>Pricecloud | No encontrado</title>
       </Head>
       <MainContent>
         <TopWrapper>
@@ -76,11 +76,11 @@ function Status404() {
                 <FormControl variant="outlined" fullWidth>
                   <OutlinedInputWrapper
                     type="text"
-                    placeholder="Search terms here..."
+                    placeholder="¿Qué estás buscando?"
                     endAdornment={
                       <InputAdornment position="end">
                         <ButtonSearch variant="contained" size="small">
-                          Search
+                          Buscar
                         </ButtonSearch>
                       </InputAdornment>
                     }

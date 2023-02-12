@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Head from 'next/head';
 import SidebarLayout from '@/layouts/SidebarLayout';
 import {
@@ -9,7 +9,7 @@ import {
   IconButton,
   useTheme
 } from '@mui/material';
-import router from 'next/router'
+//import router from 'next/router'
 
 import TopBarContent from '@/content/Applications/Messenger/TopBarContent';
 import BottomBarContent from '@/content/Applications/Messenger/BottomBarContent';

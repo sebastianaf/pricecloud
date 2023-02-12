@@ -119,9 +119,9 @@ function HeaderSearch() {
                 </InputAdornment>
               )
             }}
-            placeholder="Search terms here..."
+            placeholder="¿Qué estás buscando?"
             fullWidth
-            label="Search"
+            label="Buscar"
           />
         </DialogTitleWrapper>
         <Divider />

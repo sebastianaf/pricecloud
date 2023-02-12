@@ -1,3 +1,4 @@
+import { GitHub } from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -107,7 +108,7 @@ function Hero() {
         <Grid item md={10} lg={8} mx="auto">
           <LabelWrapper color="success">Version 1.0.0</LabelWrapper>
           <TypographyH1 sx={{ mb: 2 }} variant="h1">
-            La app para informarse de los precios del Cloud
+            La app para informarse de los precios del cloud
           </TypographyH1>
           <TypographyH2
             sx={{ lineHeight: 1.5, pb: 4 }}
@@ -115,26 +116,27 @@ function Hero() {
             color="text.secondary"
             fontWeight="normal"
           >
-            Conocer cuales son los precios para los principales servicios que ofrecen los proveedores de servicio de cloud computing, compáralos y toma la mejor decisión.
+            Conoce cuáles son los precios para los principales servicios que
+            ofrecen los proveedores de cloud computing, compáralos y toma la
+            mejor decisión.
           </TypographyH2>
           <Button
             component={Link}
-            href="/dashboards/tasks"
+            href="https://github.com/sebastianaf/pricecloud"
             size="large"
-            variant="contained"
+            variant="text"
+            startIcon={<GitHub />}
           >
-            Browse Live Preview
+            Ver en GitHub
           </Button>
           <Button
             sx={{ ml: 2 }}
             component="a"
-            target="_blank"
-            rel="noopener"
-            href="https://bloomui.com/product/tokyo-free-black-nextjs-typescript-material-ui-admin-dashboard/"
+            href="/signup"
             size="large"
-            variant="text"
+            variant="contained"
           >
-            Key Features
+            Regístrate
           </Button>
           <Grid container spacing={3} mt={5}>
             <Grid item md={4}>
@@ -146,11 +148,10 @@ function Hero() {
               </MuiAvatar>
               <Typography variant="h4">
                 <Box sx={{ pb: 2 }}>
-                  <b>Powered by MUI (Material-UI)</b>
+                  <b>Basado en (Material-UI)</b>
                 </Box>
                 <Typography component="span" variant="subtitle2">
-                  A simple and customizable component library to build faster,
-                  beautiful, and accessible React apps.
+                  Es una librería de componentes personalizable para construir aplicaciones de React rápidas y accesibles.
                 </Typography>
               </Typography>
             </Grid>
@@ -160,11 +161,10 @@ function Hero() {
               </NextJsAvatar>
               <Typography variant="h4">
                 <Box sx={{ pb: 2 }}>
-                  <b>Built with Next.js</b>
+                  <b>Construido con Next.js</b>
                 </Box>
                 <Typography component="span" variant="subtitle2">
-                  Next.js gives you the best developer experience with all the
-                  features you need for production.
+                  Next.js te da la mejor experiencia de desarrollo con todas las características que necesitas en producción.
                 </Typography>
               </Typography>
             </Grid>
@@ -177,10 +177,10 @@ function Hero() {
               </TsAvatar>
               <Typography variant="h4">
                 <Box sx={{ pb: 2 }}>
-                  <b>Built with Typescript</b>
+                  <b>Construido con Typescript</b>
                 </Box>
                 <Typography component="span" variant="subtitle2">
-                  Tokyo Free Black features a modern technology stack and is built with React + Typescript.
+                  Al igual que el backend Pricecloud usa Typescript en su front-end.
                 </Typography>
               </Typography>
             </Grid>

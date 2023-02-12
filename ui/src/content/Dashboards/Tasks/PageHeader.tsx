@@ -7,9 +7,8 @@ import {
   Avatar,
   styled
 } from '@mui/material';
-import DocumentScannerTwoToneIcon from '@mui/icons-material/DocumentScannerTwoTone';
-import AddAlertTwoToneIcon from '@mui/icons-material/AddAlertTwoTone';
-import { Person, Settings } from '@mui/icons-material';
+import { EmojiEmotions } from '@mui/icons-material';
+import { ManageAccounts } from '@mui/icons-material';
 
 const AvatarPageTitle = styled(Avatar)(
   ({ theme }) => `
@@ -50,20 +49,25 @@ function PageHeader() {
     >
       <Box display="flex" alignItems="center">
         <AvatarPageTitle variant="rounded">
-          <AddAlertTwoToneIcon fontSize="large" />
+          <EmojiEmotions fontSize="large" />
         </AvatarPageTitle>
         <Box>
           <Typography variant="h3" component="h3" gutterBottom>
             Bienvenido, {user.name}!
           </Typography>
           <Typography variant="subtitle2">
-            Entérate de los cambios de precios en los principales servicios de Cloud.
+            Entérate de los cambios de precios en los principales servicios de
+            Cloud.
           </Typography>
         </Box>
       </Box>
       <Box mt={{ xs: 3, md: 0 }}>
-        <Button variant="contained" startIcon={<Settings />}>
-          Administrar perfil
+        <Button
+          href="/management/profile/settings"
+          variant="contained"
+          startIcon={<ManageAccounts />}
+        >
+          Configurar cuenta
         </Button>
       </Box>
     </Box>

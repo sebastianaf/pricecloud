@@ -4,8 +4,8 @@ const redirects = {
   async redirects() {
     return [
       {
-        source: '/dashboards',
-        destination: '/dashboards/tasks',
+        source: '/dashboard',
+        destination: '/dashboard/tasks',
         permanent: true
       }
     ];

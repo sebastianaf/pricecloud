@@ -54,8 +54,9 @@ function Overview() {
               <Box>
                 <Button
                   component={Link}
-                  href="/login"
+                  href="/signin"
                   variant="contained"
+                  size='large'
                   sx={{ ml: 2 }}
                 >
                   Iniciar sesión
@@ -66,15 +67,23 @@ function Overview() {
         </Container>
       </HeaderWrapper>
       <Hero />
-      <Container maxWidth="lg" sx={{ mt: 8 }}>
+      <Container maxWidth="lg" sx={{ my: 8 }}>
         <Typography textAlign="center" variant="subtitle1">
           Crafted by{' '}
+          <Link
+            href="https://github.com/sebastianaf"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            sebastianaf
+          </Link>
+          {' '}with{' '}
           <Link
             href="https://bloomui.com"
             target="_blank"
             rel="noopener noreferrer"
           >
-            BloomUI.com
+            BloomUI template
           </Link>
         </Typography>
       </Container>
