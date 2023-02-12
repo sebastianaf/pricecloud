@@ -10,24 +10,18 @@ import {
   Button,
   Switch,
   CardHeader,
-  Tooltip,
-  IconButton,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TablePagination,
   TableRow,
-  TableContainer,
-  useTheme
+  TableContainer
 } from '@mui/material';
 
-import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import { format, subHours, subWeeks, subDays } from 'date-fns';
 
 function SecurityTab() {
-  const theme = useTheme();
-
   const [page, setPage] = useState(2);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
