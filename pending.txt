@@ -6,6 +6,7 @@ Crear servidor de base de datos
 Crear sistema de roles
 
 Backend
+Crear seed de usuario inicial
 Crear login en backend
 
 Frontend

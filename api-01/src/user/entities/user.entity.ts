@@ -1,19 +1,38 @@
-import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { ApiProperty } from '@nestjs/swagger';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  Column,
+} from 'typeorm';
 
 @Entity()
 export class User {
-  //@ApiPropert()
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  //@ApiProperty({ nullable: false })
+  @Column({})
+  firstName: string;
+
+  @Column({})
+  secondName: string;
+
+  @Column({})
+  firstLastName: string;
+
+  @Column({})
+  secondLastName: string;
+
+  @Column({})
+  email: string;
+
   @CreateDateColumn({
     type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',
   })
   createdAt: Date;
 
-  //@ApiProperty({ nullable: false })
   @UpdateDateColumn({
     type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',
