@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Exclude } from 'class-transformer';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -12,20 +13,33 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({})
+  @ApiProperty({ description: `Email` })
+  @Column({ unique: true })
+  email: string;
+
+  @ApiProperty({ description: `Password` })
+  @Column({ select: false })
+  password: string;
+
+  @ApiProperty({ description: `First name` })
+  @Column()
   firstName: string;
 
-  @Column({})
+  @ApiProperty({ description: `Second name` })
+  @Column({ nullable: true })
   secondName: string;
 
-  @Column({})
+  @ApiProperty({ description: `First Lastname` })
+  @Column()
   firstLastName: string;
 
-  @Column({})
+  @ApiProperty({ description: `Second Lastname` })
+  @Column()
   secondLastName: string;
 
-  @Column({})
-  email: string;
+  @ApiProperty({ description: `User's login count` })
+  @Column({ default: 0 })
+  loginCount: number;
 
   @CreateDateColumn({
     type: 'timestamptz',

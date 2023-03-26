@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class CloudServiceSku {
+export class RawAws {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 }
