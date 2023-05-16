@@ -11,6 +11,8 @@ import { RawAwsModule } from './raw-aws/raw-aws.module';
 import { RawAzureModule } from './raw-azure/raw-azure.module';
 import { RawGcpModule } from './raw-gcp/raw-gcp.module';
 import { UserModule } from './user/user.module';
+import { AuthService } from './auth/services/auth.service';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -44,9 +46,10 @@ import { UserModule } from './user/user.module';
     RawAwsModule,
     RawAzureModule,
     RawGcpModule,
+    AuthModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [AuthService],
   exports: [],
 })
 export class AppModule {}
