@@ -11,7 +11,7 @@ import { RawAwsModule } from './raw-aws/raw-aws.module';
 import { RawAzureModule } from './raw-azure/raw-azure.module';
 import { RawGcpModule } from './raw-gcp/raw-gcp.module';
 import { UserModule } from './user/user.module';
-import { AuthService } from './auth/services/auth.service';
+import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
@@ -19,6 +19,8 @@ import { AuthModule } from './auth/auth.module';
     ConfigModule.forRoot({
       isGlobal: true,
       validationSchema: Joi.object({
+        JWT_SECRET: Joi.string().required(),
+        JWT_EXPIRATION_TIME: Joi.string().min(2).max(3).required(),
         DB_HOST: Joi.string().ip().required(),
         DB_PORT: Joi.number().min(100).max(65535).required(),
         DB_NAME: Joi.string().required(),
@@ -49,7 +51,7 @@ import { AuthModule } from './auth/auth.module';
     AuthModule,
   ],
   controllers: [],
-  providers: [AuthService],
+  providers: [],
   exports: [],
 })
 export class AppModule {}
