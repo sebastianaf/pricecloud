@@ -35,6 +35,6 @@ export class AuthService {
 
     const token = this.generateToken({ id: user.id, email: user.email });
 
-    return { ...user, token };
+    return { token, user };
   }
 }

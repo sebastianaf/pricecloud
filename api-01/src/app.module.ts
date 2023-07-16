@@ -13,10 +13,15 @@ import { RawGcpModule } from './raw-gcp/raw-gcp.module';
 import { UserModule } from './user/user.module';
 import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
+import { environments } from './environments';
+import config from './config';
+
 
 @Module({
   imports: [
     ConfigModule.forRoot({
+      envFilePath: environments[process.env.NODE_ENV] || `.env`,
+      load: [config],
       isGlobal: true,
       validationSchema: Joi.object({
         JWT_SECRET: Joi.string().required(),
@@ -37,7 +42,8 @@ import { AuthModule } from './auth/auth.module';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       autoLoadEntities: true,
-      synchronize: process.env.ENV === 'production' ? false : true,
+      synchronize: process.env.ENV === 'prod' ? false : true,
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
       //logging: true,
     }),
     UserModule,

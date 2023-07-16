@@ -14,10 +14,11 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiKeyGuard } from '../auth/guards/api-key/api-key.guard';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags(`Users`)
 @Controller('user')
-//@UseGuards(ApiKeyGuard)
+@UseGuards(AuthGuard(`jwt`))
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
