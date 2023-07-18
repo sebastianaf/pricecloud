@@ -7,6 +7,8 @@ import {
   UpdateDateColumn,
   Column,
 } from 'typeorm';
+import { EncryptionLowerCaseTransformer } from '../../auth/transformer/encryption-lowercase.transformer';
+import { EncryptionTransformer } from '../../auth/transformer/encryption.transformer';
 
 @Entity()
 export class User {
@@ -14,27 +16,30 @@ export class User {
   id: string;
 
   @ApiProperty({ description: `Email` })
-  @Column({ unique: true })
+  @Column({ unique: true, transformer: EncryptionLowerCaseTransformer })
   email: string;
 
   @ApiProperty({ description: `Password` })
+  @Exclude({ toPlainOnly: true })
   @Column({ select: false })
   password: string;
 
   @ApiProperty({ description: `First name` })
-  @Column()
+  @Column({
+    transformer: EncryptionTransformer,
+  })
   firstName: string;
 
   @ApiProperty({ description: `Second name` })
-  @Column({ nullable: true })
+  @Column({ nullable: true, transformer: EncryptionTransformer })
   secondName: string;
 
   @ApiProperty({ description: `First Lastname` })
-  @Column()
+  @Column({ transformer: EncryptionTransformer })
   firstLastName: string;
 
   @ApiProperty({ description: `Second Lastname` })
-  @Column()
+  @Column({ transformer: EncryptionTransformer })
   secondLastName: string;
 
   @ApiProperty({ description: `User's login count` })

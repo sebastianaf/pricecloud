@@ -7,7 +7,7 @@ import { AuthService } from './auth.service';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @UseGuards(AuthGuard('jwt'))
+  //@UseGuards(AuthGuard('jwt'))
   @Post(`login`)
   async validateUser(@Body() validateUser: ValidateUserDto) {
     return await this.authService.validateUser(validateUser);

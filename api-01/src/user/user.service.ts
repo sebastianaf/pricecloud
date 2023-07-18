@@ -14,13 +14,20 @@ export class UserService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async findOne(email: string) {
+  async findOne(id: string) {
     const user = await this.userRepository.findOne({
-      select: ['id', 'email', 'password', 'loginCount'],
-      where: { email },
+      where: { id },
     });
 
-    if (!user) throw new ConflictException(`User do not exist (UL-001)`);
+    if (!user) throw new ConflictException(`User do not exist (USFO-001)`);
+    return user;
+  }
+
+  async findAll() {
+    const user = await this.userRepository.find();
+
+    if (user.length === 0)
+      throw new ConflictException(`No users registered (USFA-001)`);
     return user;
   }
 
@@ -31,12 +38,11 @@ export class UserService {
       where: { email },
     });
 
-    if (user)
-      throw new ConflictException(`The user take is not available (UC-001)`);
+    if (user) throw new ConflictException(`User not available (USC-001)`);
 
     createUserDto.password = bcrypt.hashSync(password, 10);
 
-    return await this.userRepository.save(createUserDto);
+    return { id: (await this.userRepository.save(createUserDto)).id };
   }
 
   async addLoginCount(user: User) {
