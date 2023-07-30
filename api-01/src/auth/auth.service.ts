@@ -5,10 +5,16 @@ import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
 import { ValidateUserDto } from './dto/validate-user.dto';
 import { JwtPayloadDto } from './dto/jwt-payload.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from '../user/entities/user.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class AuthService {
   constructor(
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
   ) {}
@@ -20,15 +26,16 @@ export class AuthService {
   async validateUser(validateUserDTO: ValidateUserDto) {
     const { password, email } = validateUserDTO;
 
-    const user = await this.userService.findOne(email);
+    const user = await this.userRepository.findOne({
+      where: { email },
+      select: ['id', 'email', 'password', 'loginCount'],
+    });
 
     if (!user) {
       return null;
     }
 
-    if (!bcrypt.compareSync(password, user.password)) {
-      return null;
-    }
+    if (!bcrypt.compareSync(password, user.password)) return null;
 
     await this.userService.addLoginCount(user);
     delete user.password;

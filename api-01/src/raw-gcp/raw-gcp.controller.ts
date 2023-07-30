@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { RawGcpService } from './raw-gcp.service';
 import { CreateRawGcpDto } from './dto/create-raw-gcp.dto';
 import { UpdateRawGcpDto } from './dto/update-raw-gcp.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('raw-gcp')
 @Controller('raw-gcp')
 export class RawGcpController {
   constructor(private readonly rawGcpService: RawGcpService) {}

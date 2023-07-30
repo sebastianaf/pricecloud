@@ -8,12 +8,9 @@ import { UserModule } from './../user/user.module';
 import { LocalStrategy } from './strategy/local.strategy';
 import { JwtStrategy } from './strategy/jwt.strategy';
 import { AuthController } from './auth.controller';
-import config from '../config';
 
 @Module({
   imports: [
-    UserModule,
-    PassportModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -26,6 +23,8 @@ import config from '../config';
         };
       },
     }),
+    UserModule,
+    PassportModule,
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],
   controllers: [AuthController],

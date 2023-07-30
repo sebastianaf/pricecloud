@@ -13,8 +13,8 @@ async function bootstrap() {
     }),
   );
   const config = new DocumentBuilder()
-    .setTitle('Pricecloud API')
-    .setDescription('Backend endpoint docs')
+    .setTitle('Pricecloud docs')
+    .setDescription('The Pricecloud API documentation')
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);

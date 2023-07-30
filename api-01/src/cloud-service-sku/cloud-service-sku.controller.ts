@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { CloudServiceSkuService } from './cloud-service-sku.service';
 import { CreateCloudServiceSkuDto } from './dto/create-cloud-service-sku.dto';
 import { UpdateCloudServiceSkuDto } from './dto/update-cloud-service-sku.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('cloud-service-sku')
 @Controller('cloud-service-sku')
 export class CloudServiceSkuController {
   constructor(private readonly cloudServiceSkuService: CloudServiceSkuService) {}

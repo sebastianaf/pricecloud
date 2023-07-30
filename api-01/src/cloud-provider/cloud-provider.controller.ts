@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { CloudProviderService } from './cloud-provider.service';
 import { CreateCloudProviderDto } from './dto/create-cloud-provider.dto';
 import { UpdateCloudProviderDto } from './dto/update-cloud-provider.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('cloud-provider')
 @Controller('cloud-provider')
 export class CloudProviderController {
   constructor(private readonly cloudProviderService: CloudProviderService) {}

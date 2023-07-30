@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { RawAzureService } from './raw-azure.service';
 import { CreateRawAzureDto } from './dto/create-raw-azure.dto';
 import { UpdateRawAzureDto } from './dto/update-raw-azure.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('raw-azure')
 @Controller('raw-azure')
 export class RawAzureController {
   constructor(private readonly rawAzureService: RawAzureService) {}

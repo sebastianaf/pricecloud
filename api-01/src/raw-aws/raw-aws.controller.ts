@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { RawAwsService } from './raw-aws.service';
 import { CreateRawAwDto } from './dto/create-raw-aw.dto';
 import { UpdateRawAwDto } from './dto/update-raw-aw.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('raw-aws')
 @Controller('raw-aws')
 export class RawAwsController {
   constructor(private readonly rawAwsService: RawAwsService) {}

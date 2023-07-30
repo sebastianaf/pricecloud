@@ -12,16 +12,15 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiKeyGuard } from '../auth/guards/api-key/api-key.guard';
-import { AuthGuard } from '@nestjs/passport';
+import { IsPublic } from '../auth/decorators/public.decorator';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @ApiTags(`Users`)
 @Controller('user')
+@UseGuards(JwtAuthGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  //@UseGuards(AuthGuard(`jwt`))
   @Post()
   @ApiOperation({ summary: `Create users` })
   create(@Body() createUserDto: CreateUserDto) {
@@ -39,10 +38,4 @@ export class UserController {
   findAll() {
     return this.userService.findAll();
   }
-
-  /* @Post(`login`)
-  @ApiOperation({ summary: `Login users` })
-  login(@Body() loginUserDto: LoginUserDto) {
-    return this.userService.login(loginUserDto);
-  } */
 }

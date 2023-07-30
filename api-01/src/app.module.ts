@@ -11,11 +11,10 @@ import { RawAwsModule } from './raw-aws/raw-aws.module';
 import { RawAzureModule } from './raw-azure/raw-azure.module';
 import { RawGcpModule } from './raw-gcp/raw-gcp.module';
 import { UserModule } from './user/user.module';
-import { AuthService } from './auth/auth.service';
 import { AuthModule } from './auth/auth.module';
 import { environments } from './environments';
+import { SeedModule } from './seed/seed.module';
 import config from './config';
-
 
 @Module({
   imports: [
@@ -55,6 +54,7 @@ import config from './config';
     RawAzureModule,
     RawGcpModule,
     AuthModule,
+    SeedModule,
   ],
   controllers: [],
   providers: [],
