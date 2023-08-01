@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as Joi from 'joi';
 
@@ -12,9 +12,10 @@ import { RawAzureModule } from './raw-azure/raw-azure.module';
 import { RawGcpModule } from './raw-gcp/raw-gcp.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
-import { environments } from './environments';
+import environments from './config/environments';
 import { SeedModule } from './seed/seed.module';
 import config from './config';
+import validationSchema from './config/validation-schema';
 
 @Module({
   imports: [
@@ -22,28 +23,24 @@ import config from './config';
       envFilePath: environments[process.env.NODE_ENV] || `.env`,
       load: [config],
       isGlobal: true,
-      validationSchema: Joi.object({
-        JWT_SECRET: Joi.string().required(),
-        JWT_EXPIRATION_TIME: Joi.string().min(2).max(3).required(),
-        DB_HOST: Joi.string().ip().required(),
-        DB_PORT: Joi.number().min(100).max(65535).required(),
-        DB_NAME: Joi.string().required(),
-        DB_USER: Joi.string().required(),
-        DB_PASSWORD: Joi.string().required(),
-        ENV: Joi.string().equal(`dev`, `prod`).required(),
-      }),
+      validationSchema,
     }),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT),
-      database: process.env.DB_NAME,
-      username: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      autoLoadEntities: true,
-      synchronize: process.env.ENV === 'prod' ? false : true,
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      //logging: true,
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => {
+        return {
+          type: 'postgres',
+          host: configService.get('DB_HOST'),
+          port: parseInt(configService.get('DB_PORT')),
+          database: configService.get('DB_NAME'),
+          username: configService.get('DB_USER'),
+          password: configService.get('DB_PASSWORD'),
+          entities: [__dirname + '/**/*.entity{.ts,.js}'],
+          autoLoadEntities: true,
+          synchronize: process.env.ENV === 'prod' ? false : true,
+        };
+      },
     }),
     UserModule,
     CloudProviderModule,
