@@ -1,5 +1,5 @@
 export default {
   dev: '.env',
-  stag: '.stag.env',
+  stag: '.testing.env',
   prod: '.prod.env',
 };
