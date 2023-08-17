@@ -4,7 +4,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi';
 
 import { SeedService } from './seed.service';
-import { SeedController } from './seed.controller';
 import { UserModule } from '../user/user.module';
 import config from '../config';
 import environments from '../config/environments';
@@ -37,7 +36,7 @@ import validationSchema from '../config/validation-schema';
     }),
     UserModule,
   ],
-  controllers: [SeedController],
+  controllers: [],
   providers: [SeedService, Logger],
 })
 export class SeedModule {}

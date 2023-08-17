@@ -19,7 +19,8 @@ import { databaseProviders } from './providers/database.providers';
           password: configService.get('DB_PASSWORD'),
           entities: [__dirname + '/**/*.entity{.ts,.js}'],
           autoLoadEntities: true,
-          synchronize: process.env.ENV === 'prod' ? false : true,
+          //synchronize: process.env.ENV === 'prod' ? false : true,
+          synchronize: false,
         };
       },
     }),
