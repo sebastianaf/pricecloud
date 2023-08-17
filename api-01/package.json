@@ -19,10 +19,10 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "seed": "ts-node -r tsconfig-paths/register src/seed/seed.ts",
-    "migrations:generate": "npm run typeorm -- migration:generate -n",
-    "migrations:run": "npm run typeorm -- migration:run",
-    "migrations:show": "npm run typeorm -- migration:show",
-    "migrations:drop": "npm run typeorm -- migration:drop",
+    "migrations:generate": "npm run typeorm -- migration:generate -d \"./src/database/data-source.ts\" \"./src/database/migrations/migration\" ",
+    "migrations:run": "npm run typeorm -- migration:run -d \"./src/database/data-source.ts\"",
+    "migrations:show": "npm run typeorm -- migration:show -d \"./src/database/data-source.ts\"",
+    "migrations:drop": "npm run typeorm -- migration:drop -d \"./src/database/data-source.ts\"",
     "typeorm": "typeorm-ts-node-commonjs"
   },
   "dependencies": {
@@ -70,7 +70,7 @@
     "supertest": "^6.1.3",
     "ts-jest": "29.0.3",
     "ts-loader": "^9.2.3",
-    "ts-node": "^10.0.0",
+    "ts-node": "^10.9.1",
     "tsconfig-paths": "4.1.1",
     "typescript": "^4.7.4"
   },
