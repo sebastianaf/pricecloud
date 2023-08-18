@@ -1,0 +1,13 @@
+Otros
+Consultar información de AWS
+Consultar información de GCP
+Consultar información de Azure
+Crear servidor de base de datos
+Crear sistema de roles
+
+Backend
+Crear seed de usuario inicial
+Crear login en backend
+
+Frontend
+Crear rutas protegidas en frontend

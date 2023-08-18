@@ -1,41 +1,31 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule } from '@nestjs/config';
+import * as Joi from 'joi';
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
-import { CloudServiceModule } from './cloud-service/cloud-service.module';
-import { CloudServiceTypeModule } from './cloud-service-type/cloud-service-type.module';
-import { CloudProviderModule } from './cloud-provider/cloud-provider.module';
-import { CloudServiceSkuModule } from './cloud-service-sku/cloud-service-sku.module';
-import { RawAzureModule } from './raw-azure/raw-azure.module';
-import { RawGcpModule } from './raw-gcp/raw-gcp.module';
-import { RawAwsModule } from './raw-aws/raw-aws.module';
+import { AuthModule } from './auth/auth.module';
+import environments from './config/environments';
+import { SeedModule } from './seed/seed.module';
+import { DatabaseModule } from './database/database.module';
+import config from './config';
+import validationSchema from './config/validation-schema';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT),
-      database: process.env.DB_NAME,
-      username: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      autoLoadEntities: true,
-      synchronize: process.env.NODE_ENV === 'production' ? false : true,
+    ConfigModule.forRoot({
+      envFilePath: environments[process.env.NODE_ENV] || `.env`,
+      load: [config],
+      isGlobal: true,
+      validationSchema,
     }),
     UserModule,
-    CloudServiceModule,
-    CloudServiceTypeModule,
-    CloudProviderModule,
-    CloudServiceSkuModule,
-    RawAzureModule,
-    RawGcpModule,
-    RawAwsModule,
+    AuthModule,
+    SeedModule,
+    DatabaseModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
+  exports: [],
 })
 export class AppModule {}
