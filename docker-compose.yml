@@ -23,8 +23,8 @@ services:
         API_PORT: ${API_PORT}
     #    ports:
     #      - 9010:${API_PORT}
-    #    depends_on:
-    #      - uv-pricecloud-db
+        depends_on:
+          - uv-pricecloud-db
 
     networks:
       - uv-pricecloud
@@ -39,7 +39,7 @@ services:
       POSTGRES_DB: ${DB_DATABASE}
       TZ: ${TZ}
     volumes:
-      - ./db-files:/var/lib/postgresql/data
+      - ../db-files:/var/lib/postgresql/data
 #    ports:
 #      - 9020:5432
     networks:
