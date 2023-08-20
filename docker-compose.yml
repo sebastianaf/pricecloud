@@ -1,6 +1,6 @@
 version: "3.8"
 
-#services:
+services:
   uv-pricecloud-api-01:
     container_name: uv-pricecloud-api-01
     image: uv-pricecloud-api-01
