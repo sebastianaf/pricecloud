@@ -36,7 +36,7 @@ services:
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_DB: ${DB_NAME}
       TZ: ${TZ}
     volumes:
       - ../db-files:/var/lib/postgresql/data
