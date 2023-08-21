@@ -1,0 +1,77 @@
+version: "3.8"
+
+services:
+  uv-pricecloud-prod-api-01:
+    container_name: uv-pricecloud-prod-api-01
+    image: uv-pricecloud-prod-api-01
+    restart: always
+    environment:
+      API_JWT_SECRET: ${API_JWT_SECRET}
+      API_JWT_EXPIRATION_TIME: ${API_JWT_EXPIRATION_TIME}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_SECRET: ${DB_SECRET}
+      DB_IV: ${DB_IV}
+      ENV: ${ENV}
+    build:
+      context: ./api-01
+      dockerfile: Dockerfile
+      args:
+        API_PORT: ${API_PORT}
+    depends_on:
+      - uv-pricecloud-prod-db
+    networks:
+      - uv-pricecloud-prod
+
+  uv-pricecloud-prod-db:
+    container_name: uv-pricecloud-prod-db
+    restart: always
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+      TZ: ${TZ}
+    volumes:
+      - ../uv-pricecloud-prod-data:/var/lib/postgresql/data
+    networks:
+      - uv-pricecloud-prod
+
+  uv-pricecloud-prod-ui:
+    container_name: uv-pricecloud-prod-ui
+    image: uv-pricecloud-prod-ui
+    restart: always
+    environment:
+      REACT_APP_UI_PORT: ${REACT_APP_UI_PORT}
+      REACT_APP_API_HOST: ${REACT_APP_API_HOST}
+    build:
+      context: ./ui
+      dockerfile: Dockerfile
+      args:
+        REACT_APP_UI_PORT: ${REACT_APP_UI_PORT}
+        REACT_APP_API_HOST: ${REACT_APP_API_HOST}
+    depends_on:
+      - uv-pricecloud-prod-api-01
+    networks:
+      - uv-pricecloud-prod
+#
+#  uv-pricecloud-prod-api-02:
+#    container_name: uv-pricecloud-prod-api-02
+#    image: uv-pricecloud-prod-api-02
+#    restart: always
+#    build:
+#      context: ./api-02
+#      dockerfile: Dockerfile
+##    ports:
+##      - 9011:5000
+#    depends_on:
+#      - uv-pricecloud-prod-db
+#    networks:
+#      - uv-pricecloud-prod
+#
+networks:
+  uv-pricecloud-prod:
+    name: uv-pricecloud-prod
