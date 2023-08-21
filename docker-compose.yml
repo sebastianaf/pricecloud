@@ -21,11 +21,8 @@ services:
       dockerfile: Dockerfile
       args:
         API_PORT: ${API_PORT}
-    #    ports:
-    #      - 9010:${API_PORT}
     depends_on:
       - uv-pricecloud-db
-
     networks:
       - uv-pricecloud
 
@@ -40,8 +37,24 @@ services:
       TZ: ${TZ}
     volumes:
       - ../db-files:/var/lib/postgresql/data
-#    ports:
-#      - 9020:5432
+    networks:
+      - uv-pricecloud
+
+  uv-pricecloud-ui:
+    container_name: uv-pricecloud-ui
+    image: uv-pricecloud-ui
+    restart: always
+    environment:
+      REACT_APP_UI_PORT: ${REACT_APP_UI_PORT}
+      REACT_APP_API_HOST: ${REACT_APP_API_HOST}
+    build:
+      context: ./ui
+      dockerfile: Dockerfile
+      args:
+        REACT_APP_UI_PORT: ${REACT_APP_UI_PORT}
+        REACT_APP_API_HOST: ${REACT_APP_API_HOST}
+    depends_on:
+      - uv-pricecloud-api-01
     networks:
       - uv-pricecloud
 #
@@ -60,25 +73,6 @@ services:
 #      - uv-pricecloud
 #
 #
-#  uv-pricecloud-ui:
-#    container_name: uv-pricecloud-ui
-#    image: uv-pricecloud-ui
-#    restart: always
-#    environment:
-#      REACT_APP_UI_PORT: ${REACT_APP_UI_PORT}
-#      REACT_APP_API_HOST: ${REACT_APP_API_HOST}
-#    build:
-#      context: ./ui
-#      dockerfile: Dockerfile
-#      args:
-#        REACT_APP_UI_PORT: ${REACT_APP_UI_PORT}
-#        REACT_APP_API_HOST: ${REACT_APP_API_HOST}
-#    depends_on:
-#      - uv-pricecloud-api-01
-##    ports:
-##      - 9030:${REACT_APP_UI_PORT}
-#    networks:
-#      - uv-pricecloud
 #
 networks:
   uv-pricecloud:
