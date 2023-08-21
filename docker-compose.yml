@@ -1,9 +1,9 @@
 version: "3.8"
 
 services:
-  uv-pricecloud-api-01:
-    container_name: uv-pricecloud-api-01
-    image: uv-pricecloud-api-01
+  uv-pricecloud-prod-api-01:
+    container_name: uv-pricecloud-prod-api-01
+    image: uv-pricecloud-prod-api-01
     restart: always
     environment:
       API_JWT_SECRET: ${API_JWT_SECRET}
@@ -22,12 +22,12 @@ services:
       args:
         API_PORT: ${API_PORT}
     depends_on:
-      - uv-pricecloud-db
+      - uv-pricecloud-prod-db
     networks:
-      - uv-pricecloud
+      - uv-pricecloud-prod
 
-  uv-pricecloud-db:
-    container_name: uv-pricecloud-db
+  uv-pricecloud-prod-db:
+    container_name: uv-pricecloud-prod-db
     restart: always
     image: postgres:latest
     environment:
@@ -38,11 +38,11 @@ services:
     volumes:
       - ../db-files:/var/lib/postgresql/data
     networks:
-      - uv-pricecloud
+      - uv-pricecloud-prod
 
-  uv-pricecloud-ui:
-    container_name: uv-pricecloud-ui
-    image: uv-pricecloud-ui
+  uv-pricecloud-prod-ui:
+    container_name: uv-pricecloud-prod-ui
+    image: uv-pricecloud-prod-ui
     restart: always
     environment:
       REACT_APP_UI_PORT: ${REACT_APP_UI_PORT}
@@ -54,13 +54,13 @@ services:
         REACT_APP_UI_PORT: ${REACT_APP_UI_PORT}
         REACT_APP_API_HOST: ${REACT_APP_API_HOST}
     depends_on:
-      - uv-pricecloud-api-01
+      - uv-pricecloud-prod-api-01
     networks:
-      - uv-pricecloud
+      - uv-pricecloud-prod
 #
-#  uv-pricecloud-api-02:
-#    container_name: uv-pricecloud-api-02
-#    image: uv-pricecloud-api-02
+#  uv-pricecloud-prod-api-02:
+#    container_name: uv-pricecloud-prod-api-02
+#    image: uv-pricecloud-prod-api-02
 #    restart: always
 #    build:
 #      context: ./api-02
@@ -68,10 +68,10 @@ services:
 ##    ports:
 ##      - 9011:5000
 #    depends_on:
-#      - uv-pricecloud-db
+#      - uv-pricecloud-prod-db
 #    networks:
-#      - uv-pricecloud
+#      - uv-pricecloud-prod
 #
 networks:
-  uv-pricecloud:
-    name: uv-pricecloud
+  uv-pricecloud-prod:
+    name: uv-pricecloud-prod
