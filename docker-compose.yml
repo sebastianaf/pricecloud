@@ -72,8 +72,6 @@ services:
 #    networks:
 #      - uv-pricecloud
 #
-#
-#
 networks:
   uv-pricecloud:
     name: uv-pricecloud
