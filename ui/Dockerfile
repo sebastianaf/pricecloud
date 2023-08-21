@@ -21,6 +21,7 @@ WORKDIR /home/node
 
 COPY --from=builder --chown=node:node /home/node/package*.json ./
 COPY --from=builder --chown=node:node /home/node/node_modules/ ./node_modules/
+COPY --from=builder --chown=node:node /home/node/public/ ./public/
 COPY --from=builder --chown=node:node /home/node/.next/ ./.next/
 
 EXPOSE ${UI_PORT}
