@@ -16,6 +16,7 @@ services:
       DB_SECRET: ${DB_SECRET}
       DB_IV: ${DB_IV}
       ENV: ${ENV}
+      TZ: ${TZ}
     build:
       context: ./api-01
       dockerfile: Dockerfile
@@ -30,6 +31,7 @@ services:
         DB_SECRET: ${DB_SECRET}
         DB_IV: ${DB_IV}
         ENV: ${ENV}
+        TZ: ${TZ}
     depends_on:
       - uv-pricecloud-dev-db
     networks:
