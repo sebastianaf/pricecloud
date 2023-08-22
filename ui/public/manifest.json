@@ -1,7 +1,7 @@
 {
   "name": "Pricecloud",
   "short_name": "Pricecloud",
-  "theme_color": "#1975ff",
+  "theme_color": "#141c23",
   "background_color": "#ffffff",
   "display": "standalone",
   "orientation": "portrait",
