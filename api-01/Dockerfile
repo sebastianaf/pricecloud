@@ -12,7 +12,7 @@ COPY --chown=node:node . .
 RUN npm run build \
     && npm prune --production
 
-RUN npm --global config set user root && \
+RUN npm --global config set user node && \
     npm --global install tsconfig-paths
 RUN npm run seed
 
