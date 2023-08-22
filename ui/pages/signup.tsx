@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {
   Box,
-  Card,
   Container,
   Button,
   FormControl,
@@ -36,7 +35,7 @@ const TopWrapper = styled(Box)(
   flex: 1;
   align-items: center;
   justify-content: center;
-  padding: ${theme.spacing(6)};
+  padding: ${theme.spacing(0)};
 `
 );
 
@@ -54,7 +53,7 @@ function Login() {
   return (
     <>
       <Head>
-        <title>Pricecloud | Registrarse</title>
+        <title>Pricecloud | Registro</title>
       </Head>
       <MainContent>
         <TopWrapper>
@@ -81,53 +80,51 @@ function Login() {
               </Box>
             </NextLink>
             <Container maxWidth="sm">
-              <Card sx={{ textAlign: 'center', p: 4 }}>
-                <Box textAlign="center" sx={{ mb: 2 }}>
-                  <FormControl variant="filled" fullWidth sx={{ mb: 2 }}>
-                    <InputLabel htmlFor="name">Nombre</InputLabel>
-                    <FilledInput id="name" type="text" />
-                  </FormControl>
+              <Box textAlign="center" sx={{ mb: 2 }}>
+                <FormControl variant="filled" fullWidth sx={{ mb: 2 }}>
+                  <InputLabel htmlFor="name">Nombre</InputLabel>
+                  <FilledInput id="name" type="text" />
+                </FormControl>
 
-                  <FormControl variant="filled" fullWidth sx={{ mb: 2 }}>
-                    <InputLabel htmlFor="email">Correo electrónico</InputLabel>
-                    <FilledInput id="email" type="email" />
-                  </FormControl>
+                <FormControl variant="filled" fullWidth sx={{ mb: 2 }}>
+                  <InputLabel htmlFor="email">Correo electrónico</InputLabel>
+                  <FilledInput id="email" type="email" />
+                </FormControl>
 
-                  <FormControl variant="filled" fullWidth sx={{ mb: 2 }}>
-                    <InputLabel htmlFor="password">Contraseña</InputLabel>
-                    <FilledInput
-                      id="password"
-                      type={showPassword ? 'text' : 'password'}
-                      endAdornment={
-                        <InputAdornment position="end">
-                          <IconButton
-                            aria-label="toggle password visibility"
-                            onClick={handleClickShowPassword}
-                            onMouseDown={handleMouseDownPassword}
-                            edge="end"
-                          >
-                            {showPassword ? <VisibilityOff /> : <Visibility />}
-                          </IconButton>
-                        </InputAdornment>
-                      }
-                    />
-                  </FormControl>
+                <FormControl variant="filled" fullWidth sx={{ mb: 2 }}>
+                  <InputLabel htmlFor="password">Contraseña</InputLabel>
+                  <FilledInput
+                    id="password"
+                    type={showPassword ? 'text' : 'password'}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                          edge="end"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
 
-                  <FormControl variant="filled" fullWidth sx={{ mb: 2 }}>
-                    <InputLabel htmlFor="passwordRepeat">
-                      Repita su contraseña
-                    </InputLabel>
-                    <FilledInput
-                      id="passwordRepeat"
-                      type={showPassword ? 'text' : 'password'}
-                    />
-                  </FormControl>
-                </Box>
-                <Divider sx={{ mb: 4 }}></Divider>
-                <Button href="/signin" variant="contained" fullWidth>
-                  Registrase
-                </Button>
-              </Card>
+                <FormControl variant="filled" fullWidth sx={{ mb: 2 }}>
+                  <InputLabel htmlFor="passwordRepeat">
+                    Repita su contraseña
+                  </InputLabel>
+                  <FilledInput
+                    id="passwordRepeat"
+                    type={showPassword ? 'text' : 'password'}
+                  />
+                </FormControl>
+              </Box>
+              <Divider sx={{ mb: 4 }}></Divider>
+              <Button href="/signin" variant="contained" fullWidth>
+                Regístrate
+              </Button>
             </Container>
           </Container>
         </TopWrapper>
