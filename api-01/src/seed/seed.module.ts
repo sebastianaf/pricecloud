@@ -1,7 +1,6 @@
 import { Logger, Module } from '@nestjs/common';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import * as Joi from 'joi';
 
 import { SeedService } from './seed.service';
 import { UserModule } from '../user/user.module';

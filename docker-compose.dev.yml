@@ -6,6 +6,7 @@ services:
     image: uv-pricecloud-dev-api-01
     restart: always
     environment:
+      API_PORT: ${API_PORT}
       API_JWT_SECRET: ${API_JWT_SECRET}
       API_JWT_EXPIRATION_TIME: ${API_JWT_EXPIRATION_TIME}
       DB_HOST: ${DB_HOST}
@@ -16,6 +17,7 @@ services:
       DB_SECRET: ${DB_SECRET}
       DB_IV: ${DB_IV}
       ENV: ${ENV}
+      TZ: ${TZ}
     build:
       context: ./api-01
       dockerfile: Dockerfile
@@ -36,7 +38,7 @@ services:
       POSTGRES_DB: ${DB_NAME}
       TZ: ${TZ}
     volumes:
-      - ../db-files:/var/lib/postgresql/data
+      - ../uv-pricecloud-dev-data:/var/lib/postgresql/data
     networks:
       - uv-pricecloud-dev
 

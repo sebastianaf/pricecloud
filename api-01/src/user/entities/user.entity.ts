@@ -19,6 +19,10 @@ export class User {
   @Column({ unique: true, transformer: EncryptionLowerCaseTransformer })
   email: string;
 
+  @ApiProperty({ description: `Email` })
+  @Column({ nullable: true, transformer: EncryptionLowerCaseTransformer })
+  company: string;
+
   @ApiProperty({ description: `Password` })
   @Exclude({ toPlainOnly: true })
   @Column({ select: false })
