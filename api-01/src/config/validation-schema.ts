@@ -12,4 +12,5 @@ export default Joi.object({
   DB_SECRET: Joi.string().length(32).required(),
   DB_IV: Joi.string().length(16).required(),
   ENV: Joi.string().equal(`dev`, `prod`).required(),
+  TZ: Joi.string().required(),
 });

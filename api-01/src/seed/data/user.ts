@@ -1,6 +1,6 @@
 import { User } from '../../user/entities/user.entity';
 
-export const userSeed: User[] = [
+export const userSeed: Partial<User>[] = [
   {
     id: undefined,
     email: 'admin@admin.com',

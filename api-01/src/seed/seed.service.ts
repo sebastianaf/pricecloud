@@ -19,8 +19,6 @@ export class SeedService {
   }
 
   async seedUser() {
-    this.logger.log('Seeding users...', `SeedModule`);
-
     const user = await this.userRepository.findOne({
       where: { email: userSeed[0].email },
     });
@@ -31,7 +29,7 @@ export class SeedService {
       }
       userSeed[i].password = bcrypt.hashSync(userSeed[i].password, 10);
       await this.userRepository.save(userSeed[i]);
+      this.logger.log('Seeding users... Done', `SeedModule`);
     }
-    this.logger.log('Seeding users... Done', `SeedModule`);
   }
 }

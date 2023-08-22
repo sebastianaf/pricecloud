@@ -15,6 +15,10 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @ApiProperty({ description: `Testing migration field` })
+  @Column({ nullable: true, transformer: EncryptionLowerCaseTransformer })
+  dummyField: string;
+
   @ApiProperty({ description: `Email` })
   @Column({ unique: true, transformer: EncryptionLowerCaseTransformer })
   email: string;
