@@ -14,6 +14,19 @@ RUN npm run build \
     && npm prune --production
 
 
+RUN echo ${API_JWT_SECRET}
+RUN echo ${API_JWT_EXPIRATION_TIME}
+RUN echo ${DB_HOST}
+RUN echo ${DB_PORT}
+RUN echo ${DB_NAME}
+RUN echo ${DB_USER}
+RUN echo ${DB_PASSWORD}
+RUN echo ${DB_SECRET}
+RUN echo ${DB_IV}
+RUN echo ${ENV}
+
+RUN printenv
+
 RUN npm run seed
 
 FROM node:16-alpine
