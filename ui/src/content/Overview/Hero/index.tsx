@@ -22,7 +22,7 @@ const TypographyH2 = styled(Typography)(
 `
 );
 
-const LabelWrapper = styled(Box)(
+/* const LabelWrapper = styled(Box)(
   ({ theme }) => `
     background-color: ${theme.colors.success.main};
     color: ${theme.palette.success.contrastText};
@@ -35,7 +35,7 @@ const LabelWrapper = styled(Box)(
     margin-bottom: ${theme.spacing(2)};
 `
 );
-
+ */
 const MuiAvatar = styled(Box)(
   ({ theme }) => `
     width: ${theme.spacing(8)};
