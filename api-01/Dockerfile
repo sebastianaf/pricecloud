@@ -1,4 +1,5 @@
 FROM node:16-alpine as builder
+ARG ENV_FILE
 
 ENV NODE_ENV build
 
@@ -12,16 +13,6 @@ COPY --chown=node:node . .
 RUN npm run build \
     && npm prune --production
 
-ENV API_JWT_SECRET= $API_JWT_SECRET
-ENV API_JWT_EXPIRATION_TIME= $API_JWT_EXPIRATION_TIME
-ENV DB_HOST= $DB_HOST
-ENV DB_PORT= $DB_PORT
-ENV DB_NAME= $DB_NAME
-ENV DB_USER= $DB_USER
-ENV DB_PASSWORD= $DB_PASSWORD
-ENV DB_SECRET= $DB_SECRET
-ENV DB_IV= $DB_IV
-ENV ENV= $ENV
 
 RUN npm run seed
 
