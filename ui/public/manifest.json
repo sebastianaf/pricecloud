@@ -1,30 +1,21 @@
 {
+  "name": "Pricecloud",
+  "short_name": "Pricecloud",
   "theme_color": "#1975ff",
   "background_color": "#ffffff",
   "display": "standalone",
+  "orientation": "portrait",
   "start_url": "/login",
-  "short_name": "Pricecloud",
-  "name": "Pricecloud",
   "icons": [
     {
       "src": "/icon-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "/icon-256x256.png",
-      "sizes": "256x256",
-      "type": "image/png"
-    },
-    {
-      "src": "/icon-384x384.png",
-      "sizes": "384x384",
-      "type": "image/png"
+      "type": "image/png",
+      "sizes": "192x192"
     },
     {
       "src": "/icon-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "sizes": "512x512"
     }
   ]
 }
