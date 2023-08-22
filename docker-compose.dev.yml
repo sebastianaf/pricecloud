@@ -6,6 +6,7 @@ services:
     image: uv-pricecloud-dev-api-01
     restart: always
     environment:
+      API_PORT: ${API_PORT}
       API_JWT_SECRET: ${API_JWT_SECRET}
       API_JWT_EXPIRATION_TIME: ${API_JWT_EXPIRATION_TIME}
       DB_HOST: ${DB_HOST}
