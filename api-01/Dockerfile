@@ -15,7 +15,6 @@ RUN npm run build \
 USER root
 #RUN npm --global config set user node && \
 RUN npm --global install tsconfig-paths
-USER node
 RUN npm run seed
 
 FROM node:16-alpine
