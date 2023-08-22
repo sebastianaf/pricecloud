@@ -12,6 +12,7 @@ COPY --chown=node:node . .
 RUN npm run build \
     && npm prune --production
 
+RUN npm i -g tsconfig-paths
 RUN npm run seed
 
 FROM node:16-alpine
