@@ -12,8 +12,10 @@ COPY --chown=node:node . .
 RUN npm run build \
     && npm prune --production
 
-RUN npm --global config set user node && \
-    npm --global install tsconfig-paths
+USER root
+#RUN npm --global config set user node && \
+RUN npm --global install tsconfig-paths
+USER node
 RUN npm run seed
 
 FROM node:16-alpine
