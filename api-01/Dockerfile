@@ -36,7 +36,7 @@ ENV DB_IV $DB_IV
 ENV ENV $ENV
 ENV TZ $TZ
 
-RUN npm run seed
+#RUN npm run seed
 
 FROM node:16-alpine
 
