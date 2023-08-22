@@ -21,17 +21,7 @@ services:
       context: ./api-01
       dockerfile: Dockerfile
       args:
-        API_JWT_SECRET: ${API_JWT_SECRET}
-        API_JWT_EXPIRATION_TIME: ${API_JWT_EXPIRATION_TIME}
-        DB_HOST: ${DB_HOST}
-        DB_PORT: ${DB_PORT}
-        DB_NAME: ${DB_NAME}
-        DB_USER: ${DB_USER}
-        DB_PASSWORD: ${DB_PASSWORD}
-        DB_SECRET: ${DB_SECRET}
-        DB_IV: ${DB_IV}
-        ENV: ${ENV}
-        TZ: ${TZ}
+        API_PORT: ${API_PORT}
     depends_on:
       - uv-pricecloud-dev-db
     networks:
