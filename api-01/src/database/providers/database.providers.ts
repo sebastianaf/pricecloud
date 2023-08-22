@@ -16,7 +16,8 @@ export const databaseProviders = [
         username: configService.get('DB_USER'),
         password: configService.get('DB_PASSWORD'),
         entities: [__dirname + '/../../**/*.entity{.ts,.js}'],
-        synchronize: process.env.ENV === 'prod' ? false : true,
+        //synchronize: process.env.ENV === 'prod' ? false : true,
+        synchronize: false,
       });
 
       return dataSource.initialize();
