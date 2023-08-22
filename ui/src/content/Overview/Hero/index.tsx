@@ -106,7 +106,7 @@ function Hero() {
         container
       >
         <Grid item md={10} lg={8} mx="auto">
-          <LabelWrapper color="success">Version 1.0.0</LabelWrapper>
+          {/* <LabelWrapper color="success">Version 1.0.0</LabelWrapper> */}
           <TypographyH1 sx={{ mb: 2 }} variant="h1">
             La app para informarse de los precios del cloud
           </TypographyH1>

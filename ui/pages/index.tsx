@@ -67,7 +67,7 @@ function Overview() {
         </Container>
       </HeaderWrapper>
       <Hero />
-      <Container maxWidth="lg" sx={{ my: 8 }}>
+      <Container maxWidth="lg" sx={{ my: 5 }}>
         <Typography textAlign="center" variant="subtitle1">
           Crafted by{' '}
           <Link
