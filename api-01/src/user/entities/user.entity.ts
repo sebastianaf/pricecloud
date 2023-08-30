@@ -19,7 +19,7 @@ export class User {
   @Column({ unique: true, transformer: EncryptionLowerCaseTransformer })
   email: string;
 
-  @ApiProperty({ description: `Email` })
+  @ApiProperty({ description: `Company`, nullable: true })
   @Column({ nullable: true, transformer: EncryptionLowerCaseTransformer })
   company: string;
 

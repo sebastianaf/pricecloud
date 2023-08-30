@@ -8,7 +8,7 @@ import { ApiTags } from '@nestjs/swagger';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Get()
+  @Post()
   async validateUser(@Body() validateUser: ValidateUserDto) {
     return await this.authService.validateUser(validateUser);
   }
