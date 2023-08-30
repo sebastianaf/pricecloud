@@ -1,17 +1,5 @@
-import {
-  Box,
-  Card,
-  Typography,
-  Container,
-  Divider,
-  Button,
-  FormControl,
-  OutlinedInput,
-  InputAdornment,
-  styled
-} from '@mui/material';
+import { Box, Typography, Container, Button, styled } from '@mui/material';
 import Head from 'next/head';
-import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import type { ReactElement } from 'react';
 import BaseLayout from 'src/layouts/BaseLayout';
 
@@ -35,18 +23,6 @@ const TopWrapper = styled(Box)(
 `
 );
 
-const OutlinedInputWrapper = styled(OutlinedInput)(
-  ({ theme }) => `
-    background-color: ${theme.colors.alpha.white[100]};
-`
-);
-
-const ButtonSearch = styled(Button)(
-  ({ theme }) => `
-    margin-right: -${theme.spacing(1)};
-`
-);
-
 function Status404() {
   return (
     <>
@@ -58,8 +34,8 @@ function Status404() {
           <Container maxWidth="md">
             <Box textAlign="center">
               <img alt="404" height={180} src="/static/images/status/404.svg" />
-              <Typography variant="h2" sx={{ my: 2 }}>
-                The page you were looking for doesn't exist.
+              <Typography variant="h2" sx={{ my: 4 }}>
+                La página que estás buscando no existe
               </Typography>
               <Typography
                 variant="h4"
@@ -67,36 +43,13 @@ function Status404() {
                 fontWeight="normal"
                 sx={{ mb: 4 }}
               >
-                It's on us, we moved the content to a different page. The search
-                below should help!
+                Parece que fue reubicada o eliminada. Comprueba la URL que
+                acabas de escribir.
               </Typography>
+              <Button href="/" variant="outlined">
+                Ir a la página principal
+              </Button>
             </Box>
-            <Container maxWidth="sm">
-              <Card sx={{ textAlign: 'center', mt: 3, p: 4 }}>
-                <FormControl variant="outlined" fullWidth>
-                  <OutlinedInputWrapper
-                    type="text"
-                    placeholder="¿Qué estás buscando?"
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <ButtonSearch variant="contained" size="small">
-                          Buscar
-                        </ButtonSearch>
-                      </InputAdornment>
-                    }
-                    startAdornment={
-                      <InputAdornment position="start">
-                        <SearchTwoToneIcon />
-                      </InputAdornment>
-                    }
-                  />
-                </FormControl>
-                <Divider sx={{ my: 4 }}>OR</Divider>
-                <Button href="/" variant="outlined">
-                  Go to homepage
-                </Button>
-              </Card>
-            </Container>
           </Container>
         </TopWrapper>
       </MainContent>
