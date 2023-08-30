@@ -4,13 +4,10 @@ import {
   Box,
   Typography,
   Container,
-  Button,
   FormControl,
   InputAdornment,
   styled,
   IconButton,
-  FilledInput,
-  InputLabel,
   Badge,
   Divider,
   TextField
@@ -53,18 +50,11 @@ function SignIn() {
   const {
     formState: { errors, isSubmitting },
     register,
-    getValues,
     handleSubmit
   } = useForm<Login>();
 
   const onSubmit = handleSubmit(async (data: Login) => {
-    console.log(data);
-
-    const response = await axiosAuth.post(path.auth, data);
-
-    console.log(response);
-
-    console.log(`submitHandler: ${JSON.stringify(getValues())}`);
+    await axiosAuth.post(path.auth, data);
   });
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
