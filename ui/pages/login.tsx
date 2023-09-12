@@ -20,9 +20,10 @@ import Head from 'next/head';
 import BaseLayout from 'src/layouts/BaseLayout';
 import { Login } from '../src/models/FormStates';
 import { emailRegex, passwordRegex } from '../src/helper/regex';
-import { axiosAuth } from '../src/helper/authAxios';
+import { authAxios } from '../src/helper/authAxios';
 import { path } from '../src/helper/path';
 import { LoadingButton } from '@mui/lab';
+import useAuth from '../src/hooks/useAuth';
 
 const MainContent = styled(Box)(
   () => `
@@ -46,6 +47,7 @@ const TopWrapper = styled(Box)(
 
 function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
+  const { login } = useAuth();
 
   const {
     formState: { errors, isSubmitting },
@@ -54,7 +56,7 @@ function SignIn() {
   } = useForm<Login>();
 
   const onSubmit = handleSubmit(async (data: Login) => {
-    await axiosAuth.post(path.auth, data);
+    await login(data);
   });
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -71,32 +73,33 @@ function SignIn() {
       <MainContent>
         <TopWrapper>
           <Container maxWidth="md">
-            <NextLink href="/">
-              <Box textAlign="center" sx={{ m: 2 }}>
-                <Badge
-                  overlap="circular"
-                  color="success"
-                  badgeContent="v1.0.0"
-                  sx={{ cursor: 'pointer' }}
-                >
+            <Box textAlign="center" sx={{ m: 2 }}>
+              <Badge
+                overlap="circular"
+                color="success"
+                badgeContent="v1.0.0"
+                sx={{ cursor: 'pointer' }}
+              >
+                <NextLink href="/">
                   <img
                     alt="Pricecloud"
                     height={96}
                     src="/static/images/logo/pricecloud-logo.png"
                     draggable={false}
                   />
-                </Badge>
-                <Typography variant="h1" sx={{ mt: 2 }}>
-                  Pricecloud
-                </Typography>
-                <Typography variant="subtitle2">Crear una cuenta</Typography>
-              </Box>
-            </NextLink>
+                </NextLink>
+              </Badge>
+              <Typography variant="h1" sx={{ mt: 2 }}>
+                Pricecloud
+              </Typography>
+              <Typography variant="subtitle2">Crear una cuenta</Typography>
+            </Box>
 
             <form onSubmit={onSubmit}>
               <Container maxWidth="sm">
                 <Box textAlign="center">
                   <TextField
+                    autoComplete="email"
                     fullWidth
                     sx={{ mb: 2 }}
                     className=""
@@ -120,6 +123,7 @@ function SignIn() {
                   />
 
                   <TextField
+                    autoComplete="password"
                     label="Contraseña"
                     id="password"
                     variant="outlined"
@@ -134,7 +138,7 @@ function SignIn() {
                       pattern: {
                         value: passwordRegex,
                         message:
-                          'Debe contener al menos 8 caracteres, una letra mayúscula, una letra minúscula y un número'
+                          'Al menos 8 caracteres, una mayúscula, una minúscula y un número'
                       }
                     })}
                     helperText={errors?.password?.message}

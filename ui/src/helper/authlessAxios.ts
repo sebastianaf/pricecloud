@@ -2,13 +2,12 @@ import axios from 'axios';
 import { API_HOST } from './environment';
 import { interceptAxios } from './interceptAxios';
 
-export const authAxios = axios.create({
+export const authlessAxios = axios.create({
   baseURL: API_HOST
 });
 
-authAxios.interceptors.request.use(
+authlessAxios.interceptors.request.use(
   (config) => {
-    config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
     return config;
   },
   (error) => {
@@ -16,7 +15,7 @@ authAxios.interceptors.request.use(
   }
 );
 
-authAxios.interceptors.response.use(
+authlessAxios.interceptors.response.use(
   (response) => {
     interceptAxios(response);
     return response;

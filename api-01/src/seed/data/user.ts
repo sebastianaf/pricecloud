@@ -3,7 +3,7 @@ import { User } from '../../user/entities/user.entity';
 export const userSeed: Partial<User>[] = [
   {
     id: undefined,
-    email: 'admin@email.com',
+    email: 'admin@pricecloud.org',
     firstName: 'Admin',
     secondName: undefined,
     firstLastName: 'Pricecloud',
