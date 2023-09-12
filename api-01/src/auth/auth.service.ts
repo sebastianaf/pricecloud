@@ -31,9 +31,10 @@ export class AuthService {
       select: ['id', 'email', 'password', 'loginCount'],
     });
 
-    if (!user) {
-      return null;
-    }
+    if (!user)
+      throw new ConflictException(
+        `El correo electrónico o la contraseña son incorrectos (AVU-001)`,
+      );
 
     if (!bcrypt.compareSync(password, user.password)) return null;
 
