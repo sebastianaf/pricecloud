@@ -1,0 +1,95 @@
+body {
+  font-family: Helvetica, Arial, Sans-Serif;
+  padding: 1rem;
+}
+
+a {
+  color: #E459C4;
+  text-decoration: none;
+}
+
+input {
+  padding: 0.5rem;
+  width: 240px;
+}
+
+button {
+  background-color: #DB44B8;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 1rem;
+  padding: 0.5rem 0.75rem;
+}
+
+button:hover {
+  background-color: #cc21a5;
+}
+
+pre {
+  background-color: #F5F5F9;
+  border: 1px solid #DCD8E1;
+  border-radius: 4px;
+  font-size: 1rem;
+  overflow: scroll;
+  padding: 0.5rem;
+}
+
+.error {
+  color: #E51029;
+}
+
+.icon {
+  height: 16px;
+  margin-bottom: -2px;
+  width: 16px;
+}
+
+.stats-table th {
+  text-align: right;
+  padding-right: 1rem;
+}
+
+.cta {
+  background-color: #FCF5EB;
+  border: 1px solid #FDDE96;
+  border-radius: 4px;
+  padding: 0.5rem;
+}
+
+.cta p {
+  margin: 0;
+}
+
+#logo {
+  width: 200px;
+}
+
+#success-message {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+#version-message {
+  margin-bottom: 2rem;
+}
+
+#version-message p.warning {
+  background-color: #FCF5EB;
+  border: 1px solid #FDDE96;
+  border-radius: 4px;
+  padding: 0.5rem;
+}
+
+#configure {
+  margin-bottom: 2rem;
+}
+
+#stats {
+  margin-bottom: 2rem;
+}
+
+#stats-results {
+  margin-top: 1rem;
+}
+

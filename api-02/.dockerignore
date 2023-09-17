@@ -1,0 +1,17 @@
+/.devcontainer
+/.github
+
+/data
+/dist
+/examples
+/node_modules
+/tmp
+
+.env*
+.gitignore
+
+docker-compose.yml
+README
+README.md
+LICENSE
+LICENSE.md

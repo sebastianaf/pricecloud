@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cloud Pricing API</title>
+    <link rel="shortcut icon" type="image/png" href="/img/favicon.png"/>
+    <link rel="stylesheet" href="/css/index.css" />
+    <script>
+      window.__CLOUD_PRICING_API_VERSION__ = '<%= version %>';
+    </script>
+  </head>
+  <body>
+    <img id="logo" src="/img/logo.svg" alt="Infracost logo" />
+    <p id="success-message"><a href="https://github.com/infracost/cloud-pricing-api" target="_blank">Cloud Pricing API (v<%= version %>)</a> has been successfully installed! 🥳🎉</p>
+
+    <div id="version-message"></div>
+
+    <div id="configure">
+      <span>To configure the <a href="https://github.com/infracost/infracost" target="_blank">Infracost CLI</a> to use this API run the following commands:</span>
+      <pre>infracost configure set pricing_api_endpoint <span id="cloud-pricing-api-endpoint">http://cloud-pricing-api</span>
+infracost configure set api_key SELF_HOSTED_INFRACOST_API_KEY</pre>
+    </div>
+
+    <div id="stats">
+      <p>To see statistics enter your self-hosted API key below:</p>
+      <input id="api-key-input" name="api_key" type="password" placeholder="Self-hosted API key" />
+      <button id="api-key-submit">Show stats</button>
+      <div id="stats-results"></div>
+    </div>
+
+    <div class="cta">
+      <p>Interested in working with us to build a more data rich dashboard, or have any feedback? Email <a href="mailto:hassan.hosseini@infracost.io">hassan.hosseini@infracost.io</a></p>
+    </div>
+  </body>
+  <script src="/js/stats.js"></script>
+</html>
