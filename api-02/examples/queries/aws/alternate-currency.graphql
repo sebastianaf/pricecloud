@@ -1,0 +1,41 @@
+# Get the price for a single t3.micro in Pounds and New Zealand Dollars.
+
+query {
+  products(
+    filter: {
+      vendorName: "aws",
+      service: "AmazonEC2",
+      productFamily: "Compute Instance",
+      region: "us-east-1",
+      attributeFilters: [
+        { key: "instanceType", value: "t3.micro" },
+        { key: "tenancy", value: "Shared" },
+        { key: "operatingSystem", value: "Linux" },
+        { key: "capacitystatus", value: "Used" },
+        { key: "preInstalledSw", value: "NA" }
+      ]
+    },
+  ) {
+    prices(
+      filter: {
+        purchaseOption: "on_demand"
+      },
+    ) { GBP, NZD }
+  }
+}
+
+# Response:
+# {
+#   "data": {
+#     "products": [
+#       {
+#         "prices": [
+#           {
+#             "GBP": "0.0075708048",
+#             "NZD": "0.0149833944"
+#           }
+#         ]
+#       }
+#     ]
+#   }
+# }

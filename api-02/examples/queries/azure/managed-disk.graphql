@@ -1,0 +1,40 @@
+# Get price of a P60 LRS Premium SSD Managed Disk in the Brazil Southeast region
+
+query {
+  products(
+    filter: {
+      vendorName: "azure",
+      productFamily: "Storage",
+      region: "brazilsoutheast",
+      attributeFilters: [
+        { key: "productName", value: "Premium SSD Managed Disks" },
+        { key: "skuName", value: "P60 LRS"},
+        { key: "meterName", value: "P60 Disks" }
+      ]
+    },
+  ) {
+    prices(
+      filter: {
+        purchaseOption: "Consumption",
+      },
+    ) { USD }
+  }
+}
+
+# Response:
+# {
+#   "data": {
+#     "products": [
+#       {
+#         "prices": [
+#           {
+#             "USD": "2124.72"
+#           }
+#         ]
+#       },
+#       {
+#         "prices": []
+#       }
+#     ]
+#   }
+# }

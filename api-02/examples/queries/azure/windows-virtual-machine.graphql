@@ -1,0 +1,38 @@
+# Get price of a DS2 v2 Windows VM in the Central US region
+
+query {
+  products(
+    filter: {
+      vendorName: "azure",
+      service: "Virtual Machines",
+      productFamily: "Compute",
+      region: "centralus",
+      attributeFilters: [
+        { key: "skuName", value: "DS2 v2" }
+        { key: "productName", value:"Virtual Machines DSv2 Series Windows"}
+      ]
+    },
+  ) {
+    prices(
+      filter: {
+        purchaseOption: "Consumption",
+        unit: "1 Hour"
+      },
+    ) { USD }
+  }
+}
+
+# Response:
+# {
+#   "data": {
+#     "products": [
+#       {
+#         "prices": [
+#           {
+#             "USD": "0.252"
+#           }
+#         ]
+#       }
+#     ]
+#   }
+# }

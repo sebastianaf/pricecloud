@@ -1,0 +1,36 @@
+# Get price of a n1-standard-64 VM in the Europe West 1
+
+query {
+  products(
+    filter: {
+      vendorName: "gcp",
+      service: "Compute Engine",
+      productFamily: "Compute Instance",
+      region: "europe-west1",
+      attributeFilters: [
+        { key: "machineType", value: "n1-standard-64" }
+      ]
+    },
+  ) {
+    prices(
+      filter: {
+        purchaseOption: "on_demand"
+      },
+    ) { USD }
+  }
+}
+
+# Response:
+# {
+#   "data": {
+#     "products": [
+#       {
+#         "prices": [
+#           {
+#             "USD": "3.344112"
+#           }
+#         ]
+#       }
+#     ]
+#   }
+# }

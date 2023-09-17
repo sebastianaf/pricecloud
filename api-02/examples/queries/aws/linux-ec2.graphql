@@ -1,0 +1,20 @@
+# Get all t3.micro prices in US East, this returns 30+ results.
+
+query {
+  products(
+    filter: {
+      vendorName: "aws",
+      service: "AmazonEC2",
+      productFamily: "Compute Instance",
+      region: "us-east-1",
+      attributeFilters: [
+        { key: "instanceType", value: "t3.micro" }
+      ]
+    },
+  ) {
+    attributes { key, value }
+    prices { USD }
+  }
+}
+
+# Response too long to paste
