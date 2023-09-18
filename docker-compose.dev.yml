@@ -38,7 +38,7 @@ services:
       POSTGRES_DB: ${DB_NAME}
       TZ: ${TZ}
     volumes:
-      - ../uv-pricecloud-dev-d:/var/lib/postgresql/data
+      - ../uv-pricecloud-dev-db:/var/lib/postgresql/data
     networks:
       - uv-pricecloud-dev
 
@@ -48,8 +48,6 @@ services:
       context: ./api-02
       dockerfile: Dockerfile
     image: uv-pricecloud-dev-api-02
-    #    ports:
-    #        - 4000:4000
     environment:
       INFRACOST_API_KEY: ${INFRACOST_API_KEY}
       SELF_HOSTED_INFRACOST_API_KEY: ${SELF_HOSTED_INFRACOST_API_KEY}
@@ -69,11 +67,12 @@ services:
     networks:
       - uv-pricecloud-dev
 
-  uv-pricecloud-dev-api-02-ij:
+  uv-pricecloud-dev-api-02-init:
+    container_name: uv-pricecloud-dev-api-02-init
     build:
       context: ./api-02
       dockerfile: Dockerfile
-    image: uv-pricecloud-dev-api-02-ij
+    image: uv-pricecloud-dev-api-02-init
     environment:
       INFRACOST_API_KEY: ${INFRACOST_API_KEY}
       POSTGRES_HOST: ${DB02_HOST}
@@ -87,10 +86,10 @@ services:
       - uv-pricecloud-dev
     command: ["npm", "run", "job:init"]
 
-  uv-pricecloud-dev-api-02-uj:
-    container_name: uv-pricecloud-dev-api-02-uj
+  uv-pricecloud-dev-api-02-cron:
+    container_name: uv-pricecloud-dev-api-02-cron
     build:
-      context: .
+      context: ./api-02
       dockerfile: Dockerfile
     image: uv-pricecloud-dev-api-02-uj
     environment:
