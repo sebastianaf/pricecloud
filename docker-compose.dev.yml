@@ -53,7 +53,7 @@ services:
     environment:
       - INFRACOST_API_KEY: ${INFRACOST_API_KEY}
       - SELF_HOSTED_INFRACOST_API_KEY: ${SELF_HOSTED_INFRACOST_API_KEY}
-      - POSTGRES_HOST: ${DB02_HOST}:${DB02_PORT}
+      - POSTGRES_HOST: ${DB02_HOST}
       - POSTGRES_USER: ${DB02_USER}
       - POSTGRES_PASSWORD: ${DB02_PASSWORD}
       - POSTGRES_DB: ${DB02_NAME}
@@ -76,7 +76,7 @@ services:
     image: uv-pricecloud-dev-api-02-ij
     environment:
       - INFRACOST_API_KEY: ${INFRACOST_API_KEY}
-      - POSTGRES_HOST: ${DB02_HOST}:${DB02_PORT}
+      - POSTGRES_HOST: ${DB02_HOST}
       - POSTGRES_DB: ${DB02_NAME}
       - POSTGRES_USER: ${DB02_USER}
       - POSTGRES_PASSWORD: ${DB02_PASSWORD}
@@ -95,7 +95,7 @@ services:
     image: uv-pricecloud-dev-api-02-uj
     environment:
       - INFRACOST_API_KEY: ${INFRACOST_API_KEY}
-      - POSTGRES_HOST: ${DB02_HOST}:${DB02_PORT}
+      - POSTGRES_HOST: ${DB02_HOST}
       - POSTGRES_DB: ${DB02_NAME}
       - POSTGRES_USER: ${DB02_USER}
       - POSTGRES_PASSWORD: ${DB02_PASSWORD}
