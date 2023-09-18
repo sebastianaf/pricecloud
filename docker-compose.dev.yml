@@ -100,7 +100,8 @@ services:
       POSTGRES_USER: ${DB02_USER}
       POSTGRES_PASSWORD: ${DB02_PASSWORD}
       TZ: ${TZ}
-    depends_on: uv-pricecloud-dev-db-02
+    depends_on: 
+      - uv-pricecloud-dev-db-02
     networks:
       - uv-pricecloud-dev
     command: ["npm", "run", "job:update"]
