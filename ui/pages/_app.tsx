@@ -43,14 +43,14 @@ function PricecloudApp(props: TokyoAppProps) {
   Router.events.on('routeChangeError', nProgress.done);
   Router.events.on('routeChangeComplete', nProgress.done);
 
-  const Transition = React.forwardRef(function Transition(
+  /* const Transition = React.forwardRef(function Transition(
     props: TransitionProps & {
       children: React.ReactElement<any, any>;
     },
     ref: React.Ref<unknown>
   ) {
     return <Slide direction="up" ref={ref} {...props} />;
-  });
+  }); */
 
   return (
     <CacheProvider value={emotionCache}>
