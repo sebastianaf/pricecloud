@@ -51,13 +51,13 @@ services:
     #    ports:
     #        - 4000:4000
     environment:
-      - INFRACOST_API_KEY: ${INFRACOST_API_KEY}
-      - SELF_HOSTED_INFRACOST_API_KEY: ${SELF_HOSTED_INFRACOST_API_KEY}
-      - POSTGRES_HOST: ${DB02_HOST}
-      - POSTGRES_USER: ${DB02_USER}
-      - POSTGRES_PASSWORD: ${DB02_PASSWORD}
-      - POSTGRES_DB: ${DB02_NAME}
-      - TZ: ${TZ}
+      INFRACOST_API_KEY: ${INFRACOST_API_KEY}
+      SELF_HOSTED_INFRACOST_API_KEY: ${SELF_HOSTED_INFRACOST_API_KEY}
+      POSTGRES_HOST: ${DB02_HOST}
+      POSTGRES_USER: ${DB02_USER}
+      POSTGRES_PASSWORD: ${DB02_PASSWORD}
+      POSTGRES_DB: ${DB02_NAME}
+      TZ: ${TZ}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:4000/health"]
       interval: 60s
@@ -75,12 +75,12 @@ services:
       dockerfile: Dockerfile
     image: uv-pricecloud-dev-api-02-ij
     environment:
-      - INFRACOST_API_KEY: ${INFRACOST_API_KEY}
-      - POSTGRES_HOST: ${DB02_HOST}
-      - POSTGRES_DB: ${DB02_NAME}
-      - POSTGRES_USER: ${DB02_USER}
-      - POSTGRES_PASSWORD: ${DB02_PASSWORD}
-      - TZ: ${TZ}
+      INFRACOST_API_KEY: ${INFRACOST_API_KEY}
+      POSTGRES_HOST: ${DB02_HOST}
+      POSTGRES_DB: ${DB02_NAME}
+      POSTGRES_USER: ${DB02_USER}
+      POSTGRES_PASSWORD: ${DB02_PASSWORD}
+      TZ: ${TZ}
     depends_on: 
       - uv-pricecloud-dev-db-02
     networks:
@@ -94,12 +94,12 @@ services:
       dockerfile: Dockerfile
     image: uv-pricecloud-dev-api-02-uj
     environment:
-      - INFRACOST_API_KEY: ${INFRACOST_API_KEY}
-      - POSTGRES_HOST: ${DB02_HOST}
-      - POSTGRES_DB: ${DB02_NAME}
-      - POSTGRES_USER: ${DB02_USER}
-      - POSTGRES_PASSWORD: ${DB02_PASSWORD}
-      - TZ: ${TZ}
+      INFRACOST_API_KEY: ${INFRACOST_API_KEY}
+      POSTGRES_HOST: ${DB02_HOST}
+      POSTGRES_DB: ${DB02_NAME}
+      POSTGRES_USER: ${DB02_USER}
+      POSTGRES_PASSWORD: ${DB02_PASSWORD}
+      TZ: ${TZ}
     depends_on: uv-pricecloud-dev-db-02
     networks:
       - uv-pricecloud-dev
@@ -110,10 +110,10 @@ services:
     image: postgres:13
     user: postgres
     environment:
-      - POSTGRES_USER: ${DB02_USER}
-      - POSTGRES_PASSWORD: ${DB02_PASSWORD}
-      - POSTGRES_DB: ${DB02_NAME}
-      - TZ: ${TZ}
+      POSTGRES_USER: ${DB02_USER}
+      POSTGRES_PASSWORD: ${DB02_PASSWORD}
+      POSTGRES_DB: ${DB02_NAME}
+      TZ: ${TZ}
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
       interval: 60s
