@@ -28,7 +28,7 @@
 #CMD ["npm", "run", "start"]
 
 # Establece el nodo base
-node:16-alpine
+FROM node:16-alpine
 
 # Establecer directorio de trabajo
 WORKDIR /usr/src/app
