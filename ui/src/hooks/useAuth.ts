@@ -7,6 +7,8 @@ import { authlessAxios } from '../helper/authlessAxios';
 const useAuth = () => {
   const login = async (data: Login) => {
     try {
+      console.log(process.env.NEXT_PUBLIC_API_HOST);
+      
       const response = await authlessAxios.post(path.auth, data);
       const { token } = await response.data;
       window.localStorage.setItem('token', token);
