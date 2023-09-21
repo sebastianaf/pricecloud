@@ -63,27 +63,6 @@ function PricecloudApp(props: TokyoAppProps) {
           content="width=device-width, initial-scale=1, shrink-to-fit=no"
         />
       </Head>
-      {/* <Dialog
-        open={true}
-        TransitionComponent={Transition}
-        keepMounted
-        onClose={() => {}}
-        aria-describedby="alert-dialog-slide-description"
-      >
-        <DialogTitle>{"Use Google's location service?"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
-            Let Google help apps determine location. This means sending
-            anonymous location data to Google, even when no apps are running.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button color='primary' size="large" variant="contained" onClick={() => {}}>
-            Disagree
-          </Button>
-          <Button onClick={() => {}}>Agree</Button>
-        </DialogActions>
-      </Dialog> */}
       <SidebarProvider>
         <ThemeProvider>
           <LocalizationProvider dateAdapter={AdapterDateFns}>

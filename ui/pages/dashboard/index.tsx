@@ -24,6 +24,7 @@ import Checklist from '@/content/Dashboards/Tasks/Checklist';
 import Profile from '@/content/Dashboards/Tasks/Profile';
 import TaskSearch from '@/content/Dashboards/Tasks/TaskSearch';
 import withAuth from '../../src/helper/withAuth';
+import Modal from '@components/Modal';
 
 const TabsContainerWrapper = styled(Box)(
   ({ theme }) => `
@@ -123,6 +124,7 @@ function DashboardTasks() {
 
   return (
     <>
+      <Modal type="info" />
       <Head>
         <title>Pricecloud | Dashboard</title>
       </Head>
