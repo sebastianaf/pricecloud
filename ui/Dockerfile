@@ -34,5 +34,5 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 RUN npm run build
-EXPOSE ${NEXT_PUBLIC_UI_PORT}
+EXPOSE ${UI_PORT}
 CMD ["npm", "run", "start"]
