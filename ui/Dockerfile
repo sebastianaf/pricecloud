@@ -27,23 +27,12 @@
 #EXPOSE ${UI_PORT}
 #CMD ["npm", "run", "start"]
 
-# Establece el nodo base
+
 FROM node:16-alpine
-
-# Establecer directorio de trabajo
 WORKDIR /usr/src/app
-
-# Copiar package.json y package-lock.json
 COPY package*.json ./
-
-# Instalar dependencias
 RUN npm install
-
-# Copiar el resto de los archivos de la aplicación
 COPY . .
-
-# Construir la aplicación
 RUN npm run build
-
 EXPOSE ${UI_PORT}
 CMD ["npm", "run", "start"]
