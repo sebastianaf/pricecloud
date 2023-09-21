@@ -24,5 +24,5 @@ COPY --from=builder --chown=node:node /home/node/node_modules/ ./node_modules/
 COPY --from=builder --chown=node:node /home/node/public/ ./public/
 #COPY --from=builder --chown=node:node /home/node/.next/ ./.next/
 
-EXPOSE ${NEXT_PUBLIC_UI_PORT}
+EXPOSE 3000
 CMD ["npm", "run", "start"]
