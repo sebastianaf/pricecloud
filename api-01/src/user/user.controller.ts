@@ -7,8 +7,13 @@ import {
   Param,
   Delete,
   UseGuards,
+  Req,
+  Request,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';

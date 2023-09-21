@@ -47,14 +47,14 @@ services:
     image: uv-pricecloud-prod-ui
     restart: always
     environment:
-      REACT_APP_UI_PORT: ${REACT_APP_UI_PORT}
-      REACT_APP_API_HOST: ${REACT_APP_API_HOST}
+      NEXT_PUBLIC_API_HOST: ${NEXT_PUBLIC_API_HOST}
+      UI_PORT: ${UI_PORT}
     build:
       context: ./ui
       dockerfile: Dockerfile
       args:
-        REACT_APP_UI_PORT: ${REACT_APP_UI_PORT}
-        REACT_APP_API_HOST: ${REACT_APP_API_HOST}
+        NEXT_PUBLIC_API_HOST: ${NEXT_PUBLIC_API_HOST}
+        UI_PORT: ${UI_PORT}
     depends_on:
       - uv-pricecloud-prod-api-01
     networks:

@@ -6,10 +6,8 @@
 import { AxiosResponse } from 'axios';
 
 const interceptAxios = (response: AxiosResponse) => {
-  if (response.status >= 400 ? 'Error' : 'Success') {
-    alert(`Error`);
+  if (response.status === 400) {
   } else {
-    alert(`Success`);
   }
 
   /* const { Toaster } = Modal();

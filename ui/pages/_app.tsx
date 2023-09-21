@@ -9,14 +9,15 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { CacheProvider, EmotionCache } from '@emotion/react';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import Dialog from '@mui/material/Dialog';
+/* 
 import { TransitionProps } from '@mui/material/transitions';
 import Slide from '@mui/material/Slide';
+import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import Button from '@mui/material/Button';
+import Button from '@mui/material/Button'; */
 
 import 'nprogress/nprogress.css';
 import ThemeProvider from 'src/theme/ThemeProvider';
@@ -26,7 +27,7 @@ import 'src/styles/global.css';
 
 const clientSideEmotionCache = createEmotionCache();
 
-type NextPageWithLayout = NextPage & {
+export type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
 
@@ -43,14 +44,14 @@ function PricecloudApp(props: TokyoAppProps) {
   Router.events.on('routeChangeError', nProgress.done);
   Router.events.on('routeChangeComplete', nProgress.done);
 
-  const Transition = React.forwardRef(function Transition(
+  /* const Transition = React.forwardRef(function Transition(
     props: TransitionProps & {
       children: React.ReactElement<any, any>;
     },
     ref: React.Ref<unknown>
   ) {
     return <Slide direction="up" ref={ref} {...props} />;
-  });
+  }); */
 
   return (
     <CacheProvider value={emotionCache}>

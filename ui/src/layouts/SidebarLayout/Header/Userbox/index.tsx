@@ -20,6 +20,7 @@ import { styled } from '@mui/material/styles';
 import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
 import LockOpenTwoToneIcon from '@mui/icons-material/LockOpenTwoTone';
 import { Settings } from '@mui/icons-material';
+import useAuth from '../../../../hooks/useAuth';
 
 const UserBoxButton = styled(Button)(
   ({ theme }) => `
@@ -74,6 +75,8 @@ function HeaderUserbox() {
     setOpen(false);
   };
 
+  const { signout } = useAuth();
+
   return (
     <>
       <UserBoxButton color="secondary" ref={ref} onClick={handleOpen}>
@@ -123,7 +126,14 @@ function HeaderUserbox() {
         </List>
         <Divider />
         <Box sx={{ m: 1 }}>
-          <Button color="primary" href="/" fullWidth>
+          <Button
+            color="primary"
+            href="/"
+            fullWidth
+            onClick={() => {
+              signout();
+            }}
+          >
             <LockOpenTwoToneIcon sx={{ mr: 1 }} />
             Cerrar sesión
           </Button>

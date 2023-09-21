@@ -95,7 +95,7 @@ function StatusComingSoon() {
 
   const timerComponents = [];
 
-  Object.keys(timeLeft).forEach((interval) => {
+  /* Object.keys(timeLeft).forEach((interval) => {
     if (!timeLeft[interval]) {
       return;
     }
@@ -106,7 +106,7 @@ function StatusComingSoon() {
         <TypographyH3 variant="h3">{interval}</TypographyH3>
       </Box>
     );
-  });
+  }); */
 
   return (
     <>

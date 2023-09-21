@@ -25,8 +25,8 @@ function ManagementUserProfile() {
   };
   //const user = undefined
 
-  if(!user){
-    return <>Loading...</>
+  if (!user) {
+    return <>Loading...</>;
   }
 
   return (
@@ -67,7 +67,7 @@ function ManagementUserProfile() {
   );
 }
 
-ManagementUserProfile.getLayout = (page) => (
+ManagementUserProfile.getLayout = (page: any) => (
   <SidebarLayout>{page}</SidebarLayout>
 );
 

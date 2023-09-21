@@ -1,4 +1,5 @@
-import { MouseEvent, useState } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import {
   Box,
@@ -20,8 +21,8 @@ import Head from 'next/head';
 import BaseLayout from 'src/layouts/BaseLayout';
 import { Login } from '../src/models/FormStates';
 import { emailRegex, passwordRegex } from '../src/helper/regex';
-import { authAxios } from '../src/helper/authAxios';
-import { path } from '../src/helper/path';
+/* import { authAxios } from '../src/helper/authAxios';
+import { path } from '../src/helper/path'; */
 import { LoadingButton } from '@mui/lab';
 import useAuth from '../src/hooks/useAuth';
 
@@ -48,6 +49,13 @@ const TopWrapper = styled(Box)(
 function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const { login } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      router.push('/dashboard');
+    }
+  }, []);
 
   const {
     formState: { errors, isSubmitting },
