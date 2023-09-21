@@ -16,7 +16,7 @@ const useAuth = () => {
 
   const signout = () => {
     window.localStorage.clear();
-    Router.push('/login');
+    Router.push('/dashboard');
   };
 
   return {
