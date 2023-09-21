@@ -136,7 +136,7 @@ services:
       context: ./ui
       dockerfile: Dockerfile
       args:
-        NEXT_PUBLIC_API_HOST: ${NEXT_PUBLIC_API_HOST}
+        NEXT_PUBLIC_API_HOST: https://api.dev.pricecloud.org
         UI_PORT: ${UI_PORT}
     depends_on:
       - uv-pricecloud-dev-api-01
