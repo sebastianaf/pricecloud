@@ -48,13 +48,13 @@ services:
     restart: always
     environment:
       NEXT_PUBLIC_API_HOST: ${NEXT_PUBLIC_API_HOST}
-      UI_PORT: ${UI_PORT}
+      NEXT_PUBLIC_UI_PORT: ${NEXT_PUBLIC_UI_PORT}
     build:
       context: ./ui
       dockerfile: Dockerfile
       args:
         NEXT_PUBLIC_API_HOST: ${NEXT_PUBLIC_API_HOST}
-        UI_PORT: ${UI_PORT}
+        NEXT_PUBLIC_UI_PORT: ${NEXT_PUBLIC_UI_PORT}
     depends_on:
       - uv-pricecloud-prod-api-01
     networks:
