@@ -9,6 +9,7 @@ const useAuth = () => {
     try {
       console.log(`--------------------------------------`);
       console.log(process.env.NEXT_PUBLIC_API_HOST);
+      console.log(process.env.API_HOST);
       console.log(`--------------------------------------`);
 
       const response = await authlessAxios.post(path.auth, data);
