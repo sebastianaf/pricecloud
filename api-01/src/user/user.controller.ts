@@ -7,8 +7,13 @@ import {
   Param,
   Delete,
   UseGuards,
+  Req,
+  Request,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -18,7 +23,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 @ApiTags(`Users`)
 @Controller('user')
 @ApiBearerAuth()
-@UseGuards(JwtAuthGuard)
+//@UseGuards(JwtAuthGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -38,5 +43,15 @@ export class UserController {
   @ApiOperation({ summary: `Find all users` })
   findAll() {
     return this.userService.findAll();
+  }
+
+  @Post('testing')
+  @UseInterceptors(FileInterceptor('imageFile'))
+  confirmRequestChange(@UploadedFile() file) {
+    // Información del archivo:
+    //console.log(file.originalname);
+    console.log(file);
+
+    return { message: `Recibido correctamente` };
   }
 }
