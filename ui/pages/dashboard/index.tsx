@@ -124,7 +124,7 @@ function DashboardTasks() {
 
   return (
     <>
-      <Modal />
+      <Modal type="info" />
       <Head>
         <title>Pricecloud | Dashboard</title>
       </Head>
