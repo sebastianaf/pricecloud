@@ -132,14 +132,12 @@ services:
     environment:
       NEXT_PUBLIC_API_HOST: ${NEXT_PUBLIC_API_HOST}
       NEXT_PUBLIC_UI_PORT: ${NEXT_PUBLIC_UI_PORT}
-      NEXT_PUBLIC_ENV: ${ENV}
     build:
       context: ./ui
       dockerfile: Dockerfile
       args:
         NEXT_PUBLIC_API_HOST: ${NEXT_PUBLIC_API_HOST}
         NEXT_PUBLIC_UI_PORT: ${NEXT_PUBLIC_UI_PORT}
-        NEXT_PUBLIC_ENV: ${ENV}
     depends_on:
       - uv-pricecloud-dev-api-01
     networks:
