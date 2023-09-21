@@ -42,88 +42,88 @@ services:
     networks:
       - uv-pricecloud-dev
 
-#  uv-pricecloud-dev-api-02:
-#    container_name: uv-pricecloud-dev-cp-api
-#    build:
-#      context: ./api-02
-#      dockerfile: Dockerfile
-#    image: uv-pricecloud-dev-api-02
-#    environment:
-#      INFRACOST_API_KEY: ${INFRACOST_API_KEY}
-#      SELF_HOSTED_INFRACOST_API_KEY: ${SELF_HOSTED_INFRACOST_API_KEY}
-#      POSTGRES_HOST: ${DB02_HOST}
-#      POSTGRES_USER: ${DB02_USER}
-#      POSTGRES_PASSWORD: ${DB02_PASSWORD}
-#      POSTGRES_DB: ${DB02_NAME}
-#      TZ: ${TZ}
-#    healthcheck:
-#      test: ["CMD", "curl", "-f", "http://localhost:4000/health"]
-#      interval: 60s
-#      timeout: 10s
-#      retries: 3
-#      start_period: 10s
-#    depends_on:
-#      - uv-pricecloud-dev-db-02
-#    networks:
-#      - uv-pricecloud-dev
-#
-#  uv-pricecloud-dev-api-02-init:
-#    container_name: uv-pricecloud-dev-api-02-init
-#    build:
-#      context: ./api-02
-#      dockerfile: Dockerfile
-#    image: uv-pricecloud-dev-api-02-init
-#    environment:
-#      INFRACOST_API_KEY: ${INFRACOST_API_KEY}
-#      POSTGRES_HOST: ${DB02_HOST}
-#      POSTGRES_DB: ${DB02_NAME}
-#      POSTGRES_USER: ${DB02_USER}
-#      POSTGRES_PASSWORD: ${DB02_PASSWORD}
-#      TZ: ${TZ}
-#    depends_on: 
-#      - uv-pricecloud-dev-db-02
-#    networks:
-#      - uv-pricecloud-dev
-#    command: ["npm", "run", "job:init"]
-#
-#  uv-pricecloud-dev-api-02-cron:
-#    container_name: uv-pricecloud-dev-api-02-cron
-#    build:
-#      context: ./api-02
-#      dockerfile: Dockerfile
-#    image: uv-pricecloud-dev-api-02-uj
-#    environment:
-#      INFRACOST_API_KEY: ${INFRACOST_API_KEY}
-#      POSTGRES_HOST: ${DB02_HOST}
-#      POSTGRES_DB: ${DB02_NAME}
-#      POSTGRES_USER: ${DB02_USER}
-#      POSTGRES_PASSWORD: ${DB02_PASSWORD}
-#      TZ: ${TZ}
-#    depends_on: 
-#      - uv-pricecloud-dev-db-02
-#    networks:
-#      - uv-pricecloud-dev
-#    command: ["npm", "run", "job:update"]
-#
-#  uv-pricecloud-dev-db-02:
-#    container_name: uv-pricecloud-dev-db-02
-#    image: postgres:13
-#    user: postgres
-#    environment:
-#      POSTGRES_USER: ${DB02_USER}
-#      POSTGRES_PASSWORD: ${DB02_PASSWORD}
-#      POSTGRES_DB: ${DB02_NAME}
-#      TZ: ${TZ}
-#    healthcheck:
-#      test: ["CMD-SHELL", "pg_isready"]
-#      interval: 60s
-#      timeout: 10s
-#      retries: 3
-#      start_period: 10s
-#    volumes:
-#      - ../uv-pricecloud-dev-db-02:/var/lib/postgresql/data
-#    networks:
-#      - uv-pricecloud-dev
+  #  uv-pricecloud-dev-api-02:
+  #    container_name: uv-pricecloud-dev-cp-api
+  #    build:
+  #      context: ./api-02
+  #      dockerfile: Dockerfile
+  #    image: uv-pricecloud-dev-api-02
+  #    environment:
+  #      INFRACOST_API_KEY: ${INFRACOST_API_KEY}
+  #      SELF_HOSTED_INFRACOST_API_KEY: ${SELF_HOSTED_INFRACOST_API_KEY}
+  #      POSTGRES_HOST: ${DB02_HOST}
+  #      POSTGRES_USER: ${DB02_USER}
+  #      POSTGRES_PASSWORD: ${DB02_PASSWORD}
+  #      POSTGRES_DB: ${DB02_NAME}
+  #      TZ: ${TZ}
+  #    healthcheck:
+  #      test: ["CMD", "curl", "-f", "http://localhost:4000/health"]
+  #      interval: 60s
+  #      timeout: 10s
+  #      retries: 3
+  #      start_period: 10s
+  #    depends_on:
+  #      - uv-pricecloud-dev-db-02
+  #    networks:
+  #      - uv-pricecloud-dev
+  #
+  #  uv-pricecloud-dev-api-02-init:
+  #    container_name: uv-pricecloud-dev-api-02-init
+  #    build:
+  #      context: ./api-02
+  #      dockerfile: Dockerfile
+  #    image: uv-pricecloud-dev-api-02-init
+  #    environment:
+  #      INFRACOST_API_KEY: ${INFRACOST_API_KEY}
+  #      POSTGRES_HOST: ${DB02_HOST}
+  #      POSTGRES_DB: ${DB02_NAME}
+  #      POSTGRES_USER: ${DB02_USER}
+  #      POSTGRES_PASSWORD: ${DB02_PASSWORD}
+  #      TZ: ${TZ}
+  #    depends_on:
+  #      - uv-pricecloud-dev-db-02
+  #    networks:
+  #      - uv-pricecloud-dev
+  #    command: ["npm", "run", "job:init"]
+  #
+  #  uv-pricecloud-dev-api-02-cron:
+  #    container_name: uv-pricecloud-dev-api-02-cron
+  #    build:
+  #      context: ./api-02
+  #      dockerfile: Dockerfile
+  #    image: uv-pricecloud-dev-api-02-uj
+  #    environment:
+  #      INFRACOST_API_KEY: ${INFRACOST_API_KEY}
+  #      POSTGRES_HOST: ${DB02_HOST}
+  #      POSTGRES_DB: ${DB02_NAME}
+  #      POSTGRES_USER: ${DB02_USER}
+  #      POSTGRES_PASSWORD: ${DB02_PASSWORD}
+  #      TZ: ${TZ}
+  #    depends_on:
+  #      - uv-pricecloud-dev-db-02
+  #    networks:
+  #      - uv-pricecloud-dev
+  #    command: ["npm", "run", "job:update"]
+  #
+  #  uv-pricecloud-dev-db-02:
+  #    container_name: uv-pricecloud-dev-db-02
+  #    image: postgres:13
+  #    user: postgres
+  #    environment:
+  #      POSTGRES_USER: ${DB02_USER}
+  #      POSTGRES_PASSWORD: ${DB02_PASSWORD}
+  #      POSTGRES_DB: ${DB02_NAME}
+  #      TZ: ${TZ}
+  #    healthcheck:
+  #      test: ["CMD-SHELL", "pg_isready"]
+  #      interval: 60s
+  #      timeout: 10s
+  #      retries: 3
+  #      start_period: 10s
+  #    volumes:
+  #      - ../uv-pricecloud-dev-db-02:/var/lib/postgresql/data
+  #    networks:
+  #      - uv-pricecloud-dev
 
   uv-pricecloud-dev-ui:
     container_name: uv-pricecloud-dev-ui
@@ -132,12 +132,14 @@ services:
     environment:
       NEXT_PUBLIC_API_HOST: ${NEXT_PUBLIC_API_HOST}
       NEXT_PUBLIC_UI_PORT: ${NEXT_PUBLIC_UI_PORT}
+      NEXT_PUBLIC_ENV: ${ENV}
     build:
       context: ./ui
       dockerfile: Dockerfile
       args:
         NEXT_PUBLIC_API_HOST: ${NEXT_PUBLIC_API_HOST}
         NEXT_PUBLIC_UI_PORT: ${NEXT_PUBLIC_UI_PORT}
+        NEXT_PUBLIC_ENV: ${ENV}
     depends_on:
       - uv-pricecloud-dev-api-01
     networks:
