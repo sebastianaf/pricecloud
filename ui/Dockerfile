@@ -33,6 +33,7 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm install
 COPY . .
+ENV NEXT_PUBLIC_API_HOST https://api.dev.pricecloud.org
 RUN npm run build
 EXPOSE ${UI_PORT}
 CMD ["npm", "run", "start"]
