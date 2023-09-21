@@ -25,7 +25,7 @@ async function bootstrap() {
     }),
   );
 
-  app.setGlobalPrefix('api');
+  //app.setGlobalPrefix('api');
   app.enableCors();
 
   if (process.env.ENV !== 'prod') {

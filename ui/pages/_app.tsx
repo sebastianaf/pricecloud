@@ -27,7 +27,7 @@ import 'src/styles/global.css';
 
 const clientSideEmotionCache = createEmotionCache();
 
-type NextPageWithLayout = NextPage & {
+export type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
 
