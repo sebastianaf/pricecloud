@@ -10,9 +10,9 @@ import InfoIcon from '@mui/icons-material/Info';
 import WarningIcon from '@mui/icons-material/Warning';
 import SuccessIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Close';
-import { ModalType, useModal } from '../contexts/ModalContext';
+import { NotificationType, useModal } from '../contexts/ModalContext';
 
-const handleIcon = (type: ModalType) => {
+const handleIcon = (type: NotificationType) => {
   if (type === 'success') {
     return <SuccessIcon fontSize="medium" color="success" />;
   } else if (type === 'error') {
@@ -28,10 +28,7 @@ const Modal = () => {
     isModalOpen,
     openModal,
     closeModal,
-    title,
-    buttonText,
-    body,
-    modalType
+    modalData: { title, message, buttonText, notificationType }
   } = useModal();
 
   const handleOpen = () => {
@@ -53,15 +50,15 @@ const Modal = () => {
             mb={2}
             gap={1}
           >
-            {handleIcon(modalType)}
+            {handleIcon(notificationType)}
             {title}
           </Box>
         </DialogTitle>
         <DialogContent>
-          <DialogContentText>{body}</DialogContentText>
+          <DialogContentText>{message}</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color={modalType}>
+          <Button onClick={handleClose} color={notificationType}>
             {buttonText}
           </Button>
         </DialogActions>
