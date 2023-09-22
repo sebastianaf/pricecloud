@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { API_HOST } from './environment';
-import { interceptAxios } from './interceptAxios';
+import { interceptError, interceptSuccess } from './interceptAxios';
 
 export const authAxios = axios.create({
   baseURL: API_HOST
@@ -18,11 +18,11 @@ authAxios.interceptors.request.use(
 
 authAxios.interceptors.response.use(
   (response) => {
-    interceptAxios(response);
+    interceptSuccess(response);
     return response;
   },
   (error) => {
-    interceptAxios(error);
+    interceptError(error);
     return error;
   }
 );

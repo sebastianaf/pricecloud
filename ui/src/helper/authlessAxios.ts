@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { API_HOST } from './environment';
-import { interceptAxios } from './interceptAxios';
+
+import { interceptError, interceptSuccess } from './interceptAxios';
 
 export const authlessAxios = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_HOST
@@ -17,11 +18,11 @@ authlessAxios.interceptors.request.use(
 
 authlessAxios.interceptors.response.use(
   (response) => {
-    interceptAxios(response);
+    interceptSuccess(response);
     return response;
   },
   (error) => {
-    interceptAxios(error);
+    interceptError(error);
     return error;
   }
 );

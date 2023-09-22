@@ -2,6 +2,7 @@ import * as React from 'react';
 import type { ReactElement, ReactNode } from 'react';
 import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
+import { SnackbarProvider } from 'notistack';
 import Head from 'next/head';
 import Router from 'next/router';
 import nProgress from 'nprogress';
@@ -9,6 +10,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { CacheProvider, EmotionCache } from '@emotion/react';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import Fade from '@mui/material/Fade';
+
 /* 
 import { TransitionProps } from '@mui/material/transitions';
 import Slide from '@mui/material/Slide';
@@ -25,7 +28,6 @@ import createEmotionCache from 'src/createEmotionCache';
 import { SidebarProvider } from 'src/contexts/SidebarContext';
 import 'src/styles/global.css';
 import { ModalProvider, useModal } from '../src/contexts/ModalContext';
-import Modal from '../src/components/Modal';
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -68,11 +70,18 @@ function PricecloudApp(props: TokyoAppProps) {
       <SidebarProvider>
         <ThemeProvider>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <ModalProvider>
-              <Modal />
-              <CssBaseline />
-              {getLayout(<Component {...pageProps} />)}
-            </ModalProvider>
+            <SnackbarProvider
+              maxSnack={5}
+              autoHideDuration={5000}
+              TransitionComponent={Fade}
+              transitionDuration={500}
+              preventDuplicate={false}
+            >
+              <ModalProvider>
+                <CssBaseline />
+                {getLayout(<Component {...pageProps} />)}
+              </ModalProvider>
+            </SnackbarProvider>
           </LocalizationProvider>
         </ThemeProvider>
       </SidebarProvider>

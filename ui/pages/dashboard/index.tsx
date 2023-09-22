@@ -15,6 +15,7 @@ import {
   styled
 } from '@mui/material';
 import PageTitleWrapper from '@/components/PageTitleWrapper';
+import { useSnackbar } from 'notistack';
 
 import TeamOverview from '@/content/Dashboards/Tasks/TeamOverview';
 import TasksAnalytics from '@/content/Dashboards/Tasks/TasksAnalytics';
@@ -24,7 +25,6 @@ import Checklist from '@/content/Dashboards/Tasks/Checklist';
 import Profile from '@/content/Dashboards/Tasks/Profile';
 import TaskSearch from '@/content/Dashboards/Tasks/TaskSearch';
 import withAuth from '../../src/helper/withAuth';
-import Modal from '@components/Modal';
 import { useModal } from '../../src/contexts/ModalContext';
 
 const TabsContainerWrapper = styled(Box)(
@@ -111,11 +111,16 @@ const TabsContainerWrapper = styled(Box)(
 
 function DashboardTasks() {
   const theme = useTheme();
-  const { openModal, setTitle, setBody } = useModal();
+  const { openModal, modalData, setModalData } = useModal();
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    setTitle('Bienvenido a Pricecloud');
-    setBody('Estamos trabajando para brindarte la mejor experiencia posible');
+    setModalData({
+      ...modalData,
+      title: `Bienvenido a Pricecloud`,
+      message: 'Estamos trabajando para brindarte la mejor experiencia posible',
+      notificationType: 'info'
+    });
     openModal();
   }, []);
 

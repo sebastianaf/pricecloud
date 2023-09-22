@@ -1,31 +1,45 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import Modal from '../components/Modal';
 
-interface ModalContextProps {
-  isModalOpen: boolean;
-  openModal: () => void;
-  closeModal: () => void;
-  setTitle?: (title: string) => void;
+interface ModalData {
   title?: string;
-  setButtonText?: (buttonText: string) => void;
-  buttonText: string;
-  setBody?: (body: string) => void;
-  body: string;
-  setModalType?: (modalType: ModalType) => void;
-  modalType?: ModalType;
+  buttonText?: string;
+  message?: string;
+  notificationType?: NotificationType;
 }
 
-export type ModalType = 'success' | 'error' | 'warning' | 'info';
+const defaultModalData: ModalData = {
+  title: `Notificación`,
+  buttonText: `Cerrar`,
+  message: `Al parecer esta notificación no tiene contenido`,
+  notificationType: `info`
+};
+
+export type NotificationType = 'success' | 'error' | 'warning' | 'info';
+
+interface ModalContextProps {
+  isModalOpen?: boolean;
+  openModal?: () => void;
+  closeModal?: () => void;
+  modalData?: ModalData;
+  setModalData?: (modalData: ModalData) => void;
+}
 
 const ModalContext = createContext<ModalContextProps | undefined>(undefined);
 
+export let ModalContextReference: ModalContextProps = {};
+
 export const ModalProvider: React.FC = ({ children }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [title, setTitle] = useState(`Notificación`);
-  const [buttonText, setButtonText] = useState(`Cerrar`);
-  const [body, setBody] = useState(
-    `Al parecer esta notificación no tiene contenido`
-  );
-  const [modalType, setModalType] = useState<ModalType>(`info`);
+  const [modalData, setModalData] = useState<ModalData>(defaultModalData);
+
+  useEffect(() => {
+    ModalContextReference.modalData = modalData;
+    ModalContextReference.setModalData = setModalData;
+    ModalContextReference.isModalOpen = isModalOpen;
+    ModalContextReference.openModal = openModal;
+    ModalContextReference.closeModal = closeModal;
+  }, [modalData]);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -36,16 +50,11 @@ export const ModalProvider: React.FC = ({ children }) => {
         isModalOpen,
         openModal,
         closeModal,
-        setTitle,
-        title,
-        setButtonText,
-        buttonText,
-        setBody,
-        body,
-        setModalType,
-        modalType
+        modalData,
+        setModalData
       }}
     >
+      {isModalOpen && <Modal />}
       {children}
     </ModalContext.Provider>
   );
