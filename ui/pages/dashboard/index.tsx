@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import SidebarLayout from '@/layouts/SidebarLayout';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import PageHeader from '@/content/Dashboards/Tasks/PageHeader';
 import Footer from '@/components/Footer';
 import {
@@ -25,6 +25,7 @@ import Profile from '@/content/Dashboards/Tasks/Profile';
 import TaskSearch from '@/content/Dashboards/Tasks/TaskSearch';
 import withAuth from '../../src/helper/withAuth';
 import Modal from '@components/Modal';
+import { useModal } from '../../src/contexts/ModalContext';
 
 const TabsContainerWrapper = styled(Box)(
   ({ theme }) => `
@@ -110,6 +111,13 @@ const TabsContainerWrapper = styled(Box)(
 
 function DashboardTasks() {
   const theme = useTheme();
+  const { openModal, setTitle, setBody } = useModal();
+
+  useEffect(() => {
+    setTitle('Bienvenido a Pricecloud');
+    setBody('Estamos trabajando para brindarte la mejor experiencia posible');
+    openModal();
+  }, []);
 
   const [currentTab, setCurrentTab] = useState<string>('analytics');
 
@@ -124,7 +132,6 @@ function DashboardTasks() {
 
   return (
     <>
-      <Modal type="info" />
       <Head>
         <title>Pricecloud | Dashboard</title>
       </Head>

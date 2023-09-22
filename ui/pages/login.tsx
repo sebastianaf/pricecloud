@@ -25,6 +25,7 @@ import { emailRegex, passwordRegex } from '../src/helper/regex';
 import { path } from '../src/helper/path'; */
 import { LoadingButton } from '@mui/lab';
 import useAuth from '../src/hooks/useAuth';
+import { useModal } from '../src/contexts/ModalContext';
 
 const MainContent = styled(Box)(
   () => `

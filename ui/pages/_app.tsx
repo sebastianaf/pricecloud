@@ -24,6 +24,8 @@ import ThemeProvider from 'src/theme/ThemeProvider';
 import createEmotionCache from 'src/createEmotionCache';
 import { SidebarProvider } from 'src/contexts/SidebarContext';
 import 'src/styles/global.css';
+import { ModalProvider, useModal } from '../src/contexts/ModalContext';
+import Modal from '../src/components/Modal';
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -66,8 +68,11 @@ function PricecloudApp(props: TokyoAppProps) {
       <SidebarProvider>
         <ThemeProvider>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <CssBaseline />
-            {getLayout(<Component {...pageProps} />)}
+            <ModalProvider>
+              <Modal />
+              <CssBaseline />
+              {getLayout(<Component {...pageProps} />)}
+            </ModalProvider>
           </LocalizationProvider>
         </ThemeProvider>
       </SidebarProvider>

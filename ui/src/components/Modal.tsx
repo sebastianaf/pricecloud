@@ -10,14 +10,9 @@ import InfoIcon from '@mui/icons-material/Info';
 import WarningIcon from '@mui/icons-material/Warning';
 import SuccessIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Close';
+import { ModalType, useModal } from '../contexts/ModalContext';
 
-interface ModalProps {
-  title?: string;
-  buttonText?: string;
-  body?: string;
-  type?: 'success' | 'error' | 'warning' | 'info';
-}
-const handleIcon = (type: string) => {
+const handleIcon = (type: ModalType) => {
   if (type === 'success') {
     return <SuccessIcon fontSize="medium" color="success" />;
   } else if (type === 'error') {
@@ -28,25 +23,28 @@ const handleIcon = (type: string) => {
   return <InfoIcon fontSize="medium" color="info" />;
 };
 
-const Modal: React.FC<ModalProps> = ({
-  title = `Notificación`,
-  buttonText = 'Cerrar',
-  body = 'Al parecer esta notificación no tiene contenido',
-  type = 'info'
-}) => {
-  const [open, setOpen] = useState(true);
+const Modal = () => {
+  const {
+    isModalOpen,
+    openModal,
+    closeModal,
+    title,
+    buttonText,
+    body,
+    modalType
+  } = useModal();
 
   const handleOpen = () => {
-    setOpen(true);
+    openModal();
   };
 
   const handleClose = () => {
-    setOpen(false);
+    closeModal();
   };
 
   return (
     <div>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={isModalOpen} onClose={handleClose}>
         <DialogTitle>
           <Box
             display="flex"
@@ -55,7 +53,7 @@ const Modal: React.FC<ModalProps> = ({
             mb={2}
             gap={1}
           >
-            {handleIcon(type)}
+            {handleIcon(modalType)}
             {title}
           </Box>
         </DialogTitle>
@@ -63,7 +61,7 @@ const Modal: React.FC<ModalProps> = ({
           <DialogContentText>{body}</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color={type}>
+          <Button onClick={handleClose} color={modalType}>
             {buttonText}
           </Button>
         </DialogActions>
