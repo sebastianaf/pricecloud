@@ -19,11 +19,12 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { IsPublic } from '../auth/decorators/public.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { CookieAuthGuard } from '../auth/guards/cookie-auth.guard';
 
 @ApiTags(`Users`)
 @Controller('user')
 @ApiBearerAuth()
-@UseGuards(JwtAuthGuard)
+@UseGuards(CookieAuthGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 

@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as cors from 'cors';
 import * as Express from 'express';
+import * as cookieParser from 'cookie-parser';
 
 import { AppModule } from './app.module';
 import { mainDocs } from './docs';
@@ -25,8 +26,13 @@ async function bootstrap() {
     }),
   );
 
-  //app.setGlobalPrefix('api');
-  app.enableCors();
+  app.enableCors({
+    origin: `https://local.enerfris.com`,
+    credentials: true,
+  });
+  app.use(cookieParser());
+
+  const appVersion = process.env.npm_package_version;
 
   if (process.env.ENV !== 'prod') {
     SwaggerModule.setup(
@@ -37,7 +43,7 @@ async function bootstrap() {
         new DocumentBuilder()
           .setTitle('pricecloud-api-01')
           .setDescription(`${mainDocs}`)
-          .setVersion('1.0.0')
+          .setVersion(appVersion)
           .build(),
         { include: [null] },
       ),

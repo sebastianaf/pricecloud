@@ -5,9 +5,8 @@ import { ConfigModule, ConfigService, ConfigType } from '@nestjs/config';
 
 import { AuthService } from './auth.service';
 import { UserModule } from './../user/user.module';
-import { LocalStrategy } from './strategy/local.strategy';
-import { JwtStrategy } from './strategy/jwt.strategy';
 import { AuthController } from './auth.controller';
+import { CookieStrategy } from './strategy/cookie.strategy';
 
 @Module({
   imports: [
@@ -25,8 +24,9 @@ import { AuthController } from './auth.controller';
     }),
     UserModule,
     PassportModule,
+    PassportModule.register({ defaultStrategy: 'cookie' }),
   ],
-  providers: [AuthService, LocalStrategy, JwtStrategy],
+  providers: [AuthService, CookieStrategy],
   controllers: [AuthController],
 })
 export class AuthModule {}

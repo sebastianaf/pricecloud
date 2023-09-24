@@ -4,6 +4,14 @@ type AppContext = {
   appName: string;
 };
 
+export type UserData = {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+
+}
+
 export const AppContext = createContext<AppContext>({} as AppContext);
 
 type Props = {

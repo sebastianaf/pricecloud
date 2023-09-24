@@ -10,6 +10,7 @@ export default registerAs('config', () => {
       password: process.env.DB_PASSWORD,
     },
     jwtExpiration: process.env.API_JWT_EXPIRATION_TIME,
+    cookieExpiration: process.env.API_COOKIE_EXPIRATION_TIME,
     jwtSecret: process.env.API_JWT_SECRET,
   };
 });
