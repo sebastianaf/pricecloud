@@ -16,7 +16,7 @@ export class CookieStrategy extends PassportStrategy(Strategy, 'cookie') {
     const user = await this.validateUser(token);
 
     if (!user) {
-      throw new UnauthorizedException(`Debes autenticarte (CO-001)`);
+      throw new UnauthorizedException(`Por favor inicia sesión (CO-001)`);
     }
     return user;
   }

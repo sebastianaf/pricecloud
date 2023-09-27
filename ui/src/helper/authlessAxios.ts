@@ -4,7 +4,7 @@ import { API_HOST } from './environment';
 import { interceptError, interceptSuccess } from './interceptAxios';
 
 export const authlessAxios = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_HOST
+  baseURL: `https://${process.env.NEXT_PUBLIC_API_HOST}`
 });
 
 authlessAxios.interceptors.request.use(

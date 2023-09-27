@@ -48,4 +48,18 @@ export class AuthController {
     }
     response.send(authData.user);
   }
+
+  @Get()
+  async validateToken(@Res() response: Response) {
+    const authData = await this.authService.validateToken(
+      response.req.cookies.token,
+    );
+
+    if (authData) {
+      response.send(authData.user);
+    } else {
+      response.send(null);
+    }
+  }
+
 }

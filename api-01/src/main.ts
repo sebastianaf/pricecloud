@@ -27,7 +27,7 @@ async function bootstrap() {
   );
 
   app.enableCors({
-    origin: `https://local.enerfris.com`,
+    origin: `https://local.pricecloud.org`,
     credentials: true,
   });
   app.use(cookieParser());
