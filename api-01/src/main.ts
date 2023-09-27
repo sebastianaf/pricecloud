@@ -27,7 +27,7 @@ async function bootstrap() {
   );
 
   app.enableCors({
-    origin: `https://local.pricecloud.org`,
+    origin: `https://${process.env.NEXT_PUBLIC_API_HOST}`,
     credentials: true,
   });
   app.use(cookieParser());
