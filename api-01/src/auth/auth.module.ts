@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService, ConfigType } from '@nestjs/config';
@@ -7,9 +7,14 @@ import { AuthService } from './auth.service';
 import { UserModule } from './../user/user.module';
 import { AuthController } from './auth.controller';
 import { CookieStrategy } from './strategy/cookie.strategy';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { View } from './entities/view.entity';
+import { RoleView } from './entities/role-view.entity';
+import { Role } from './entities/role.entity';
 
 @Module({
   imports: [
+    TypeOrmModule.forFeature([Role, RoleView, View]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -22,11 +27,12 @@ import { CookieStrategy } from './strategy/cookie.strategy';
         };
       },
     }),
-    UserModule,
+    forwardRef(() => UserModule),
     PassportModule,
     PassportModule.register({ defaultStrategy: 'cookie' }),
   ],
-  providers: [AuthService, CookieStrategy],
+  providers: [CookieStrategy, AuthService],
   controllers: [AuthController],
+  exports: [AuthService, TypeOrmModule],
 })
 export class AuthModule {}

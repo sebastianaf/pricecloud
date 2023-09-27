@@ -13,12 +13,16 @@ import { ValidateUserDto } from './dto/validate-user.dto';
 import { JwtPayloadDto } from './dto/jwt-payload.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
+import { RoleView } from './entities/role-view.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @InjectRepository(RoleView)
+    private readonly roleViewRepository: Repository<RoleView>,
+
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
   ) {}
@@ -36,7 +40,7 @@ export class AuthService {
 
       const user = await this.userRepository.findOne({
         where: { id, email },
-        select: ['id', 'email', 'password', 'loginCount'],
+        select: ['id', 'email', 'password', 'loginCount', `role`],
       });
 
       if (!user) throw new UnauthorizedException(`Token no válido (AVT-001)`);
@@ -77,5 +81,11 @@ export class AuthService {
     const token = this.generateToken({ id: user.id, email: user.email });
 
     return { token, user };
+  }
+
+  async getRoleViews(roleId: number) {
+    return await this.roleViewRepository.findOne({
+      where: { role: { id: roleId } as any },
+    });
   }
 }
