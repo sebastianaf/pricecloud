@@ -4,6 +4,8 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as cors from 'cors';
 import * as Express from 'express';
 import * as cookieParser from 'cookie-parser';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 import { AppModule } from './app.module';
 import { mainDocs } from './docs';
