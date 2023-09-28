@@ -7,6 +7,7 @@ import { UserModule } from '../user/user.module';
 import config from '../config';
 import environments from '../config/environments';
 import validationSchema from '../config/validation-schema';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import validationSchema from '../config/validation-schema';
       },
     }),
     UserModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [SeedService, Logger],

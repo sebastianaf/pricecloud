@@ -6,14 +6,21 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   Column,
+  OneToMany,
+  ManyToOne,
 } from 'typeorm';
 import { EncryptionLowerCaseTransformer } from '../../auth/transformer/encryption-lowercase.transformer';
 import { EncryptionTransformer } from '../../auth/transformer/encryption.transformer';
+import { Role } from '../../auth/entities/role.entity';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @ApiProperty({ description: `User's role` })
+  @ManyToOne(() => Role, (role) => role.users, { nullable: false })
+  role: Role;
 
   @ApiProperty({ description: `Email` })
   @Column({ unique: true, transformer: EncryptionLowerCaseTransformer })
