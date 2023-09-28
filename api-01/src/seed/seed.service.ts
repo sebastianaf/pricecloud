@@ -24,10 +24,10 @@ export class SeedService {
   ) {}
 
   async runSeed() {
-    await this.seedUser();
     await this.seed(`View`, viewSeed, this.viewRepository);
     await this.seed(`Role`, roleSeed, this.roleRepository);
     await this.seedRoleView();
+    await this.seedUser();
   }
 
   async seed(name: string, data: any[], repository: Repository<any>) {

@@ -56,10 +56,9 @@ export class AuthController {
     );
 
     if (authData) {
-      response.send(authData.user);
+      response.send(authData);
     } else {
       response.send(null);
     }
   }
-
 }

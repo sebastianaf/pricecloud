@@ -1,4 +1,4 @@
 export enum RoleInterface {
-  admin = 0,
-  user = 1,
+  admin = 1,
+  user = 2,
 }

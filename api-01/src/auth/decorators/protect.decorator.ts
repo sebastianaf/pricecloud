@@ -2,9 +2,9 @@
 import { SetMetadata, UseGuards, applyDecorators } from '@nestjs/common';
 import { CookieAuthGuard } from '../guards/cookie-auth.guard';
 
-export const Protect = (pages?: number[]) => {
+export const Protect = (views?: number[]) => {
   return applyDecorators(
-    SetMetadata('pages', pages),
+    SetMetadata('views', views),
     UseGuards(CookieAuthGuard),
   );
 };

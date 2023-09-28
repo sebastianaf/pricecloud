@@ -2,6 +2,7 @@ import {
   Injectable,
   UnauthorizedException,
   ExecutionContext,
+  ForbiddenException,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Reflector } from '@nestjs/core';
@@ -23,30 +24,28 @@ export class CookieAuthGuard extends AuthGuard('cookie') {
     if (!token)
       throw new UnauthorizedException(`Por favor inicie sesión (AVT-001)`);
 
-    const validateTokenData = await this.authService.validateToken(token);
+    const user = await this.authService.validateToken(token);
+    console.log(user.role.roleViews);
 
-    console.log(validateTokenData.user);
-
-    const roleView = await this.authService.getRoleViews(
-      validateTokenData.user.role.id,
-    );
-
-    console.log(roleView);
-
-    /* if (!pages.some((page) => user.pages.includes(page))) {
-      throw new UnauthorizedException(
-        'No tienes acceso a esta página (CG-002)',
-      );
-    } */
-
-    const hasProtectDecorator = this.reflector.get<number[]>(
-      'pages',
+    const requiredViews = this.reflector.get<number[]>(
+      'views',
       context.getHandler(),
     );
 
-    if (!hasProtectDecorator) {
+    if (!requiredViews) {
       return true;
+    } else {
+      if (requiredViews.length === 0) return true;
     }
-    return false;
+
+    const hasAccess = requiredViews.some((viewId) =>
+      user.role.roleViews.map((roleView) => roleView.view.id).includes(viewId),
+    );
+
+    if (!hasAccess) {
+      throw new ForbiddenException(`No tiene acceso a este recurso (AVT-002)`);
+    }
+
+    return true;
   }
 }

@@ -27,6 +27,10 @@ export const viewSeed: Partial<View>[] = [
     id: ViewInterface.dashboard,
     label: 'Dashboard',
   },
+  {
+    id: ViewInterface.userConfig,
+    label: 'Configuración de usuario',
+  },
 ];
 
 export const roleSeed: Partial<Role>[] = [

@@ -40,12 +40,15 @@ export class AuthService {
 
       const user = await this.userRepository.findOne({
         where: { id, email },
-        select: ['id', 'email', 'password', 'loginCount', `role`],
+        select: ['id', 'email', 'password', 'loginCount'],
+        relations: [`role`, `role.roleViews`, `role.roleViews.view`],
       });
+
+      delete user.password;
 
       if (!user) throw new UnauthorizedException(`Token no válido (AVT-001)`);
 
-      return { id, user };
+      return user;
     } catch (error) {
       return null;
     }

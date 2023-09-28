@@ -1,3 +1,4 @@
 export enum ViewInterface {
-  dashboard = 0,
+  dashboard = 1,
+  userConfig = 2,
 }
