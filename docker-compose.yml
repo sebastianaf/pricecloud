@@ -146,5 +146,5 @@ services:
       - "uv-pricecloud-${ENV}"
 
 networks:
-  uv-pricecloud-dev:
+  "uv-pricecloud-${ENV}":
     name: "uv-pricecloud-${ENV}"
