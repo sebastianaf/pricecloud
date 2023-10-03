@@ -30,8 +30,6 @@ services:
     networks:
       - uv-pricecloud-${ENV}
 
-#testing commit
-
   uv-pricecloud-db-01:
     container_name: uv-pricecloud-${ENV}-db-01
     restart: always
