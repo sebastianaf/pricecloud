@@ -25,7 +25,8 @@ services:
       dockerfile: Dockerfile
       args:
         API_PORT: ${API_PORT}
-    depends_on: uv-pricecloud-db-01
+    depends_on: 
+      - uv-pricecloud-db-01
     networks:
       - "uv-pricecloud-${ENV}"
 
@@ -63,7 +64,8 @@ services:
       timeout: 10s
       retries: 3
       start_period: 10s
-    depends_on: uv-pricecloud-db-02
+    depends_on: 
+      - uv-pricecloud-db-02
     networks:
       - "uv-pricecloud-${ENV}"
 
@@ -80,7 +82,8 @@ services:
       POSTGRES_USER: ${DB02_USER}
       POSTGRES_PASSWORD: ${DB02_PASSWORD}
       TZ: ${TZ}
-    depends_on: uv-pricecloud-db-02
+    depends_on: 
+      - uv-pricecloud-db-02
     networks:
       - "uv-pricecloud-${ENV}"
     command: ["npm", "run", "job:init"]
@@ -98,7 +101,8 @@ services:
       POSTGRES_USER: ${DB02_USER}
       POSTGRES_PASSWORD: ${DB02_PASSWORD}
       TZ: ${TZ}
-    depends_on: uv-pricecloud-db-02
+    depends_on: 
+      - uv-pricecloud-db-02
     networks:
       - "uv-pricecloud-${ENV}"
     command: ["npm", "run", "job:update"]
@@ -136,7 +140,8 @@ services:
       args:
         NEXT_PUBLIC_API_HOST: ${NEXT_PUBLIC_API_HOST}
         UI_PORT: ${UI_PORT}
-    depends_on: uv-pricecloud-api-01"
+    depends_on: 
+      - uv-pricecloud-api-01
     networks:
       - "uv-pricecloud-${ENV}"
 
