@@ -104,7 +104,7 @@ services:
     depends_on:
       - "uv-pricecloud-${ENV}-db-02"
     networks:
-      - "uv-pricecloud-${ENV}""
+      - "uv-pricecloud-${ENV}"
     command: ["npm", "run", "job:update"]
 
   uv-pricecloud-db-02:
