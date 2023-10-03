@@ -44,6 +44,8 @@ services:
     networks:
       - "uv-pricecloud-${ENV}"
 
+# this is a comment
+
   uv-pricecloud-api-02:
     container_name: "uv-pricecloud-${ENV}-cp-api"
     build:
