@@ -2,14 +2,21 @@ import Router from 'next/router';
 
 import { Login } from '../models/FormStates';
 import { path } from '../helper/path';
-import { authlessAxios } from '../helper/authlessAxios';
+import { interceptedAxios } from '../helper/interceptedAxios';
+import { useAppContext } from '../contexts/AppContext';
 
 const useAuth = () => {
+  const { setUserProfile, userProfile } = useAppContext();
+
   const login = async (data: Login) => {
     try {
-      const response = await authlessAxios.post(path.auth, data);
-      const { token } = await response.data;
-      window.localStorage.setItem('token', token);
+      const response = await interceptedAxios.post(path.auth, data);
+      const user = await response.data;
+
+      setUserProfile(user)
+      
+
+      
       Router.push('/dashboard');
     } catch (error) {}
   };

@@ -63,7 +63,7 @@ export const ModalProvider: React.FC = ({ children }) => {
 export const useModal = () => {
   const context = useContext(ModalContext);
   if (context === undefined) {
-    throw new Error('El modal debe estar dentro del proveedor ModalContext');
+    throw new Error("useAppContext must be used within an AppProvider");
   }
   return context;
 };

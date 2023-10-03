@@ -1,18 +1,19 @@
-import { ReactNode, createContext } from 'react';
+import { ReactNode, createContext, useContext, useState } from 'react';
 
-type AppContext = {
+type AppContextProps = {
   appName: string;
+  userProfile: UserProfile;
+  setUserProfile: (profile: UserProfile) => void;
 };
 
-export type UserData = {
+export type UserProfile = {
   id: string;
   name: string;
   email: string;
   role: string;
+};
 
-}
-
-export const AppContext = createContext<AppContext>({} as AppContext);
+export const AppContext = createContext<AppContextProps | undefined>(undefined);
 
 type Props = {
   children: ReactNode;
@@ -20,7 +21,20 @@ type Props = {
 
 export function AppProvider({ children }: Props) {
   const appName = `Pricecloud`;
+
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+
   return (
-    <AppContext.Provider value={{ appName }}>{children}</AppContext.Provider>
+    <AppContext.Provider value={{ appName, userProfile, setUserProfile }}>
+      {children}
+    </AppContext.Provider>
   );
+}
+
+export function useAppContext() {
+  const context = useContext(AppContext);
+  if (!context) {
+    throw new Error('useAppContext must be used within an AppProvider');
+  }
+  return context;
 }
