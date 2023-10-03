@@ -1,0 +1,150 @@
+version: "3.8"
+
+services:
+  uv-pricecloud-api-01:
+    container_name: uv-pricecloud-${ENV}-api-01
+    image: uv-pricecloud-${ENV}-api-01
+    restart: always
+    environment:
+      API_PORT: ${API_PORT}
+      API_JWT_SECRET: ${API_JWT_SECRET}
+      API_JWT_EXPIRATION_TIME: ${API_JWT_EXPIRATION_TIME}
+      API_COOKIE_EXPIRATION_TIME: ${API_COOKIE_EXPIRATION_TIME}
+      API_COOKIE_DOMAIN: ${API_COOKIE_DOMAIN}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_SECRET: ${DB_SECRET}
+      DB_IV: ${DB_IV}
+      ENV: ${ENV}
+      TZ: ${TZ}
+    build:
+      context: ./api-01
+      dockerfile: Dockerfile
+      args:
+        API_PORT: ${API_PORT}
+    depends_on:
+      - uv-pricecloud-${ENV}-db
+    networks:
+      - uv-pricecloud-${ENV}
+
+  uv-pricecloud-db-01:
+    container_name: uv-pricecloud-${ENV}-db-01
+    restart: always
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+      TZ: ${TZ}
+    volumes:
+      - ../uv-pricecloud-${ENV}-db:/var/lib/postgresql/data
+    networks:
+      - uv-pricecloud-${ENV}
+
+  uv-pricecloud-api-02:
+    container_name: uv-pricecloud-${ENV}-cp-api
+    build:
+      context: ./api-02
+      dockerfile: Dockerfile
+    image: uv-pricecloud-${ENV}-api-02
+    environment:
+      INFRACOST_API_KEY: ${INFRACOST_API_KEY}
+      SELF_HOSTED_INFRACOST_API_KEY: ${SELF_HOSTED_INFRACOST_API_KEY}
+      POSTGRES_HOST: ${DB02_HOST}
+      POSTGRES_USER: ${DB02_USER}
+      POSTGRES_PASSWORD: ${DB02_PASSWORD}
+      POSTGRES_DB: ${DB02_NAME}
+      TZ: ${TZ}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4000/health"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    depends_on:
+      - uv-pricecloud-${ENV}-db-02
+    networks:
+      - uv-pricecloud-${ENV}
+
+  uv-pricecloud-api-02-init:
+    container_name: uv-pricecloud-${ENV}-api-02-init
+    build:
+      context: ./api-02
+      dockerfile: Dockerfile
+    image: uv-pricecloud-${ENV}-api-02-init
+    environment:
+      INFRACOST_API_KEY: ${INFRACOST_API_KEY}
+      POSTGRES_HOST: ${DB02_HOST}
+      POSTGRES_DB: ${DB02_NAME}
+      POSTGRES_USER: ${DB02_USER}
+      POSTGRES_PASSWORD: ${DB02_PASSWORD}
+      TZ: ${TZ}
+    depends_on:
+      - uv-pricecloud-${ENV}-db-02
+    networks:
+      - uv-pricecloud-${ENV}
+    command: ["npm", "run", "job:init"]
+
+  uv-pricecloud-api-02-cron:
+    container_name: uv-pricecloud-${ENV}-api-02-cron
+    build:
+      context: ./api-02
+      dockerfile: Dockerfile
+    image: uv-pricecloud-${ENV}-api-02-uj
+    environment:
+      INFRACOST_API_KEY: ${INFRACOST_API_KEY}
+      POSTGRES_HOST: ${DB02_HOST}
+      POSTGRES_DB: ${DB02_NAME}
+      POSTGRES_USER: ${DB02_USER}
+      POSTGRES_PASSWORD: ${DB02_PASSWORD}
+      TZ: ${TZ}
+    depends_on:
+      - uv-pricecloud-${ENV}-db-02
+    networks:
+      - uv-pricecloud-${ENV}
+    command: ["npm", "run", "job:update"]
+
+  uv-pricecloud-db-02:
+    container_name: uv-pricecloud-${ENV}-db-02
+    image: postgres:latest
+    user: postgres
+    environment:
+      POSTGRES_USER: ${DB02_USER}
+      POSTGRES_PASSWORD: ${DB02_PASSWORD}
+      POSTGRES_DB: ${DB02_NAME}
+      TZ: ${TZ}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    volumes:
+      - ../uv-pricecloud-${ENV}-db-02:/var/lib/postgresql/data
+    networks:
+      - uv-pricecloud-${ENV}
+
+  uv-pricecloud-ui:
+    container_name: uv-pricecloud-${ENV}-ui
+    image: uv-pricecloud-${ENV}-ui
+    restart: always
+    environment:
+      NEXT_PUBLIC_API_HOST: ${NEXT_PUBLIC_API_HOST}
+      UI_PORT: ${UI_PORT}
+    build:
+      context: ./ui
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_HOST: ${NEXT_PUBLIC_API_HOST}
+        UI_PORT: ${UI_PORT}
+    depends_on:
+      - uv-pricecloud-${ENV}-api-01
+    networks:
+      - uv-pricecloud-${ENV}
+
+networks:
+  uv-pricecloud-dev:
+    name: uv-pricecloud-${ENV}

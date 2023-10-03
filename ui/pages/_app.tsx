@@ -28,6 +28,7 @@ import createEmotionCache from 'src/createEmotionCache';
 import { SidebarProvider } from 'src/contexts/SidebarContext';
 import 'src/styles/global.css';
 import { ModalProvider, useModal } from '../src/contexts/ModalContext';
+import { AppContext, AppProvider } from '../src/contexts/AppContext';
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -67,24 +68,26 @@ function PricecloudApp(props: TokyoAppProps) {
           content="width=device-width, initial-scale=1, shrink-to-fit=no"
         />
       </Head>
-      <SidebarProvider>
-        <ThemeProvider>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <SnackbarProvider
-              maxSnack={5}
-              autoHideDuration={5000}
-              TransitionComponent={Fade}
-              transitionDuration={500}
-              preventDuplicate={false}
-            >
-              <ModalProvider>
-                <CssBaseline />
-                {getLayout(<Component {...pageProps} />)}
-              </ModalProvider>
-            </SnackbarProvider>
-          </LocalizationProvider>
-        </ThemeProvider>
-      </SidebarProvider>
+      <AppProvider>
+        <SidebarProvider>
+          <ThemeProvider>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <SnackbarProvider
+                maxSnack={5}
+                autoHideDuration={5000}
+                TransitionComponent={Fade}
+                transitionDuration={500}
+                preventDuplicate={false}
+              >
+                <ModalProvider>
+                  <CssBaseline />
+                  {getLayout(<Component {...pageProps} />)}
+                </ModalProvider>
+              </SnackbarProvider>
+            </LocalizationProvider>
+          </ThemeProvider>
+        </SidebarProvider>
+      </AppProvider>
     </CacheProvider>
   );
 }
