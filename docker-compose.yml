@@ -147,4 +147,4 @@ services:
 
 networks:
   "uv-pricecloud-${ENV}":
-    name: "uv-pricecloud-${ENV}"
+#    name: "uv-pricecloud-${ENV}"
