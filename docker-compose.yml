@@ -47,7 +47,7 @@ services:
 # this is a comment
 
   uv-pricecloud-api-02:
-    container_name: "uv-pricecloud-${ENV}-cp-api"
+    container_name: "uv-pricecloud-${ENV}-api-02"
     build:
       context: ./api-02
       dockerfile: Dockerfile
