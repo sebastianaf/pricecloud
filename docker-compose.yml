@@ -110,7 +110,6 @@ services:
   uv-pricecloud-db-02:
     container_name: "uv-pricecloud-${ENV}-db-02"
     image: postgres:latest
-    #user: postgres
     environment:
       POSTGRES_USER: ${DB02_USER}
       POSTGRES_PASSWORD: ${DB02_PASSWORD}
