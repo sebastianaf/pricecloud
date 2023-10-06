@@ -39,9 +39,11 @@ const OverviewWrapper = styled(Box)(
 
 function Overview() {
   const { isAuth } = useAppContext();
+  const { check } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
+    check();
     isAuth && router.push('/dashboard');
   }, []);
 
