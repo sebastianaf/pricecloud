@@ -9,6 +9,8 @@ import {
 } from '@mui/material';
 import { EmojiEmotions } from '@mui/icons-material';
 import { ManageAccounts } from '@mui/icons-material';
+import { useAppContext } from '../../../contexts/AppContext';
+import { useEffect } from 'react';
 
 const AvatarPageTitle = styled(Avatar)(
   ({ theme }) => `
@@ -35,6 +37,8 @@ const AvatarPageTitle = styled(Avatar)(
 );
 
 function PageHeader() {
+  const { userProfile } = useAppContext();
+
   const user = {
     name: 'John Doe',
     avatar: '/static/images/avatars/3.jpg'

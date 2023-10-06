@@ -71,12 +71,12 @@ export class AuthService {
       ],
     });
 
-    if (!user)
+    const isPassword = bcrypt.compareSync(password, user.password);
+
+    if (!user || !isPassword)
       throw new UnauthorizedException(
         `El correo electrónico o la contraseña son incorrectos (AVU-001)`,
       );
-
-    if (!bcrypt.compareSync(password, user.password)) return null;
 
     await this.userService.addLoginCount(user);
     delete user.password;

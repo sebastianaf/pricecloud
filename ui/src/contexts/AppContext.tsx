@@ -3,14 +3,19 @@ import { ReactNode, createContext, useContext, useState } from 'react';
 type AppContextProps = {
   appName: string;
   userProfile: UserProfile;
-  setUserProfile: (profile: UserProfile) => void;
+  setUserProfile: (userProfile: UserProfile) => void;
+  isAuth: boolean;
+  setIsAuth: (isAuth: boolean) => void;
 };
 
 export type UserProfile = {
   id: string;
-  name: string;
   email: string;
-  role: string;
+  firstName: string;
+  secondName: string;
+  firstLastName: string;
+  secondLastName: string;
+  loginCount: number;
 };
 
 export const AppContext = createContext<AppContextProps | undefined>(undefined);
@@ -23,9 +28,12 @@ export function AppProvider({ children }: Props) {
   const appName = `Pricecloud`;
 
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [isAuth, setIsAuth] = useState(false);
 
   return (
-    <AppContext.Provider value={{ appName, userProfile, setUserProfile }}>
+    <AppContext.Provider
+      value={{ appName, userProfile, setUserProfile, isAuth, setIsAuth }}
+    >
       {children}
     </AppContext.Provider>
   );

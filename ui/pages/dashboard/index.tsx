@@ -26,6 +26,8 @@ import Profile from '@/content/Dashboards/Tasks/Profile';
 import TaskSearch from '@/content/Dashboards/Tasks/TaskSearch';
 import withAuth from '../../src/helper/withAuth';
 import { useModal } from '../../src/contexts/ModalContext';
+import useAuth from '../../src/hooks/useAuth';
+import { customAxios } from '../../src/helper/customAxios';
 
 const TabsContainerWrapper = styled(Box)(
   ({ theme }) => `
@@ -112,7 +114,7 @@ const TabsContainerWrapper = styled(Box)(
 function DashboardTasks() {
   const theme = useTheme();
   const { openModal, modalData, setModalData } = useModal();
-  const { enqueueSnackbar } = useSnackbar();
+  const { check } = useAuth();
 
   useEffect(() => {
     setModalData({

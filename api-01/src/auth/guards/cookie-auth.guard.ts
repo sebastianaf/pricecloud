@@ -1,4 +1,4 @@
- import {
+import {
   Injectable,
   UnauthorizedException,
   ExecutionContext,
@@ -21,11 +21,12 @@ export class CookieAuthGuard extends AuthGuard('cookie') {
     const request = context.switchToHttp().getRequest();
     const token = request.cookies?.token;
 
+    console.log(request);
+
     if (!token)
       throw new UnauthorizedException(`Por favor inicie sesión (AVT-001)`);
 
     const user = await this.authService.validateToken(token);
-    console.log(user.role.roleViews);
 
     const requiredViews = this.reflector.get<number[]>(
       'views',
