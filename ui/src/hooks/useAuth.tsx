@@ -1,34 +1,44 @@
 import Router from 'next/router';
+import { useState } from 'react';
 
 import { Login } from '../models/FormStates';
 import { path } from '../helper/path';
-import { interceptedAxios } from '../helper/interceptedAxios';
+import { customAxios } from '../helper/customAxios';
 import { useAppContext } from '../contexts/AppContext';
 
 const useAuth = () => {
-  const { setUserProfile, userProfile } = useAppContext();
+  const { setUserProfile, isAuth, setIsAuth } = useAppContext();
 
   const login = async (data: Login) => {
     try {
-      const response = await interceptedAxios.post(path.auth, data);
-      const user = await response.data;
+      const response = await customAxios.post(path.auth, data);
+      const user = response.data;
 
-      setUserProfile(user)
-      
+      setUserProfile(user);
 
-      
       Router.push('/dashboard');
     } catch (error) {}
   };
 
-  const signout = () => {
-    window.localStorage.clear();
-    Router.push('/dashboard');
+  const check = async () => {
+    const response = await customAxios.get(path.auth);
+    if (response.status === 200) {
+      setIsAuth(true);
+    } else {
+      Router.push('/login');
+    }
+  };
+
+  const signout = async () => {
+    await customAxios.delete(path.auth);
+    Router.push('/');
   };
 
   return {
     login,
-    signout
+    signout,
+    check,
+    isAuth
   };
 };
 

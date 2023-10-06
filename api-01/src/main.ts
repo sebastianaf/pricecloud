@@ -1,7 +1,6 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import * as cors from 'cors';
 import * as Express from 'express';
 import * as cookieParser from 'cookie-parser';
 
@@ -14,7 +13,6 @@ import { AuthModule } from './auth/auth.module';
 import { authDocs } from './auth/docs';
 
 const server = Express();
-server.use(cors());
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, new ExpressAdapter(server));

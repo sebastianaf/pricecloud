@@ -7,13 +7,15 @@ import {
   styled
 } from '@mui/material';
 import type { ReactElement } from 'react';
-import BaseLayout from 'src/layouts/BaseLayout';
+import { useEffect } from 'react';
+import Router, { useRouter } from 'next/router';
 
+import BaseLayout from 'src/layouts/BaseLayout';
 import Link from 'src/components/Link';
 import Head from 'next/head';
-
 import Logo from 'src/components/LogoSign';
 import Hero from 'src/content/Overview/Hero';
+import useAuth from '../src/hooks/useAuth';
 
 const HeaderWrapper = styled(Card)(
   ({ theme }) => `
@@ -35,6 +37,13 @@ const OverviewWrapper = styled(Box)(
 );
 
 function Overview() {
+  const { isAuth } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    isAuth && router.push('/dashboard');
+  }, []);
+
   return (
     <OverviewWrapper>
       <Head>
@@ -56,7 +65,7 @@ function Overview() {
                   component={Link}
                   href="/login"
                   variant="contained"
-                  size='large'
+                  size="large"
                   sx={{ ml: 2 }}
                 >
                   Iniciar sesión
@@ -76,8 +85,8 @@ function Overview() {
             rel="noopener noreferrer"
           >
             sebastianaf
-          </Link>
-          {' '}with{' '}
+          </Link>{' '}
+          with{' '}
           <Link
             href="https://bloomui.com"
             target="_blank"

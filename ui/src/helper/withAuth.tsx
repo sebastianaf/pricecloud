@@ -1,34 +1,20 @@
-import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { NextPageWithLayout } from '../../pages/_app';
+import useAuth from '../hooks/useAuth';
 
 const withAuth = (WrappedComponent: any) => {
   const AuthComponent: NextPageWithLayout = (props) => {
-    const router = useRouter();
     const [isClient, setIsClient] = useState(false);
+    const { isAuth, check } = useAuth();
 
     useEffect(() => {
       setIsClient(true);
-    }, []);
-
-    useEffect(() => {
-      if (isClient && !isAuthenticated()) {
-        router.push('/login');
+      if (isClient) {
+        check();
       }
     }, [isClient]);
 
-    const isAuthenticated = () => {
-      if (!isClient) {
-        
-      }
-      return localStorage.getItem('token') ? true : false;
-    };
-
-    if (!isClient) {
-      return null;
-    }
-
-    if (!isAuthenticated()) {
+    if (!isClient || !isAuth) {
       return null;
     }
 

@@ -15,17 +15,14 @@ import {
 } from '@mui/material';
 import NextLink from 'next/link';
 import { VisibilityOff, Visibility } from '@mui/icons-material';
+import { LoadingButton } from '@mui/lab';
 import type { ReactElement } from 'react';
 
 import Head from 'next/head';
 import BaseLayout from 'src/layouts/BaseLayout';
 import { Login } from '../src/models/FormStates';
 import { emailRegex, passwordRegex } from '../src/helper/regex';
-/* import { authAxios } from '../src/helper/authAxios';
-import { path } from '../src/helper/path'; */
-import { LoadingButton } from '@mui/lab';
 import useAuth from '../src/hooks/useAuth';
-import { useModal } from '../src/contexts/ModalContext';
 
 const MainContent = styled(Box)(
   () => `
@@ -49,13 +46,11 @@ const TopWrapper = styled(Box)(
 
 function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
-  const { login } = useAuth();
   const router = useRouter();
+  const { login, isAuth } = useAuth();
 
   useEffect(() => {
-    if (localStorage.getItem('token')) {
-      router.push('/dashboard');
-    }
+    isAuth && router.push('/dashboard');
   }, []);
 
   const {
