@@ -21,6 +21,13 @@ const processSuccess = (response: AxiosResponse) => {
 const processError = (response: any) => {
   switch (response.response.data.statusCode) {
     case HttpStatusCode.InternalServerError:
+      ModalContextReference.setModalData({
+        ...ModalContextReference.modalData,
+        title: `Error inesperado`,
+        message: `Hay un error al procesar la solicitud, disculpe las molestias`,
+        notificationType: 'error'
+      });
+      ModalContextReference.openModal();
       break;
     case HttpStatusCode.Unauthorized:
       ModalContextReference.setModalData({

@@ -1,5 +1,4 @@
-import Router from 'next/router';
-import { useState } from 'react';
+import { useRouter } from 'next/router';
 
 import { Login } from '../models/FormStates';
 import { path } from '../helper/path';
@@ -8,16 +7,14 @@ import { useAppContext } from '../contexts/AppContext';
 
 const useAuth = () => {
   const { setUserProfile, isAuth, setIsAuth } = useAppContext();
+  const router = useRouter();
 
   const login = async (data: Login) => {
-    try {
-      const response = await customAxios.post(path.auth, data);
-      const user = response.data;
-
-      setUserProfile(user);
-
-      Router.push('/dashboard');
-    } catch (error) {}
+    const response = await customAxios.post(path.auth, data);
+    if (response.status === 200) {
+      setUserProfile(response.data);
+      router.push('/dashboard');
+    }
   };
 
   const check = async () => {
@@ -25,13 +22,13 @@ const useAuth = () => {
     if (response.status === 200) {
       setIsAuth(true);
     } else {
-      Router.push('/login');
+      router.push('/login');
     }
   };
 
   const signout = async () => {
     await customAxios.delete(path.auth);
-    Router.push('/');
+    router.push('/');
   };
 
   return {

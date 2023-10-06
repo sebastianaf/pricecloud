@@ -44,9 +44,9 @@ export class AuthService {
         relations: [`role`, `role.roleViews`, `role.roleViews.view`],
       });
 
-      delete user.password;
-
       if (!user) throw new UnauthorizedException(`Token no válido (AVT-001)`);
+
+      delete user.password;
 
       return user;
     } catch (error) {
@@ -71,9 +71,14 @@ export class AuthService {
       ],
     });
 
+    if (!user)
+      throw new UnauthorizedException(
+        `El correo electrónico o la contraseña son incorrectos (AVU-001)`,
+      );
+
     const isPassword = bcrypt.compareSync(password, user.password);
 
-    if (!user || !isPassword)
+    if (!isPassword)
       throw new UnauthorizedException(
         `El correo electrónico o la contraseña son incorrectos (AVU-001)`,
       );
