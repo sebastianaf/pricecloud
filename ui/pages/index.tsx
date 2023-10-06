@@ -16,6 +16,7 @@ import Head from 'next/head';
 import Logo from 'src/components/LogoSign';
 import Hero from 'src/content/Overview/Hero';
 import useAuth from '../src/hooks/useAuth';
+import { useAppContext } from '../src/contexts/AppContext';
 
 const HeaderWrapper = styled(Card)(
   ({ theme }) => `
@@ -37,7 +38,7 @@ const OverviewWrapper = styled(Box)(
 );
 
 function Overview() {
-  const { isAuth } = useAuth();
+  const { isAuth } = useAppContext();
   const router = useRouter();
 
   useEffect(() => {

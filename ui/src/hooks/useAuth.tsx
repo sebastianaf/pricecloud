@@ -27,6 +27,7 @@ const useAuth = () => {
   };
 
   const signout = async () => {
+    setIsAuth(false);
     await customAxios.delete(path.auth);
     router.push('/');
   };

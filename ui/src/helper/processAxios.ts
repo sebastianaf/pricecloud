@@ -24,7 +24,7 @@ const processError = (response: any) => {
       ModalContextReference.setModalData({
         ...ModalContextReference.modalData,
         title: `Error inesperado`,
-        message: `Hay un error al procesar la solicitud, disculpe las molestias`,
+        message: `Hay un error al procesar la solicitud, pora favor intente luego. disculpe las molestias`,
         notificationType: 'error'
       });
       ModalContextReference.openModal();
