@@ -30,13 +30,6 @@ const processError = (response: any) => {
       ModalContextReference.openModal();
       break;
     case HttpStatusCode.Unauthorized:
-      ModalContextReference.setModalData({
-        ...ModalContextReference.modalData,
-        title: `Error de autenticación`,
-        message: `${response.response.data.message}`,
-        notificationType: 'warning'
-      });
-      ModalContextReference.openModal();
       break;
     case HttpStatusCode.Forbidden:
       break;

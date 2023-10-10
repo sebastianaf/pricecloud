@@ -78,6 +78,7 @@ function PricecloudApp(props: TokyoAppProps) {
                 TransitionComponent={Fade}
                 transitionDuration={500}
                 preventDuplicate={false}
+                
               >
                 <ModalProvider>
                   <CssBaseline />

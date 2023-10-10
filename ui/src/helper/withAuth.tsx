@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { NextPageWithLayout } from '../../pages/_app';
 import useAuth from '../hooks/useAuth';
+import { useAppContext } from '../contexts/AppContext';
 
 const withAuth = (WrappedComponent: any) => {
   const AuthComponent: NextPageWithLayout = (props) => {
     const [isClient, setIsClient] = useState(false);
-    const { isAuth, check } = useAuth();
+    const { isAuth } = useAppContext();
+    const { check } = useAuth();
 
     useEffect(() => {
       setIsClient(true);

@@ -114,19 +114,15 @@ const TabsContainerWrapper = styled(Box)(
 function DashboardTasks() {
   const theme = useTheme();
   const { openModal, modalData, setModalData } = useModal();
-  const { check } = useAuth();
+  const { enqueueSnackbar } = useSnackbar();
+  const [currentTab, setCurrentTab] = useState<string>('analytics');
 
   useEffect(() => {
-    setModalData({
-      ...modalData,
-      title: `Bienvenido a Pricecloud`,
-      message: 'Estamos trabajando para brindarte la mejor experiencia posible',
-      notificationType: 'info'
+    enqueueSnackbar({
+      message: `Inicio de sesión exitoso. Bienvenido`,
+      variant: `success`
     });
-    openModal();
   }, []);
-
-  const [currentTab, setCurrentTab] = useState<string>('analytics');
 
   const tabs = [
     { value: 'analytics', label: 'Indicadores' },

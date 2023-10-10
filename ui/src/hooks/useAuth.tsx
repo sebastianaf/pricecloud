@@ -6,7 +6,7 @@ import { customAxios } from '../helper/customAxios';
 import { useAppContext } from '../contexts/AppContext';
 
 const useAuth = () => {
-  const { setUserProfile, isAuth, setIsAuth } = useAppContext();
+  const { setUserProfile, setIsAuth } = useAppContext();
   const router = useRouter();
 
   const login = async (data: Login) => {
@@ -35,8 +35,7 @@ const useAuth = () => {
   return {
     login,
     signout,
-    check,
-    isAuth
+    check
   };
 };
 

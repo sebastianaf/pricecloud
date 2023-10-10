@@ -23,6 +23,7 @@ import BaseLayout from 'src/layouts/BaseLayout';
 import { Login } from '../src/models/FormStates';
 import { emailRegex, passwordRegex } from '../src/helper/regex';
 import useAuth from '../src/hooks/useAuth';
+import { AppContext, useAppContext } from '../src/contexts/AppContext';
 
 const MainContent = styled(Box)(
   () => `
@@ -47,11 +48,10 @@ const TopWrapper = styled(Box)(
 function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
-  const { login, isAuth } = useAuth();
+  const { login, check } = useAuth();
+  const { isAuth } = useAppContext();
 
-  useEffect(() => {
-    isAuth && router.push('/dashboard');
-  }, []);
+  useEffect(() => {}, []);
 
   const {
     formState: { errors, isSubmitting },
