@@ -18,6 +18,10 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       DB_SECRET: ${DB_SECRET}
       DB_IV: ${DB_IV}
+      EMAIL_HOST: ${EMAIL_HOST}
+      EMAIL_PORT: ${EMAIL_PORT}
+      EMAIL_USER: ${EMAIL_USER}
+      EMAIL_PASSWORD: ${EMAIL_PASSWORD}
       ENV: ${ENV}
       TZ: ${TZ}
     build:
