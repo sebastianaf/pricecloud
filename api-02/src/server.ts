@@ -1,5 +1,3 @@
-// server.ts
-
 import createApp from './app';
 import config from './config';
 import { initializeSocket } from './socket';
