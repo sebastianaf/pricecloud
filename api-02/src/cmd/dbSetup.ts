@@ -10,7 +10,8 @@ import {
 const attempts = 10;
 const backOffSecs = 10;
 
-async function run(): Promise<void> {
+export async function run(): Promise<void> {
+  config.logger.info('Starting: DB setup');
   const pool = await config.pg();
 
   let client: PoolClient | null = null;
@@ -19,7 +20,7 @@ async function run(): Promise<void> {
     try {
       client = await pool.connect();
       break;
-    } catch (e) {
+    } catch (e: any) {
       config.logger.error(
         `Waiting for PostgreSQL to become available: ${e.message}`
       );
@@ -45,16 +46,6 @@ async function run(): Promise<void> {
     throw e;
   } finally {
     client.release();
+    config.logger.info('Completed: DB setup');
   }
 }
-
-config.logger.info('Starting: DB setup');
-run()
-  .then(() => {
-    config.logger.info('Completed: DB setup');
-    process.exit(0);
-  })
-  .catch((err) => {
-    config.logger.error(err);
-    process.exit(1);
-  });

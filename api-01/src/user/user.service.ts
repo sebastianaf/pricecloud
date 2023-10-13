@@ -6,12 +6,15 @@ import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import { EmailService } from '../email/email.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+
+    private readonly emailService: EmailService,
   ) {}
 
   async findOne(id: string) {
@@ -49,5 +52,21 @@ export class UserService {
     await this.userRepository.update(user.id, {
       loginCount: user.loginCount + 1,
     });
+  }
+
+  async sendEmail() {
+    try {
+      await this.emailService.send({
+        body: 'Hola',
+        subject: 'Hola',
+        to: [`sebastian.afanador@correounivalle.edu.co`],
+      });
+
+      return { message: `Mensaje enviado exitosamente` };
+    } catch (error) {
+      throw new ConflictException(
+        `Hubo un error al enviar el email (USSE-001)`,
+      );
+    }
   }
 }

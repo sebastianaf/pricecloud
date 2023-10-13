@@ -18,4 +18,8 @@ export default Joi.object({
   DB_IV: Joi.string().length(16).required(),
   ENV: Joi.string().equal(`local`, `dev`, `prod`).required(),
   TZ: Joi.string().required(),
+  EMAIL_HOST: Joi.string().hostname().required(),
+  EMAIL_PORT: Joi.number().min(100).max(65535).required(),
+  EMAIL_USER: Joi.string().email().required(),
+  EMAIL_PASSWORD: Joi.string().required().min(8).max(32),
 });

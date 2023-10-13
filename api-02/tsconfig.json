@@ -6,8 +6,7 @@
     "lib": ["esnext"],
     "esModuleInterop": true,
     "declaration": true,
+    "noImplicitAny": false
   },
-  "include": [
-    "src/**/*"
-  ],
+  "include": ["src/**/*"]
 }

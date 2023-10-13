@@ -4,7 +4,8 @@ import fs from 'fs';
 import yargs from 'yargs';
 import config from '../config';
 
-async function run() {
+export async function run() {
+  config.logger.info('Starting: downloading DB data');
   const argv = await yargs
     .usage(
       'Usage: $0 --out=[output file, default: ./data/products/products.csv.gz ]'
@@ -105,15 +106,5 @@ async function run() {
       });
     });
   });
+  config.logger.info('Completed: downloading DB data');
 }
-
-config.logger.info('Starting: downloading DB data');
-run()
-  .then(() => {
-    config.logger.info('Completed: downloading DB data');
-    process.exit(0);
-  })
-  .catch((err) => {
-    config.logger.error(err);
-    process.exit(1);
-  });
