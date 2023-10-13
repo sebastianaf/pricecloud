@@ -30,6 +30,7 @@ import { Role } from './entities/role.entity';
     forwardRef(() => UserModule),
     PassportModule,
     PassportModule.register({ defaultStrategy: 'cookie' }),
+    forwardRef(() => UserModule),
   ],
   providers: [CookieStrategy, AuthService],
   controllers: [AuthController],

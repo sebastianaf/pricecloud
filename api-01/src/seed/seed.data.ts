@@ -17,6 +17,7 @@ export const userSeed: Partial<User>[] = [
     loginCount: 0,
     role: { id: RoleInterface.admin } as any,
     company: `Pricecloud`,
+    isEmailVerified: true,
     createdAt: undefined,
     updatedAt: undefined,
   },

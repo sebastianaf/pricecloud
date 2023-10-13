@@ -1,12 +1,18 @@
-import { ConflictException, Injectable, UseGuards } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  Inject,
+  forwardRef,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { EmailService } from '../email/email.service';
+import { AuthService } from '../auth/auth.service';
+import { CommonService } from '../common/common.service';
 
 @Injectable()
 export class UserService {
@@ -14,7 +20,11 @@ export class UserService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
 
+    @Inject(forwardRef(() => AuthService))
+    private readonly authService: AuthService,
+
     private readonly emailService: EmailService,
+    private readonly commonService: CommonService,
   ) {}
 
   async findOne(id: string) {
@@ -34,18 +44,27 @@ export class UserService {
     return user;
   }
 
-  async create(createUserDto: CreateUserDto) {
+  async createUser(createUserDto: CreateUserDto) {
     const { password, email } = createUserDto;
 
     const user = await this.userRepository.findOne({
       where: { email },
     });
 
-    if (user) throw new ConflictException(`User not available (USC-001)`);
+    if (user)
+      throw new ConflictException(
+        `Por favor intente con un email diferente (USC-001)`,
+      );
 
     createUserDto.password = bcrypt.hashSync(password, 10);
+    const newUser = await this.userRepository.save(createUserDto);
 
-    return { id: (await this.userRepository.save(createUserDto)).id };
+    await this.sendVerificationEmail(newUser);
+
+    return {
+      id: newUser.id,
+      message: `Se ha enviado un correo de verificación a tu email.`,
+    };
   }
 
   async addLoginCount(user: User) {
@@ -54,19 +73,42 @@ export class UserService {
     });
   }
 
-  async sendEmail() {
-    try {
-      await this.emailService.send({
-        body: 'Hola',
-        subject: 'Hola',
-        to: [`sebastian.afanador@correounivalle.edu.co`],
-      });
+  private async createVerificationToken(user: User) {
+    const tempToken = await this.authService.createTempToken(user);
+    return await this.commonService.encrypt(tempToken);
+  }
 
-      return { message: `Mensaje enviado exitosamente` };
+  private async sendVerificationEmail(user: User) {
+    const encryptedTempToken = await this.createVerificationToken(user);
+    const uriDecodedEncryptedTempToken = encodeURIComponent(encryptedTempToken);
+
+    const url = `${process.env.API_COOKIE_DOMAIN}/user/verify-email/${uriDecodedEncryptedTempToken}`;
+
+    const body = `
+      <p>Para verificar tu cuenta, por favor haz click en el siguiente enlace:</p>
+      <a href="${url}">Verificar cuenta</a>
+    `;
+
+    const subject = `Verificación de cuenta Pricecloud`;
+
+    try {
+      await this.emailService.send({ body, subject, to: [user.email] });
     } catch (error) {
       throw new ConflictException(
-        `Hubo un error al enviar el email (USSE-001)`,
+        `Hubo un error al enviar el email de verificación de correo, por favor intente de nuevo (USSE-001)`,
       );
     }
+  }
+
+  async verifyEmail(uriEncodedEncryptedTempToken: string) {
+    const encryptedTempToken = decodeURIComponent(uriEncodedEncryptedTempToken);
+
+    const tempToken = await this.commonService.decrypt(encryptedTempToken);
+
+    const user = await this.authService.validateToken(tempToken);
+
+    await this.userRepository.update(user.id, { isEmailVerified: true });
+
+    return { message: `Email verificado exitosamente` };
   }
 }

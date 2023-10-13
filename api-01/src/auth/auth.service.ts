@@ -1,17 +1,19 @@
 import * as bcrypt from 'bcrypt';
 import {
-  ConflictException,
+  Inject,
+  forwardRef,
   Injectable,
   UnauthorizedException,
+  GoneException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as jwt from 'jsonwebtoken';
 import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 import { UserService } from '../user/user.service';
 import { ValidateUserDto } from './dto/validate-user.dto';
 import { JwtPayloadDto } from './dto/jwt-payload.dto';
-import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
 import { RoleView } from './entities/role-view.entity';
 
@@ -23,7 +25,9 @@ export class AuthService {
     @InjectRepository(RoleView)
     private readonly roleViewRepository: Repository<RoleView>,
 
+    @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
+
     private readonly jwtService: JwtService,
   ) {}
 
@@ -80,7 +84,12 @@ export class AuthService {
 
     if (!isPassword)
       throw new UnauthorizedException(
-        `El correo electrónico o la contraseña son incorrectos (AVU-001)`,
+        `El correo electrónico o la contraseña son incorrectos (AVU-002)`,
+      );
+
+    if (!user.isEmailVerified)
+      throw new GoneException(
+        `El correo electrónico no ha sido verificado, se ha enviado uno nuevo, por favor verifique  su email (AVU-003)`,
       );
 
     await this.userService.addLoginCount(user);
@@ -95,5 +104,12 @@ export class AuthService {
     return await this.roleViewRepository.findOne({
       where: { role: { id: roleId } as any },
     });
+  }
+
+  async createTempToken(user: User) {
+    return this.jwtService.sign(
+      { id: user.id, email: user.email },
+      { expiresIn: '5m' },
+    );
   }
 }

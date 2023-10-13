@@ -22,6 +22,8 @@ services:
       EMAIL_PORT: ${EMAIL_PORT}
       EMAIL_USER: ${EMAIL_USER}
       EMAIL_PASSWORD: ${EMAIL_PASSWORD}
+      COMMON_SECRET: ${COMMON_SECRET}
+      COMMON_IV: ${COMMON_IV}
       ENV: ${ENV}
       TZ: ${TZ}
     build:

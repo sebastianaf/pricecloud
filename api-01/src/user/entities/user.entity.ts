@@ -57,6 +57,10 @@ export class User {
   @Column({ default: 0 })
   loginCount: number;
 
+  @ApiProperty({ description: `User's email verification status` })
+  @Column({ default: false })
+  isEmailVerified: boolean;
+
   @CreateDateColumn({
     type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',

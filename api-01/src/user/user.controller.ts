@@ -21,10 +21,10 @@ export class UserController {
   @ApiOperation({ summary: `Create users` })
   @ApiResponse({
     status: 200,
-    description: `Verifique su email  para activar su cuenta`,
+    description: `Se ha enviado un correo de verificación a tu email.`,
   })
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  createUser(@Body() createUserDto: CreateUserDto) {
+    return this.userService.createUser(createUserDto);
   }
 
   @Get()
@@ -34,17 +34,13 @@ export class UserController {
     return this.userService.findOne(id);
   }
 
-  @Post(`send-email`)
-  @ApiOperation({ summary: `Send email` })
+  @Post(`verify-email`)
+  @ApiOperation({ summary: `Verify email` })
   @ApiResponse({
     status: 200,
-    schema: {
-      example: {
-        message: `Mensaje enviado exitosamente`,
-      },
-    },
+    description: `Email verificado correctamente.`,
   })
-  sendEmail() {
-    return this.userService.sendEmail();
+  verifyEmail(@Body() body: { token: string }) {
+    return this.userService.verifyEmail(body.token);
   }
 }
