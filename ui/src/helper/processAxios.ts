@@ -11,7 +11,7 @@ const processSuccess = (response: AxiosResponse) => {
 };
 
 const processError = (response: any) => {
-  const status = response.response.data.statusCode;
+  const status = response?.response?.data?.statusCode;
   switch (status) {
     case HttpStatusCode.InternalServerError:
       showNotification(response.response.data, 'error');

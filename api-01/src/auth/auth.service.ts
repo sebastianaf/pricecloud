@@ -37,26 +37,27 @@ export class AuthService {
   }
 
   async validateToken(token: string) {
+    let decoded: any;
     try {
-      const decoded = jwt.verify(token, process.env.API_JWT_SECRET);
-
-      const decodedData = { id: decoded[`id`], email: decoded[`email`] };
-      const { id, email } = decodedData;
-
-      const user = await this.userRepository.findOne({
-        where: { id, email },
-        select: ['id', 'email', 'password', 'loginCount'],
-        relations: [`role`, `role.roleViews`, `role.roleViews.view`],
-      });
-
-      if (!user) throw new UnauthorizedException(`Token no válido (AVT-001)`);
-
-      delete user.password;
-
-      return user;
+      decoded = jwt.verify(token, process.env.API_JWT_SECRET);
     } catch (error) {
-      return null;
+      throw new UnauthorizedException(`Token no válido (AVT-001)`);
     }
+
+    const decodedData = { id: decoded[`id`], email: decoded[`email`] };
+    const { id, email } = decodedData;
+
+    const user = await this.userRepository.findOne({
+      where: { id, email },
+      select: ['id', 'email', 'password', 'loginCount'],
+      relations: [`role`, `role.roleViews`, `role.roleViews.view`],
+    });
+
+    if (!user) throw new UnauthorizedException(`Token no válido (AVT-002)`);
+
+    delete user.password;
+
+    return user;
   }
 
   async auth(validateUserDTO: ValidateUserDto) {
@@ -89,10 +90,12 @@ export class AuthService {
         `El correo electrónico o la contraseña son incorrectos (AVU-002)`,
       );
 
-    if (!user.isEmailVerified)
+    if (!user.isEmailVerified) {
+      await this.userService.sendVerificationEmail(user);
       throw new GoneException(
-        `El correo electrónico no ha sido verificado, se ha enviado uno nuevo, por favor verifique  su email (AVU-003)`,
+        `Se ha enviado un nuevo email para verificar su correo (AVU-003)`,
       );
+    }
 
     await this.userService.addLoginCount(user);
     delete user.password;

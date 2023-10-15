@@ -1,12 +1,15 @@
 const paths = {
-  api: { auth: `auth`, user: `user` },
+  api: {
+    auth: `auth`,
+    user: {
+      root: `user`,
+      verifyEmail: `user/verify-email`
+    }
+  },
   web: {
     login: `/login`,
     signup: `/signup`,
-    dashboard: `/dashboard`,
-    user: {
-      signup: `user/signup`
-    }
+    dashboard: `/dashboard`
   }
 };
 

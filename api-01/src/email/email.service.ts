@@ -39,7 +39,7 @@ export class EmailService {
     const { body, subject, to } = sendEmailDto;
 
     const mailOptions: nodemailer.SendMailOptions = {
-      from: process.env.EMAIL_USER,
+      from: `Pricecloud<${this.emailUser}>`,
       to,
       subject: `${
         this.env !== EnvironmentsInterface.production &&

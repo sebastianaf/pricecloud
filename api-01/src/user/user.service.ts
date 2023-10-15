@@ -3,6 +3,7 @@ import {
   Injectable,
   Inject,
   forwardRef,
+  Logger,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -79,7 +80,7 @@ export class UserService {
 
     return {
       id: newUser.id,
-      title: `Verificación de email`,
+      title: `Usuario creado exitosamente`,
       message: `Se ha enviado un correo de verificación a tu email.`,
     };
   }
@@ -95,11 +96,11 @@ export class UserService {
     return await this.commonService.encrypt(tempToken);
   }
 
-  private async sendVerificationEmail(user: User) {
+  async sendVerificationEmail(user: User) {
     const encryptedTempToken = await this.createVerificationToken(user);
-    const uriDecodedEncryptedTempToken = encodeURIComponent(encryptedTempToken);
+    const uriEncodedEncryptedTempToken = encodeURIComponent(encryptedTempToken);
 
-    const url = `https://${process.env.API_COOKIE_DOMAIN}/${paths.user.emailVerify}?token=${uriDecodedEncryptedTempToken}`;
+    const url = `https://${process.env.API_COOKIE_DOMAIN}/${paths.user.emailVerify}?token=${uriEncodedEncryptedTempToken}`;
 
     const body = `
       <p>Para verificar tu cuenta, por favor haz click en el siguiente enlace:</p>
@@ -123,6 +124,14 @@ export class UserService {
     const tempToken = await this.commonService.decrypt(encryptedTempToken);
 
     const user = await this.authService.validateToken(tempToken);
+
+    if (!user)
+      throw new ConflictException(`Error al verificar el email (USVE-001)`);
+
+    if (user.isEmailVerified)
+      throw new ConflictException(
+        `El email ya se encuentra verificado (USVE-002)`,
+      );
 
     await this.userRepository.update(user.id, { isEmailVerified: true });
 

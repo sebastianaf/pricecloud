@@ -21,8 +21,7 @@ export let SnackbarContextReference: SnackbarContextProps = {};
 export const SnackbarProvider: React.FC = ({ children }) => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarVariant, setSnackbarVariant] =
-    useState<NotificationType>('success');
+  const [snackbarVariant, setSnackbarVariant] = useState<NotificationType>();
 
   const showSnackbar = (
     message: string,
@@ -46,15 +45,19 @@ export const SnackbarProvider: React.FC = ({ children }) => {
       {children}
       <Snackbar
         open={snackbarOpen}
-        autoHideDuration={5000}
+        autoHideDuration={7000}
         onClose={closeSnackbar}
         anchorOrigin={{
           vertical: 'bottom',
-          horizontal: 'left'
+          horizontal: 'center'
         }}
         inlist={true}
       >
-        <Alert onClose={closeSnackbar} severity={snackbarVariant}>
+        <Alert
+          className={`custom-alert`}
+          onClose={closeSnackbar}
+          severity={snackbarVariant}
+        >
           {snackbarMessage}
         </Alert>
       </Snackbar>

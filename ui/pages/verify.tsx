@@ -1,5 +1,9 @@
 import { Box, CircularProgress, Typography, styled } from '@mui/material';
 import type { ReactElement } from 'react';
+import { useEffect } from 'react';
+import { customAxios } from '../src/helper/customAxios';
+import paths from '../src/helper/paths';
+import { useRouter } from 'next/router';
 
 const MainContent = styled(Box)(
   () => `
@@ -22,6 +26,22 @@ const TopWrapper = styled(Box)(
 );
 
 function Verify() {
+  const router = useRouter();
+	
+  useEffect(() => {
+    if (!!router.query) {
+      const { token } = router.query;
+      if (token) {
+        customAxios.post(paths.api.user.verifyEmail, {
+          token
+        });
+      }
+    }
+    setTimeout(() => {
+      router.push(paths.web.login);
+    }, 5000);
+  }, [router.query]);
+
   return (
     <MainContent>
       <TopWrapper>

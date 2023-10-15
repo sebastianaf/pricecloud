@@ -55,7 +55,7 @@ export class CommonService {
       text += decrypt.final('utf8');
       return text;
     } catch (error) {
-      throw new ConflictException(`Error al deencriptar (CD-001)`);
+      throw new ConflictException(`Error al desencriptar (CD-001)`);
     }
   }
 }

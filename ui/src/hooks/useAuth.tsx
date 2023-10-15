@@ -22,7 +22,7 @@ const useAuth = () => {
   };
 
   const signup = async (data: SignupType) => {
-    const response = await customAxios.post(paths.api.user, data);
+    const response = await customAxios.post(paths.api.user.root, data);
     if (response.status === 201) {
       router.push(paths.web.login);
     }
