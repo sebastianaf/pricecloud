@@ -10,7 +10,8 @@ import InfoIcon from '@mui/icons-material/Info';
 import WarningIcon from '@mui/icons-material/Warning';
 import SuccessIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Close';
-import { NotificationType, useModal } from '../contexts/ModalContext';
+import { useModal } from '../contexts/ModalContext';
+import { NotificationType } from '../types/notification.type';
 
 const handleIcon = (type: NotificationType) => {
   if (type === 'success') {

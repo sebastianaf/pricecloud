@@ -17,7 +17,6 @@ import Logo from 'src/components/LogoSign';
 import Hero from 'src/content/Overview/Hero';
 import useAuth from '../src/hooks/useAuth';
 import { useAppContext } from '../src/contexts/AppContext';
-import { useSnackbar } from 'notistack';
 
 const HeaderWrapper = styled(Card)(
   ({ theme }) => `
@@ -39,15 +38,6 @@ const OverviewWrapper = styled(Box)(
 );
 
 function Overview() {
-  const { check } = useAuth();
-  const router = useRouter();
-  const { isAuth } = useAppContext();
-
-
-  useEffect(() => {
-    
-  }, []);
-
   return (
     <OverviewWrapper>
       <Head>
