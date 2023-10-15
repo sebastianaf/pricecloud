@@ -49,8 +49,8 @@ export class User {
   @Column({ transformer: EncryptionTransformer })
   firstLastName: string;
 
-  @ApiProperty({ description: `Second Lastname` })
-  @Column({ transformer: EncryptionTransformer })
+  @ApiProperty({ description: `Second Lastname`, nullable: true })
+  @Column({ nullable: true, transformer: EncryptionTransformer })
   secondLastName: string;
 
   @ApiProperty({ description: `User's login count` })

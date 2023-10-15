@@ -15,7 +15,7 @@ export const userSeed: Partial<User>[] = [
     secondLastName: 'User',
     password: 'Teardrop7777',
     loginCount: 0,
-    role: { id: RoleInterface.admin } as any,
+    role: { id: RoleInterface.admin } as Role,
     company: `Pricecloud`,
     isEmailVerified: true,
     createdAt: undefined,
@@ -47,11 +47,11 @@ export const roleSeed: Partial<Role>[] = [
 
 export const roleViewSeed: Partial<RoleView>[] = [
   {
-    role: { id: RoleInterface.admin } as any,
-    view: { id: ViewInterface.dashboard } as any,
+    role: { id: RoleInterface.admin } as Role,
+    view: { id: ViewInterface.dashboard } as View,
   },
   {
-    role: { id: RoleInterface.user } as any,
-    view: { id: ViewInterface.dashboard } as any,
+    role: { id: RoleInterface.user } as Role,
+    view: { id: ViewInterface.dashboard } as View,
   },
 ];

@@ -1,4 +1,5 @@
 import * as Joi from 'joi';
+import { EnvironmentsInterface } from '../common/interfaces/environment.interface';
 
 export default Joi.object({
   API_PORT: Joi.number().min(100).max(65535).required(),
@@ -16,7 +17,13 @@ export default Joi.object({
   DB_PASSWORD: Joi.string().required(),
   DB_SECRET: Joi.string().length(32).required(),
   DB_IV: Joi.string().length(16).required(),
-  ENV: Joi.string().equal(`local`, `dev`, `prod`).required(),
+  ENV: Joi.string()
+    .equal(
+      EnvironmentsInterface.local,
+      EnvironmentsInterface.development,
+      EnvironmentsInterface.production,
+    )
+    .required(),
   TZ: Joi.string().required(),
   EMAIL_HOST: Joi.string().hostname().required(),
   EMAIL_PORT: Joi.number().min(100).max(65535).required(),

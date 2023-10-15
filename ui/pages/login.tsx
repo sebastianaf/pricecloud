@@ -1,5 +1,4 @@
 import { MouseEvent, useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import {
   Box,
@@ -20,10 +19,11 @@ import type { ReactElement } from 'react';
 
 import Head from 'next/head';
 import BaseLayout from 'src/layouts/BaseLayout';
-import { Login } from '../src/models/FormStates';
+import { Login } from '../src/types/FormStates';
 import { emailRegex, passwordRegex } from '../src/helper/regex';
 import useAuth from '../src/hooks/useAuth';
-import { AppContext, useAppContext } from '../src/contexts/AppContext';
+import paths from '../src/helper/paths';
+import { useSnackbar } from '../src/contexts/SnackbarContext';
 
 const MainContent = styled(Box)(
   () => `
@@ -45,13 +45,9 @@ const TopWrapper = styled(Box)(
 `
 );
 
-function SignIn() {
+function Signin() {
   const [showPassword, setShowPassword] = useState(false);
-  const router = useRouter();
-  const { login, check } = useAuth();
-  const { isAuth } = useAppContext();
-
-  useEffect(() => {}, []);
+  const { signin } = useAuth();
 
   const {
     formState: { errors, isSubmitting },
@@ -60,7 +56,7 @@ function SignIn() {
   } = useForm<Login>();
 
   const onSubmit = handleSubmit(async (data: Login) => {
-    await login(data);
+    await signin(data);
   });
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -96,7 +92,10 @@ function SignIn() {
               <Typography variant="h1" sx={{ mt: 2 }}>
                 Pricecloud
               </Typography>
-              <Typography variant="subtitle2">Crear una cuenta</Typography>
+              <Typography variant="subtitle2">
+                Inicia sesión o{' '}
+                <NextLink href={paths.web.signup}>crea una cuenta</NextLink>
+              </Typography>
             </Box>
 
             <form onSubmit={onSubmit}>
@@ -188,8 +187,8 @@ function SignIn() {
   );
 }
 
-export default SignIn;
+export default Signin;
 
-SignIn.getLayout = function getLayout(page: ReactElement) {
+Signin.getLayout = function getLayout(page: ReactElement) {
   return <BaseLayout>{page}</BaseLayout>;
 };

@@ -5,6 +5,7 @@ import {
   Injectable,
   UnauthorizedException,
   GoneException,
+  Logger,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as jwt from 'jsonwebtoken';
@@ -72,6 +73,7 @@ export class AuthService {
         `secondLastName`,
         `password`,
         `loginCount`,
+        `isEmailVerified`,
       ],
     });
 

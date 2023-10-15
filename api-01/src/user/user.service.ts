@@ -13,6 +13,8 @@ import { User } from './entities/user.entity';
 import { EmailService } from '../email/email.service';
 import { AuthService } from '../auth/auth.service';
 import { CommonService } from '../common/common.service';
+import { RoleInterface } from '../auth/interfaces/role.interface';
+import paths from '../config/paths';
 
 @Injectable()
 export class UserService {
@@ -45,7 +47,14 @@ export class UserService {
   }
 
   async createUser(createUserDto: CreateUserDto) {
-    const { password, email } = createUserDto;
+    const {
+      password,
+      email,
+      firstLastName,
+      firstName,
+      secondLastName,
+      secondName,
+    } = createUserDto;
 
     const user = await this.userRepository.findOne({
       where: { email },
@@ -56,13 +65,21 @@ export class UserService {
         `Por favor intente con un email diferente (USC-001)`,
       );
 
-    createUserDto.password = bcrypt.hashSync(password, 10);
-    const newUser = await this.userRepository.save(createUserDto);
+    const newUser = await this.userRepository.save({
+      firstName,
+      secondName,
+      firstLastName,
+      secondLastName,
+      email,
+      password: bcrypt.hashSync(password, 10),
+      role: <any>{ id: RoleInterface.user },
+    });
 
     await this.sendVerificationEmail(newUser);
 
     return {
       id: newUser.id,
+      title: `Verificación de email`,
       message: `Se ha enviado un correo de verificación a tu email.`,
     };
   }
@@ -82,7 +99,7 @@ export class UserService {
     const encryptedTempToken = await this.createVerificationToken(user);
     const uriDecodedEncryptedTempToken = encodeURIComponent(encryptedTempToken);
 
-    const url = `${process.env.API_COOKIE_DOMAIN}/user/verify-email/${uriDecodedEncryptedTempToken}`;
+    const url = `https://${process.env.API_COOKIE_DOMAIN}/${paths.user.emailVerify}?token=${uriDecodedEncryptedTempToken}`;
 
     const body = `
       <p>Para verificar tu cuenta, por favor haz click en el siguiente enlace:</p>
