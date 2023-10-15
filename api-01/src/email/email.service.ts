@@ -42,8 +42,9 @@ export class EmailService {
       from: `Pricecloud<${this.emailUser}>`,
       to,
       subject: `${
-        this.env !== EnvironmentsInterface.production &&
-        `${this.env.toUpperCase()} | `
+        this.env !== EnvironmentsInterface.production
+          ? `${this.env.toUpperCase()} | `
+          : ``
       }${subject}`,
       html: body,
     };
