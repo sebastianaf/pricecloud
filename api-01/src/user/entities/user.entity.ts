@@ -49,13 +49,17 @@ export class User {
   @Column({ transformer: EncryptionTransformer })
   firstLastName: string;
 
-  @ApiProperty({ description: `Second Lastname` })
-  @Column({ transformer: EncryptionTransformer })
+  @ApiProperty({ description: `Second Lastname`, nullable: true })
+  @Column({ nullable: true, transformer: EncryptionTransformer })
   secondLastName: string;
 
   @ApiProperty({ description: `User's login count` })
   @Column({ default: 0 })
   loginCount: number;
+
+  @ApiProperty({ description: `User's email verification status` })
+  @Column({ default: false })
+  isEmailVerified: boolean;
 
   @CreateDateColumn({
     type: 'timestamptz',

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import Modal from '../components/Modal';
+import { NotificationType } from '../types/notification.type';
 
 interface ModalData {
   title?: string;
@@ -14,8 +15,6 @@ const defaultModalData: ModalData = {
   message: `Al parecer esta notificación no tiene contenido`,
   notificationType: `info`
 };
-
-export type NotificationType = 'success' | 'error' | 'warning' | 'info';
 
 interface ModalContextProps {
   isModalOpen?: boolean;
@@ -63,7 +62,7 @@ export const ModalProvider: React.FC = ({ children }) => {
 export const useModal = () => {
   const context = useContext(ModalContext);
   if (context === undefined) {
-    throw new Error("useAppContext must be used within an AppProvider");
+    throw new Error('useAppContext must be used within an AppProvider');
   }
   return context;
 };

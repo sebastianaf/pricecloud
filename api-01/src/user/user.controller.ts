@@ -1,6 +1,10 @@
 import { Controller, Get, Post, Body, Param } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { FileInterceptor } from '@nestjs/platform-express';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -15,8 +19,12 @@ export class UserController {
 
   @Post()
   @ApiOperation({ summary: `Create users` })
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  @ApiResponse({
+    status: 200,
+    description: `Se ha enviado un correo de verificación a tu email.`,
+  })
+  createUser(@Body() createUserDto: CreateUserDto) {
+    return this.userService.createUser(createUserDto);
   }
 
   @Get()
@@ -24,5 +32,15 @@ export class UserController {
   @ApiOperation({ summary: `Find user` })
   findOne(@Param('id') id: string) {
     return this.userService.findOne(id);
+  }
+
+  @Post(`verify-email`)
+  @ApiOperation({ summary: `Verify email` })
+  @ApiResponse({
+    status: 200,
+    description: `Email verificado correctamente.`,
+  })
+  verifyEmail(@Body() body: { token: string }) {
+    return this.userService.verifyEmail(body.token);
   }
 }

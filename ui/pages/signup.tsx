@@ -11,13 +11,20 @@ import {
   InputLabel,
   Badge,
   Typography,
-  Divider
+  Divider,
+  TextField
 } from '@mui/material';
 import NextLink from 'next/link';
 import Head from 'next/head';
 import { VisibilityOff, Visibility } from '@mui/icons-material';
 import type { ReactElement } from 'react';
 import BaseLayout from 'src/layouts/BaseLayout';
+import { useForm } from 'react-hook-form';
+import { SignupType } from '../src/types/user/signup.type';
+import paths from '../src/helper/paths';
+import { emailRegex, passwordRegex } from '../src/helper/regex';
+import { LoadingButton } from '@mui/lab';
+import useAuth from '../src/hooks/useAuth';
 
 const MainContent = styled(Box)(
   () => `
@@ -39,8 +46,14 @@ const TopWrapper = styled(Box)(
 `
 );
 
-function Login() {
+function Signup() {
   const [showPassword, setShowPassword] = React.useState(false);
+  const {
+    formState: { errors, isSubmitting },
+    register,
+    handleSubmit
+  } = useForm<SignupType>();
+  const { signup } = useAuth();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -50,6 +63,10 @@ function Login() {
     event.preventDefault();
   };
 
+  const onSubmit = handleSubmit(async (data: SignupType) => {
+    await signup(data);
+  });
+
   return (
     <>
       <Head>
@@ -58,74 +75,142 @@ function Login() {
       <MainContent>
         <TopWrapper>
           <Container maxWidth="md">
-            <NextLink href="/">
-              <Box textAlign="center" sx={{ m: 4 }}>
-                <Badge
-                  overlap="circular"
-                  color="success"
-                  badgeContent="v1.0"
-                  sx={{ cursor: 'pointer' }}
-                >
+            <Box textAlign="center" sx={{ m: 4 }}>
+              <Badge
+                overlap="circular"
+                color="success"
+                badgeContent="v1.0"
+                sx={{ cursor: 'pointer' }}
+              >
+                <NextLink href="/">
                   <img
                     alt="Pricecloud"
                     height={96}
                     src="/static/images/logo/pricecloud-logo.png"
                     draggable={false}
                   />
-                </Badge>
-                <Typography variant="h1" sx={{ mt: 2 }}>
-                  Pricecloud
-                </Typography>
-                <Typography variant="subtitle2">Crear una cuenta</Typography>
-              </Box>
-            </NextLink>
-            <Container maxWidth="sm">
-              <Box textAlign="center" sx={{ mb: 2 }}>
-                <FormControl variant="filled" fullWidth sx={{ mb: 2 }}>
-                  <InputLabel htmlFor="name">Nombre</InputLabel>
-                  <FilledInput id="name" type="text" />
-                </FormControl>
+                </NextLink>
+              </Badge>
+              <Typography variant="h1" sx={{ mt: 2 }}>
+                Pricecloud
+              </Typography>
+              <Typography variant="subtitle2">
+                Crea una cuenta o{' '}
+                <NextLink href={paths.web.login}>inicia sesión</NextLink>
+              </Typography>
+            </Box>
+            <form onSubmit={onSubmit}>
+              <Container maxWidth="sm">
+                <Box textAlign="center">
+                  <TextField
+                    autoComplete="email"
+                    fullWidth
+                    sx={{ mb: 2 }}
+                    className=""
+                    id="email"
+                    variant="outlined"
+                    type="email"
+                    label="Email"
+                    {...register('email', {
+                      required: {
+                        value: true,
+                        message: 'Por favor ingrese su correo electrónico'
+                      },
+                      pattern: {
+                        value: emailRegex,
+                        message:
+                          'Por favor ingrese un correo electrónico válido'
+                      }
+                    })}
+                    helperText={errors?.email?.message}
+                    error={!!errors?.email?.message}
+                  />
 
-                <FormControl variant="filled" fullWidth sx={{ mb: 2 }}>
-                  <InputLabel htmlFor="email">Correo electrónico</InputLabel>
-                  <FilledInput id="email" type="email" />
-                </FormControl>
+                  <Box display={'flex'} flexDirection={`row`} gap={2}>
+                    <TextField
+                      label="Primer Nombre"
+                      id="firstName"
+                      variant="outlined"
+                      fullWidth
+                      sx={{ mb: 2 }}
+                      type="text"
+                      {...register('firstName', {
+                        required: {
+                          value: true,
+                          message: 'Por favor ingrese su primer nombre'
+                        }
+                      })}
+                      helperText={errors?.firstName?.message}
+                      error={!!errors?.firstName?.message}
+                    />
+                    <TextField
+                      label="Primer apellido"
+                      id="firstLastName"
+                      variant="outlined"
+                      fullWidth
+                      sx={{ mb: 2 }}
+                      type="text"
+                      {...register('firstLastName', {
+                        required: {
+                          value: true,
+                          message: 'Por favor ingrese su primer apellido'
+                        }
+                      })}
+                      helperText={errors?.firstLastName?.message}
+                      error={!!errors?.firstLastName?.message}
+                    />
+                  </Box>
 
-                <FormControl variant="filled" fullWidth sx={{ mb: 2 }}>
-                  <InputLabel htmlFor="password">Contraseña</InputLabel>
-                  <FilledInput
+                  <TextField
+                    autoComplete="password"
+                    label="Contraseña"
                     id="password"
+                    variant="outlined"
+                    fullWidth
+                    sx={{ mb: 2 }}
                     type={showPassword ? 'text' : 'password'}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
-                          edge="end"
-                        >
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    }
+                    {...register('password', {
+                      required: {
+                        value: true,
+                        message: 'Por favor indique una contraseña'
+                      },
+                      pattern: {
+                        value: passwordRegex,
+                        message:
+                          'Al menos 8 caracteres, una mayúscula, una minúscula y un número'
+                      }
+                    })}
+                    helperText={errors?.password?.message}
+                    error={!!errors?.password?.message}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickShowPassword}
+                            onMouseDown={handleMouseDownPassword}
+                            edge="end"
+                          >
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      )
+                    }}
                   />
-                </FormControl>
-
-                <FormControl variant="filled" fullWidth sx={{ mb: 2 }}>
-                  <InputLabel htmlFor="passwordRepeat">
-                    Repita su contraseña
-                  </InputLabel>
-                  <FilledInput
-                    id="passwordRepeat"
-                    type={showPassword ? 'text' : 'password'}
-                  />
-                </FormControl>
-              </Box>
-              <Divider sx={{ mb: 4 }}></Divider>
-              <Button href="/signin" variant="contained" fullWidth>
-                Regístrate
-              </Button>
-            </Container>
+                </Box>
+                <Divider sx={{ mb: 4 }}></Divider>
+                <LoadingButton
+                  size="large"
+                  loading={isSubmitting}
+                  type="submit"
+                  variant="contained"
+                  fullWidth
+                  disabled={isSubmitting}
+                >
+                  {!isSubmitting ? <>Crear cuenta</> : <>Iniciando...</>}
+                </LoadingButton>
+              </Container>
+            </form>
           </Container>
         </TopWrapper>
       </MainContent>
@@ -133,8 +218,8 @@ function Login() {
   );
 }
 
-export default Login;
+export default Signup;
 
-Login.getLayout = function getLayout(page: ReactElement) {
+Signup.getLayout = function getLayout(page: ReactElement) {
   return <BaseLayout>{page}</BaseLayout>;
 };

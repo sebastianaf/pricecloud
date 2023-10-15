@@ -15,8 +15,6 @@ import {
   styled
 } from '@mui/material';
 import PageTitleWrapper from '@/components/PageTitleWrapper';
-import { useSnackbar } from 'notistack';
-
 import TeamOverview from '@/content/Dashboards/Tasks/TeamOverview';
 import TasksAnalytics from '@/content/Dashboards/Tasks/TasksAnalytics';
 import Performance from '@/content/Dashboards/Tasks/Performance';
@@ -28,6 +26,7 @@ import withAuth from '../../src/helper/withAuth';
 import { useModal } from '../../src/contexts/ModalContext';
 import useAuth from '../../src/hooks/useAuth';
 import { customAxios } from '../../src/helper/customAxios';
+import { useSnackbar } from '../../src/contexts/SnackbarContext';
 
 const TabsContainerWrapper = styled(Box)(
   ({ theme }) => `
@@ -113,19 +112,6 @@ const TabsContainerWrapper = styled(Box)(
 
 function DashboardTasks() {
   const theme = useTheme();
-  const { openModal, modalData, setModalData } = useModal();
-  const { check } = useAuth();
-
-  useEffect(() => {
-    setModalData({
-      ...modalData,
-      title: `Bienvenido a Pricecloud`,
-      message: 'Estamos trabajando para brindarte la mejor experiencia posible',
-      notificationType: 'info'
-    });
-    openModal();
-  }, []);
-
   const [currentTab, setCurrentTab] = useState<string>('analytics');
 
   const tabs = [

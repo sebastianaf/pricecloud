@@ -4,6 +4,9 @@ import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-co
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import pinoHttp from 'pino-http';
 import path from 'path';
+import { Server as HttpServer } from 'http';
+import { Server as IOServer } from 'socket.io';
+
 import { Logger } from 'pino';
 import config from './config';
 import ApolloLogger from './utils/apolloLogger';
@@ -31,8 +34,10 @@ interface ResponseError extends Error {
 
 async function createApp<TContext>(
   opts: ApplicationOptions<TContext> = {}
-): Promise<Application> {
+): Promise<{ httpServer: HttpServer; io: IOServer }> {
   const app = express();
+  const httpServer = new HttpServer(app);
+  const io = new IOServer(httpServer, { cors: { origin: '*' } });
 
   const logger = opts.logger || config.logger;
 
@@ -110,7 +115,7 @@ async function createApp<TContext>(
 
   apollo.applyMiddleware({ app });
 
-  return app;
+  return { httpServer, io };
 }
 
 export default createApp;

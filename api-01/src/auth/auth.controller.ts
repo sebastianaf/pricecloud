@@ -75,6 +75,6 @@ export class AuthController {
       domain: process.env.API_COOKIE_DOMAIN,
       expires: new Date(0),
     });
-    response.send({ message: 'Vuelve pronto !' });
+    response.send({ message: '¡Vuelve pronto!' });
   }
 }
