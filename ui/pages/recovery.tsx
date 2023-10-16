@@ -4,6 +4,7 @@ import {
   Box,
   Typography,
   Container,
+  FormControl,
   InputAdornment,
   styled,
   IconButton,
@@ -19,9 +20,10 @@ import type { ReactElement } from 'react';
 import Head from 'next/head';
 import BaseLayout from 'src/layouts/BaseLayout';
 import { Login } from '../src/types/FormStates';
-import { emailRegex, passwordRegex } from '../src/helper/regex';
+import { emailRegex } from '../src/helper/regex';
 import useAuth from '../src/hooks/useAuth';
 import paths from '../src/helper/paths';
+import { RecoveryType } from '../src/types/recovery.type';
 
 const MainContent = styled(Box)(
   () => `
@@ -43,9 +45,8 @@ const TopWrapper = styled(Box)(
 `
 );
 
-function Signin() {
-  const [showPassword, setShowPassword] = useState(false);
-  const { signin } = useAuth();
+function Recovery() {
+  const { recovery } = useAuth();
 
   const {
     formState: { errors, isSubmitting },
@@ -53,20 +54,14 @@ function Signin() {
     handleSubmit
   } = useForm<Login>();
 
-  const onSubmit = handleSubmit(async (data: Login) => {
-    await signin(data);
+  const onSubmit = handleSubmit(async (data: RecoveryType) => {
+    await recovery(data);
   });
-
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-  const handleMouseDownPassword = (event: MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-  };
 
   return (
     <>
       <Head>
-        <title>Pricecloud | Iniciar sesión</title>
+        <title>Pricecloud | Recuperar contraseña</title>
       </Head>
       <MainContent>
         <TopWrapper>
@@ -91,8 +86,8 @@ function Signin() {
                 Pricecloud
               </Typography>
               <Typography variant="subtitle2">
-                Inicia sesión o{' '}
-                <NextLink href={paths.web.signup}>crea una cuenta</NextLink>
+                Recupera tu contraseña o{' '}
+                <NextLink href={paths.web.login}>inicia sesión</NextLink>
               </Typography>
             </Box>
 
@@ -122,48 +117,6 @@ function Signin() {
                     helperText={errors?.email?.message}
                     error={!!errors?.email?.message}
                   />
-
-                  <TextField
-                    autoComplete="password"
-                    label="Contraseña"
-                    id="password"
-                    variant="outlined"
-                    fullWidth
-                    sx={{ mb: 2 }}
-                    type={showPassword ? 'text' : 'password'}
-                    {...register('password', {
-                      required: {
-                        value: true,
-                        message: 'Por favor indique una contraseña'
-                      },
-                      pattern: {
-                        value: passwordRegex,
-                        message:
-                          'Al menos 8 caracteres, una mayúscula, una minúscula y un número'
-                      }
-                    })}
-                    helperText={errors?.password?.message}
-                    error={!!errors?.password?.message}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton
-                            aria-label="toggle password visibility"
-                            onClick={handleClickShowPassword}
-                            onMouseDown={handleMouseDownPassword}
-                            edge="end"
-                          >
-                            {showPassword ? <VisibilityOff /> : <Visibility />}
-                          </IconButton>
-                        </InputAdornment>
-                      )
-                    }}
-                  />
-                  <Box sx={{ mb: 1, textAlign: 'right' }}>
-                    <NextLink href={paths.web.recovery}>
-                      Restablecer contraseña
-                    </NextLink>
-                  </Box>
                 </Box>
 
                 <Divider sx={{ mb: 2 }}></Divider>
@@ -175,7 +128,7 @@ function Signin() {
                   fullWidth
                   disabled={isSubmitting}
                 >
-                  {!isSubmitting ? <>Acceder</> : <>Iniciando...</>}
+                  {!isSubmitting ? <>Recuperar </> : <>Cargando...</>}
                 </LoadingButton>
               </Container>
             </form>
@@ -186,8 +139,8 @@ function Signin() {
   );
 }
 
-export default Signin;
+export default Recovery;
 
-Signin.getLayout = function getLayout(page: ReactElement) {
+Recovery.getLayout = function getLayout(page: ReactElement) {
   return <BaseLayout>{page}</BaseLayout>;
 };

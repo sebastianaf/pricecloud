@@ -4,8 +4,10 @@ import { Login } from '../types/FormStates';
 import paths from '../helper/paths';
 import { customAxios } from '../helper/customAxios';
 import { useAppContext } from '../contexts/AppContext';
-import { SignupType } from '../types/user/signup.type';
+import { SignupType } from '../types/signup.type';
 import { useSnackbar } from '../contexts/SnackbarContext';
+import { RecoveryType } from '../types/recovery.type';
+import { PasswordResetType } from '../types/password-reset.type';
 
 const useAuth = () => {
   const { setUserProfile, setIsAuth } = useAppContext();
@@ -28,6 +30,23 @@ const useAuth = () => {
     }
   };
 
+  const recovery = async (data: RecoveryType) => {
+    await customAxios.post(paths.api.user.recovery, data);
+    router.push(`/`);
+  };
+
+  const passwordReset = async (data: PasswordResetType) => {
+    const token = router.query.token;
+    console.log(`token`, token);
+    console.log(`data`, data);
+
+    await customAxios.patch(paths.api.user.passwordReset, {
+      token,
+      password: data.password
+    });
+    router.push(paths.web.login);
+  };
+
   const check = async () => {
     const response = await customAxios.get(paths.api.auth);
     if (response.status === 200) {
@@ -45,6 +64,8 @@ const useAuth = () => {
 
   return {
     signin,
+    recovery,
+    passwordReset,
     signup,
     signout,
     check

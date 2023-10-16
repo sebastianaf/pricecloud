@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  ConflictException,
+  Patch,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -10,9 +18,16 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { Protect } from '../auth/decorators/protect.decorator';
 import { ViewInterface } from '../auth/interfaces/view.interface';
+import { RecoveryDto } from './dto/recovery.dto';
+import { PasswordResetDto } from './dto/password-reset.dto';
 
-@ApiTags(`Users`)
+@ApiTags(`user`)
 @Controller('user')
+@ApiResponse({
+  schema: {
+    example: new ConflictException(`Error message`),
+  },
+})
 @ApiBearerAuth()
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -38,9 +53,43 @@ export class UserController {
   @ApiOperation({ summary: `Verify email` })
   @ApiResponse({
     status: 200,
-    description: `Email verificado correctamente.`,
+    schema: {
+      example: {
+        message: `Email verificado correctamente.`,
+      },
+    },
   })
   verifyEmail(@Body() body: { token: string }) {
     return this.userService.verifyEmail(body.token);
+  }
+
+  @Patch(`password-reset`)
+  @ApiOperation({ summary: `Reset a user's password` })
+  @ApiResponse({
+    status: 200,
+    schema: {
+      example: {
+        title: `Contraseña actualizada`,
+        message: `Tu contraseña ha sido actualizada exitosamente`,
+      },
+    },
+  })
+  resetPassword(@Body() passwordResetDto: PasswordResetDto) {
+    return this.userService.resetPassword(passwordResetDto);
+  }
+
+  @Post(`recovery`)
+  @ApiOperation({ summary: `Recovery email account` })
+  @ApiResponse({
+    status: 200,
+    schema: {
+      example: {
+        title: `Restablecer contraseña`,
+        message: `Se envió un enlace de restablecimiento a su email`,
+      },
+    },
+  })
+  recovery(@Body() recoveryDto: RecoveryDto) {
+    return this.userService.recovery(recoveryDto);
   }
 }

@@ -2,13 +2,9 @@ import * as React from 'react';
 import {
   Box,
   Container,
-  Button,
-  FormControl,
   InputAdornment,
   styled,
   IconButton,
-  FilledInput,
-  InputLabel,
   Badge,
   Typography,
   Divider,
@@ -20,7 +16,7 @@ import { VisibilityOff, Visibility } from '@mui/icons-material';
 import type { ReactElement } from 'react';
 import BaseLayout from 'src/layouts/BaseLayout';
 import { useForm } from 'react-hook-form';
-import { SignupType } from '../src/types/user/signup.type';
+import { SignupType } from '../src/types/signup.type';
 import paths from '../src/helper/paths';
 import { emailRegex, passwordRegex } from '../src/helper/regex';
 import { LoadingButton } from '@mui/lab';
@@ -75,7 +71,7 @@ function Signup() {
       <MainContent>
         <TopWrapper>
           <Container maxWidth="md">
-            <Box textAlign="center" sx={{ m: 4 }}>
+            <Box textAlign="center" sx={{ m: 2 }}>
               <Badge
                 overlap="circular"
                 color="success"
@@ -198,7 +194,7 @@ function Signup() {
                     }}
                   />
                 </Box>
-                <Divider sx={{ mb: 4 }}></Divider>
+                <Divider sx={{ mb: 2 }}></Divider>
                 <LoadingButton
                   size="large"
                   loading={isSubmitting}

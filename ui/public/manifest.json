@@ -2,7 +2,7 @@
   "name": "Pricecloud",
   "short_name": "Pricecloud",
   "theme_color": "#141c23",
-  "background_color": "#ffffff",
+  "background_color": "#141c23",
   "display": "standalone",
   "orientation": "portrait",
   "start_url": "/login",

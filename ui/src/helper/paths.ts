@@ -3,13 +3,16 @@ const paths = {
     auth: `auth`,
     user: {
       root: `user`,
-      verifyEmail: `user/verify-email`
+      verifyEmail: `user/verify-email`,
+      passwordReset: `user/password-reset`,
+      recovery: `user/recovery`
     }
   },
   web: {
     login: `/login`,
     signup: `/signup`,
-    dashboard: `/dashboard`
+    dashboard: `/dashboard`,
+    recovery: `/recovery`
   }
 };
 
