@@ -7,21 +7,25 @@ import {
   InputAdornment,
   styled,
   IconButton,
-  Badge,
   Divider,
-  TextField
+  TextField,
+  Button,
+  Card,
+  Badge
 } from '@mui/material';
-import NextLink from 'next/link';
 import { VisibilityOff, Visibility } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import type { ReactElement } from 'react';
-
 import Head from 'next/head';
+import NextLink from 'next/link';
+
 import BaseLayout from 'src/layouts/BaseLayout';
-import { Login } from '../src/types/FormStates';
-import { emailRegex, passwordRegex } from '../src/helper/regex';
 import useAuth from '../src/hooks/useAuth';
-import paths from '../src/helper/paths';
+import { RecoveryType } from '../src/types/recovery.type';
+import Logo from '../src/components/LogoSign';
+import Link from 'src/components/Link';
+import { passwordRegex } from '../src/helper/regex';
+import { PasswordResetType } from '../src/types/password-reset.type';
 
 const MainContent = styled(Box)(
   () => `
@@ -43,30 +47,45 @@ const TopWrapper = styled(Box)(
 `
 );
 
-function Signin() {
+function PasswordReset() {
   const [showPassword, setShowPassword] = useState(false);
-  const { signin } = useAuth();
+  const [showRepeatPassword, setShowRepeatPassword] = useState(true);
+  const { recovery } = useAuth();
+  const { passwordReset } = useAuth();
 
   const {
     formState: { errors, isSubmitting },
     register,
-    handleSubmit
-  } = useForm<Login>();
+    handleSubmit,
+    setError
+  } = useForm<PasswordResetType>();
 
-  const onSubmit = handleSubmit(async (data: Login) => {
-    await signin(data);
+  const onSubmit = handleSubmit(async (data: PasswordResetType) => {
+    if (!showPassword && data.password !== data.password2) {
+      setError('password2', {
+        type: 'manual',
+        message: 'Las contraseñas no coinciden'
+      });
+      return;
+    }
+    await passwordReset(data);
   });
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+    setShowRepeatPassword(!showRepeatPassword);
+  };
 
   const handleMouseDownPassword = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
   };
 
+  useEffect(() => {}, []);
+
   return (
     <>
       <Head>
-        <title>Pricecloud | Iniciar sesión</title>
+        <title>Pricecloud | Recuperar contraseña</title>
       </Head>
       <MainContent>
         <TopWrapper>
@@ -78,51 +97,24 @@ function Signin() {
                 badgeContent="v1.0.0"
                 sx={{ cursor: 'pointer' }}
               >
-                <NextLink href="/">
-                  <img
-                    alt="Pricecloud"
-                    height={96}
-                    src="/static/images/logo/pricecloud-logo.png"
-                    draggable={false}
-                  />
-                </NextLink>
+                <img
+                  alt="Pricecloud"
+                  height={96}
+                  src="/static/images/logo/pricecloud-logo.png"
+                  draggable={false}
+                />
               </Badge>
               <Typography variant="h1" sx={{ mt: 2 }}>
                 Pricecloud
               </Typography>
               <Typography variant="subtitle2">
-                Inicia sesión o{' '}
-                <NextLink href={paths.web.signup}>crea una cuenta</NextLink>
+                Restablece tu contraseña
               </Typography>
             </Box>
 
             <form onSubmit={onSubmit}>
               <Container maxWidth="sm">
                 <Box textAlign="center">
-                  <TextField
-                    autoComplete="email"
-                    fullWidth
-                    sx={{ mb: 2 }}
-                    className=""
-                    id="email"
-                    variant="outlined"
-                    type="email"
-                    label="Email"
-                    {...register('email', {
-                      required: {
-                        value: true,
-                        message: 'Por favor ingrese su correo electrónico'
-                      },
-                      pattern: {
-                        value: emailRegex,
-                        message:
-                          'Por favor ingrese un correo electrónico válido'
-                      }
-                    })}
-                    helperText={errors?.email?.message}
-                    error={!!errors?.email?.message}
-                  />
-
                   <TextField
                     autoComplete="password"
                     label="Contraseña"
@@ -159,15 +151,25 @@ function Signin() {
                       )
                     }}
                   />
-                  <Box sx={{ mb: 1, textAlign: 'right' }}>
-                    <NextLink href={paths.web.recovery}>
-                      Restablecer contraseña
-                    </NextLink>
-                  </Box>
+                  {showRepeatPassword && (
+                    <TextField
+                      autoComplete="password"
+                      label="Repite tu contraseña"
+                      id="password2"
+                      variant="outlined"
+                      fullWidth
+                      sx={{ mb: 2 }}
+                      type={'password'}
+                      helperText={errors.password2?.message}
+                      error={!!errors.password2?.message}
+                      {...register('password2', {})}
+                    />
+                  )}
                 </Box>
 
                 <Divider sx={{ mb: 2 }}></Divider>
                 <LoadingButton
+                  sx={{ mb: 2 }}
                   size="large"
                   loading={isSubmitting}
                   type="submit"
@@ -175,7 +177,11 @@ function Signin() {
                   fullWidth
                   disabled={isSubmitting}
                 >
-                  {!isSubmitting ? <>Acceder</> : <>Iniciando...</>}
+                  {!isSubmitting ? (
+                    <>Restablecer contraseña </>
+                  ) : (
+                    <>Cargando...</>
+                  )}
                 </LoadingButton>
               </Container>
             </form>
@@ -186,8 +192,8 @@ function Signin() {
   );
 }
 
-export default Signin;
+export default PasswordReset;
 
-Signin.getLayout = function getLayout(page: ReactElement) {
+PasswordReset.getLayout = function getLayout(page: ReactElement) {
   return <BaseLayout>{page}</BaseLayout>;
 };

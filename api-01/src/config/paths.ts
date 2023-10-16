@@ -1,7 +1,9 @@
 const paths = {
-  user: {
-    emailVerify: `verify`,
+  web: {
+    verify: `/verify`,
+    passwordReset: `/password-reset`,
   },
+  api: {},
 };
 
 export default paths;
