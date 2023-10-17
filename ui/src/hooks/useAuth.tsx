@@ -17,7 +17,7 @@ const useAuth = () => {
   const signin = async (data: Login) => {
     const response = await customAxios.post(paths.api.auth, data);
     if (response.status === 200) {
-      router.push(paths.web.dashboard);
+      router.push(paths.web.dashboard.root);
       setUserProfile(response.data);
       showSnackbar('Bienvenido a Priceclcoud', 'success');
     }
@@ -37,9 +37,6 @@ const useAuth = () => {
 
   const passwordReset = async (data: PasswordResetType) => {
     const token = router.query.token;
-    console.log(`token`, token);
-    console.log(`data`, data);
-
     await customAxios.patch(paths.api.user.passwordReset, {
       token,
       password: data.password

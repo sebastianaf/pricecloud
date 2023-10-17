@@ -22,7 +22,7 @@ import Projects from '@/content/Dashboards/Tasks/Projects';
 import Checklist from '@/content/Dashboards/Tasks/Checklist';
 import Profile from '@/content/Dashboards/Tasks/Profile';
 import TaskSearch from '@/content/Dashboards/Tasks/TaskSearch';
-import withAuth from '../../../src/helper/withAuth';
+import withAuth from '../../src/helper/withAuth';
 
 const TabsContainerWrapper = styled(Box)(
   ({ theme }) => `

@@ -11,6 +11,7 @@ import { styled } from '@mui/material/styles';
 import EditProfileTab from '@/content/Management/Users/settings/EditProfileTab';
 import NotificationsTab from '@/content/Management/Users/settings/NotificationsTab';
 import SecurityTab from '@/content/Management/Users/settings/SecurityTab';
+import withAuth from '../src/helper/withAuth';
 
 const TabsWrapper = styled(Tabs)(
   () => `
@@ -20,7 +21,7 @@ const TabsWrapper = styled(Tabs)(
 `
 );
 
-function ManagementUserSettings() {
+function Profile() {
   const [currentTab, setCurrentTab] = useState<string>('info');
 
   const tabs = [
@@ -75,8 +76,6 @@ function ManagementUserSettings() {
   );
 }
 
-ManagementUserSettings.getLayout = (page) => (
-  <SidebarLayout>{page}</SidebarLayout>
-);
+Profile.getLayout = (page) => <SidebarLayout>{page}</SidebarLayout>;
 
-export default ManagementUserSettings;
+export default withAuth(Profile);
