@@ -13,6 +13,5 @@ select:-webkit-autofill:focus,
 }
 
 .custom-alert {
-  background-color: #fff;
   opacity: 1 !important;
 }

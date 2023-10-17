@@ -18,10 +18,11 @@ import type { ReactElement } from 'react';
 
 import Head from 'next/head';
 import BaseLayout from 'src/layouts/BaseLayout';
-import { Login } from '../src/types/FormStates';
+import { LoginType } from '../src/types/FormStates';
 import { emailRegex, passwordRegex } from '../src/helper/regex';
-import useAuth from '../src/hooks/useAuth';
 import paths from '../src/helper/paths';
+import { useRouter } from 'next/router';
+import { useAuth } from '../src/contexts/AuthContext';
 
 const MainContent = styled(Box)(
   () => `
@@ -45,15 +46,21 @@ const TopWrapper = styled(Box)(
 
 function Signin() {
   const [showPassword, setShowPassword] = useState(false);
-  const { signin } = useAuth();
+  const { signin, isAuth, check } = useAuth();
+  const router = useRouter();
 
   const {
     formState: { errors, isSubmitting },
     register,
     handleSubmit
-  } = useForm<Login>();
+  } = useForm<LoginType>();
 
-  const onSubmit = handleSubmit(async (data: Login) => {
+  useEffect(() => {
+    check();
+    isAuth && router.push(paths.web.dashboard.root);
+  }, [isAuth]);
+
+  const onSubmit = handleSubmit(async (data: LoginType) => {
     await signin(data);
   });
 

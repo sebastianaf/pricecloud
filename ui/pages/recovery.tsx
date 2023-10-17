@@ -19,11 +19,12 @@ import type { ReactElement } from 'react';
 
 import Head from 'next/head';
 import BaseLayout from 'src/layouts/BaseLayout';
-import { Login } from '../src/types/FormStates';
+import { LoginType } from '../src/types/FormStates';
 import { emailRegex } from '../src/helper/regex';
-import useAuth from '../src/hooks/useAuth';
 import paths from '../src/helper/paths';
 import { RecoveryType } from '../src/types/recovery.type';
+import { useAuth } from '../src/contexts/AuthContext';
+import { useRouter } from 'next/router';
 
 const MainContent = styled(Box)(
   () => `
@@ -46,16 +47,22 @@ const TopWrapper = styled(Box)(
 );
 
 function Recovery() {
-  const { recovery } = useAuth();
+  const { recovery, isAuth, check } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    check();
+    isAuth && router.push(paths.web.dashboard.root);
+  }, [isAuth]);
 
   const {
     formState: { errors, isSubmitting },
     register,
     handleSubmit
-  } = useForm<Login>();
+  } = useForm<LoginType>();
 
-  const onSubmit = handleSubmit(async (data: RecoveryType) => {
-    await recovery(data);
+  const onSubmit = handleSubmit((data: RecoveryType) => {
+    recovery(data);
   });
 
   return (
@@ -86,7 +93,7 @@ function Recovery() {
                 Pricecloud
               </Typography>
               <Typography variant="subtitle2">
-                Recupera tu contraseña o{' '}
+                Restablece tu contraseña o{' '}
                 <NextLink href={paths.web.login}>inicia sesión</NextLink>
               </Typography>
             </Box>

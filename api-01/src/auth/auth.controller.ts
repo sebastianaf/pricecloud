@@ -66,12 +66,12 @@ export class AuthController {
 
   @Get()
   async validateToken(@Req() req: Request, @Res() response: Response) {
-    const user = await this.authService.validateToken(req.cookies.token);
-
-    if (!user)
-      throw new UnauthorizedException(`Por favor inicia sesión (AVT-001)`);
-
-    response.send(user);
+    if (req.cookies.token) {
+      const user = await this.authService.validateToken(req.cookies.token);
+      user ? response.send(user) : response.send(null);
+      return;
+    }
+    response.send(null);
   }
 
   @Delete()

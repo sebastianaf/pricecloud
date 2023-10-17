@@ -9,23 +9,18 @@ import {
   IconButton,
   Divider,
   TextField,
-  Button,
-  Card,
   Badge
 } from '@mui/material';
 import { VisibilityOff, Visibility } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import type { ReactElement } from 'react';
 import Head from 'next/head';
-import NextLink from 'next/link';
 
 import BaseLayout from 'src/layouts/BaseLayout';
-import useAuth from '../src/hooks/useAuth';
-import { RecoveryType } from '../src/types/recovery.type';
-import Logo from '../src/components/LogoSign';
-import Link from 'src/components/Link';
+
 import { passwordRegex } from '../src/helper/regex';
 import { PasswordResetType } from '../src/types/password-reset.type';
+import { useAuth } from '../src/contexts/AuthContext';
 
 const MainContent = styled(Box)(
   () => `
@@ -50,7 +45,6 @@ const TopWrapper = styled(Box)(
 function PasswordReset() {
   const [showPassword, setShowPassword] = useState(false);
   const [showRepeatPassword, setShowRepeatPassword] = useState(true);
-  const { recovery } = useAuth();
   const { passwordReset } = useAuth();
 
   const {
