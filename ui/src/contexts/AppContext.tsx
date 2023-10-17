@@ -4,8 +4,6 @@ type AppContextProps = {
   appName: string;
   userProfile: UserProfile;
   setUserProfile: (userProfile: UserProfile) => void;
-  isAuth: boolean;
-  setIsAuth: (isAuth: boolean) => void;
 };
 
 export type UserProfile = {
@@ -28,12 +26,9 @@ export function AppProvider({ children }: Props) {
   const appName = `Pricecloud`;
 
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
-  const [isAuth, setIsAuth] = useState(false);
 
   return (
-    <AppContext.Provider
-      value={{ appName, userProfile, setUserProfile, isAuth, setIsAuth }}
-    >
+    <AppContext.Provider value={{ appName, userProfile, setUserProfile }}>
       {children}
     </AppContext.Provider>
   );

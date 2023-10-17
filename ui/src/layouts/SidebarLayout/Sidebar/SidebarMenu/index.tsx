@@ -22,6 +22,7 @@ import {
   CloudSync,
   CompareArrows
 } from '@mui/icons-material';
+import paths from '../../../../helper/paths';
 
 const MenuWrapper = styled(Box)(
   ({ theme }) => `
@@ -203,12 +204,10 @@ function SidebarMenu() {
           <SubMenuWrapper>
             <List component="div">
               <ListItem component="div">
-                <NextLink href="/management/profile/settings" passHref>
+                <NextLink href={paths.web.profile} passHref>
                   <Button
                     className={
-                      currentRoute === '/management/profile/settings'
-                        ? 'active'
-                        : ''
+                      currentRoute === paths.web.profile ? 'active' : ''
                     }
                     disableRipple
                     component="a"
@@ -233,9 +232,13 @@ function SidebarMenu() {
           <SubMenuWrapper>
             <List component="div">
               <ListItem component="div">
-                <NextLink href="#" passHref>
+                <NextLink href={paths.web.dashboard.explore} passHref>
                   <Button
-                    className={currentRoute === '#' ? 'active' : ''}
+                    className={
+                      currentRoute === paths.web.dashboard.explore
+                        ? 'active'
+                        : ''
+                    }
                     disableRipple
                     component="a"
                     onClick={closeSidebar}
@@ -246,9 +249,13 @@ function SidebarMenu() {
                 </NextLink>
               </ListItem>
               <ListItem component="div">
-                <NextLink href="#" passHref>
+                <NextLink href={paths.web.dashboard.compare} passHref>
                   <Button
-                    className={currentRoute === '#' ? 'active' : ''}
+                    className={
+                      currentRoute === paths.web.dashboard.compare
+                        ? 'active'
+                        : ''
+                    }
                     disableRipple
                     component="a"
                     onClick={closeSidebar}
@@ -272,9 +279,13 @@ function SidebarMenu() {
           <SubMenuWrapper>
             <List component="div">
               <ListItem component="div">
-                <NextLink href="#" passHref>
+                <NextLink href={paths.web.providers.explore} passHref>
                   <Button
-                    className={currentRoute === '#' ? 'active' : ''}
+                    className={
+                      currentRoute === paths.web.providers.explore
+                        ? 'active'
+                        : ''
+                    }
                     disableRipple
                     component="a"
                     onClick={closeSidebar}
@@ -285,9 +296,13 @@ function SidebarMenu() {
                 </NextLink>
               </ListItem>
               <ListItem component="div">
-                <NextLink href="#" passHref>
+                <NextLink href={paths.web.providers.settings} passHref>
                   <Button
-                    className={currentRoute === '#' ? 'active' : ''}
+                    className={
+                      currentRoute === paths.web.providers.settings
+                        ? 'active'
+                        : ''
+                    }
                     disableRipple
                     component="a"
                     onClick={closeSidebar}
@@ -311,9 +326,11 @@ function SidebarMenu() {
           <SubMenuWrapper>
             <List component="div">
               <ListItem component="div">
-                <NextLink href="#" passHref>
+                <NextLink href={paths.web.deploy.aws} passHref>
                   <Button
-                    className={currentRoute === '#' ? 'active' : ''}
+                    className={
+                      currentRoute === paths.web.deploy.aws ? 'active' : ''
+                    }
                     disableRipple
                     component="a"
                     onClick={closeSidebar}

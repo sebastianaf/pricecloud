@@ -11,6 +11,7 @@ import { EmojiEmotions } from '@mui/icons-material';
 import { ManageAccounts } from '@mui/icons-material';
 import { useAppContext } from '../../../contexts/AppContext';
 import { useEffect } from 'react';
+import paths from '../../../helper/paths';
 
 const AvatarPageTitle = styled(Avatar)(
   ({ theme }) => `
@@ -67,7 +68,7 @@ function PageHeader() {
       </Box>
       <Box mt={{ xs: 3, md: 0 }}>
         <Button
-          href="/management/profile/settings"
+          href={paths.web.profile}
           variant="contained"
           startIcon={<ManageAccounts />}
         >

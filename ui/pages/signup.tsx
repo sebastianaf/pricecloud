@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEffect } from 'react';
 import {
   Box,
   Container,
@@ -14,13 +15,15 @@ import NextLink from 'next/link';
 import Head from 'next/head';
 import { VisibilityOff, Visibility } from '@mui/icons-material';
 import type { ReactElement } from 'react';
-import BaseLayout from 'src/layouts/BaseLayout';
 import { useForm } from 'react-hook-form';
+import { LoadingButton } from '@mui/lab';
+import { useRouter } from 'next/router';
+
+import BaseLayout from 'src/layouts/BaseLayout';
 import { SignupType } from '../src/types/signup.type';
 import paths from '../src/helper/paths';
 import { emailRegex, passwordRegex } from '../src/helper/regex';
-import { LoadingButton } from '@mui/lab';
-import useAuth from '../src/hooks/useAuth';
+import { useAuth } from '../src/contexts/AuthContext';
 
 const MainContent = styled(Box)(
   () => `
@@ -49,7 +52,13 @@ function Signup() {
     register,
     handleSubmit
   } = useForm<SignupType>();
-  const { signup } = useAuth();
+  const { signup, isAuth, check } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    check();
+    isAuth && router.push(paths.web.dashboard.root);
+  }, [isAuth]);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 

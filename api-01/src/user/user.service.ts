@@ -124,9 +124,7 @@ export class UserService {
   async verifyEmail(uriEncodedEncryptedTempToken: string) {
     const encryptedTempToken = decodeURIComponent(uriEncodedEncryptedTempToken);
 
-    const tempToken = await this.commonService.decrypt(encryptedTempToken);
-
-    const user = await this.authService.validateToken(tempToken);
+    const user = await this.authService.validateToken(encryptedTempToken);
 
     if (!user)
       throw new ConflictException(`Error al verificar el email (USVE-001)`);
@@ -190,9 +188,7 @@ export class UserService {
 
     const encryptedTempToken = decodeURIComponent(uriEncodedEncryptedTempToken);
 
-    const tempToken = await this.commonService.decrypt(encryptedTempToken);
-
-    const user = await this.authService.validateToken(tempToken);
+    const user = await this.authService.validateToken(encryptedTempToken);
 
     if (!user)
       throw new ConflictException(

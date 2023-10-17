@@ -29,6 +29,7 @@ import 'src/styles/global.css';
 import { ModalProvider } from '../src/contexts/ModalContext';
 import { AppProvider } from '../src/contexts/AppContext';
 import { SnackbarProvider } from '../src/contexts/SnackbarContext';
+import { AuthProvider } from '../src/contexts/AuthContext';
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -69,18 +70,20 @@ function PricecloudApp(props: TokyoAppProps) {
         />
       </Head>
       <AppProvider>
-        <SidebarProvider>
-          <ThemeProvider>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <SnackbarProvider>
-                <ModalProvider>
-                  <CssBaseline />
-                  {getLayout(<Component {...pageProps} />)}
-                </ModalProvider>
-              </SnackbarProvider>
-            </LocalizationProvider>
-          </ThemeProvider>
-        </SidebarProvider>
+        <SnackbarProvider>
+          <AuthProvider>
+            <SidebarProvider>
+              <ThemeProvider>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <ModalProvider>
+                    <CssBaseline />
+                    {getLayout(<Component {...pageProps} />)}
+                  </ModalProvider>
+                </LocalizationProvider>
+              </ThemeProvider>
+            </SidebarProvider>
+          </AuthProvider>
+        </SnackbarProvider>
       </AppProvider>
     </CacheProvider>
   );

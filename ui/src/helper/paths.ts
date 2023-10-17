@@ -11,8 +11,20 @@ const paths = {
   web: {
     login: `/login`,
     signup: `/signup`,
-    dashboard: `/dashboard`,
-    recovery: `/recovery`
+    dashboard: {
+      root: `/dashboard`,
+      explore: `/dashboard/explore`,
+      compare: `/dashboard/compare`
+    },
+    providers: {
+      explore: `/providers/explore`,
+      settings: `/providers/settings`
+    },
+    deploy: {
+      aws: `/deploy/aws`
+    },
+    recovery: `/recovery`,
+    profile: `/profile`
   }
 };
 

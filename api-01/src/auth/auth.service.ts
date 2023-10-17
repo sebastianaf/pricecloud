@@ -17,6 +17,7 @@ import { ValidateUserDto } from './dto/validate-user.dto';
 import { JwtPayloadDto } from './dto/jwt-payload.dto';
 import { User } from '../user/entities/user.entity';
 import { RoleView } from './entities/role-view.entity';
+import { CommonService } from '../common/common.service';
 
 @Injectable()
 export class AuthService {
@@ -30,25 +31,28 @@ export class AuthService {
     private readonly userService: UserService,
 
     private readonly jwtService: JwtService,
+    private readonly commonService: CommonService,
   ) {}
 
   private generateToken(jwtPayloadDto: JwtPayloadDto) {
     return this.jwtService.sign(jwtPayloadDto);
   }
 
-  async validateToken(token: string) {
+  async validateToken(token: string, isEncrypted = true) {
     let decoded: any;
     try {
+      if (isEncrypted) token = await this.commonService.decrypt(token);
+
       decoded = jwt.verify(token, process.env.API_JWT_SECRET);
     } catch (error) {
-      throw new UnauthorizedException(`Token no válido (AVT-001)`);
+      return null;
     }
 
-    const decodedData = { id: decoded[`id`], email: decoded[`email`] };
-    const { id, email } = decodedData;
+    const decodedData = { id: decoded[`id`] };
+    const { id } = decodedData;
 
     const user = await this.userRepository.findOne({
-      where: { id, email },
+      where: { id },
       select: ['id', 'email', 'password', 'loginCount', 'isEmailVerified'],
       relations: [`role`, `role.roleViews`, `role.roleViews.view`],
     });
@@ -100,7 +104,9 @@ export class AuthService {
     await this.userService.addLoginCount(user);
     delete user.password;
 
-    const token = this.generateToken({ id: user.id, email: user.email });
+    let token = this.generateToken({ id: user.id });
+
+    token = await this.commonService.encrypt(token);
 
     return { token, user };
   }

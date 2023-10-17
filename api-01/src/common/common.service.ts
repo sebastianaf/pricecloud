@@ -28,12 +28,12 @@ export class CommonService {
       .trim();
   }
 
-  async encrypt(value: string) {
+  async encrypt(value: string, iv?: string) {
     try {
       const cipher = createCipheriv(
         `aes-256-cbc`,
         this.secret,
-        this.initializationVector,
+        iv || this.initializationVector,
       );
       let encrypted = cipher.update(value, 'utf8', 'base64');
       encrypted += cipher.final('base64');
@@ -44,12 +44,12 @@ export class CommonService {
     }
   }
 
-  async decrypt(value: string) {
+  async decrypt(value: string, iv?: string) {
     try {
       const decrypt = createDecipheriv(
         `aes-256-cbc`,
         this.secret,
-        this.initializationVector,
+        iv || this.initializationVector,
       );
       let text = decrypt.update(value, 'base64', 'utf8');
       text += decrypt.final('utf8');

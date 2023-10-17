@@ -1,11 +1,9 @@
 import {
   Controller,
   Post,
-  UseGuards,
   Body,
   Get,
   Res,
-  ConflictException,
   UnauthorizedException,
   Req,
   Delete,
@@ -20,9 +18,16 @@ import { CookieOptions, Response, Request } from 'express';
 export class AuthController {
   private sameSite: `lax` | `strict` | `none`;
   private httpOnly: boolean;
+  private apiCookieDomain: string;
+  private apiCookieExpirationTime: number;
 
   constructor(private readonly authService: AuthService) {
     this.config();
+
+    this.apiCookieDomain = process.env.API_COOKIE_DOMAIN;
+    this.apiCookieExpirationTime = parseInt(
+      process.env.API_COOKIE_EXPIRATION_TIME,
+    );
   }
 
   private config() {
@@ -46,12 +51,12 @@ export class AuthController {
   ) {
     const { token, user } = await this.authService.auth(validateUser);
 
-    const cookieOptions = {
+    const cookieOptions: CookieOptions = {
       httpOnly: this.sameSite === `none` ? false : true,
       secure: true,
       sameSite: this.sameSite,
-      domain: process.env.API_COOKIE_DOMAIN,
-      maxAge: 15000,
+      domain: this.apiCookieDomain,
+      maxAge: this.apiCookieExpirationTime,
     };
 
     response.cookie('token', token, cookieOptions);
@@ -61,12 +66,12 @@ export class AuthController {
 
   @Get()
   async validateToken(@Req() req: Request, @Res() response: Response) {
-    const authData = await this.authService.validateToken(req.cookies.token);
-
-    if (!authData)
-      throw new UnauthorizedException(`Por favor inicia sesión (AVT-001)`);
-
-    response.send(authData);
+    if (req.cookies.token) {
+      const user = await this.authService.validateToken(req.cookies.token);
+      user ? response.send(user) : response.send(null);
+      return;
+    }
+    response.send(null);
   }
 
   @Delete()

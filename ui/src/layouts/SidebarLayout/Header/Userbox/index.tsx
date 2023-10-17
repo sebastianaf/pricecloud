@@ -20,7 +20,8 @@ import { styled } from '@mui/material/styles';
 import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
 import LockOpenTwoToneIcon from '@mui/icons-material/LockOpenTwoTone';
 import { Settings } from '@mui/icons-material';
-import useAuth from '../../../../hooks/useAuth';
+import { useAuth } from '../../../../contexts/AuthContext';
+
 
 const UserBoxButton = styled(Button)(
   ({ theme }) => `
