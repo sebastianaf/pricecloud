@@ -13,5 +13,32 @@ select:-webkit-autofill:focus,
 }
 
 .custom-alert {
-  opacity: 1 !important;
+  background-color: #051d21 !important;
+  opacity: 0.95 !important;
+  font-weight: bold !important;
+  color: #969696 !important;
+}
+
+a {
+  color: #06b6d4; /* Color base para enlaces no visitados */
+  text-decoration: none; /* Si quieres quitar el subrayado, por ejemplo */
+}
+
+a:link {
+  color: #06b6d4; /* Este es un azul típico para enlaces */
+}
+
+/* Estilo para enlaces visitados */
+a:visited {
+  color: #06b6d4; /* Este es un gris para enlaces que ya se han visitado */
+}
+
+/* Si también deseas cambiar el color cuando se pasa el ratón sobre el enlace */
+a:hover {
+  color: #06b6d4; /* Este es un azul más oscuro */
+}
+
+/* Y tal vez quieras un estilo para cuando el enlace está siendo activado (ej., mientras se está haciendo clic en él) */
+a:active {
+  color: #06b6d4; /* Este es un azul todavía más oscuro */
 }
