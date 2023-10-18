@@ -29,8 +29,28 @@ export const viewSeed: Partial<View>[] = [
     label: 'Dashboard',
   },
   {
-    id: ViewInterface.userConfig,
-    label: 'Configuración de usuario',
+    id: ViewInterface.profile,
+    label: 'Configurar cuenta',
+  },
+  {
+    id: ViewInterface.dashboardExplore,
+    label: 'Explorar servicios',
+  },
+  {
+    id: ViewInterface.dashboardCompare,
+    label: 'Comparar servicios',
+  },
+  {
+    id: ViewInterface.providerExplore,
+    label: 'Explorar proveedores',
+  },
+  {
+    id: ViewInterface.providerSettings,
+    label: 'Configurar proveedores',
+  },
+  {
+    id: ViewInterface.deployAws,
+    label: 'AWS',
   },
 ];
 
@@ -47,11 +67,31 @@ export const roleSeed: Partial<Role>[] = [
 
 export const roleViewSeed: Partial<RoleView>[] = [
   {
-    role: { id: RoleInterface.admin } as Role,
+    role: { id: RoleInterface.user } as Role,
     view: { id: ViewInterface.dashboard } as View,
   },
   {
     role: { id: RoleInterface.user } as Role,
-    view: { id: ViewInterface.dashboard } as View,
+    view: { id: ViewInterface.profile } as View,
+  },
+  {
+    role: { id: RoleInterface.user } as Role,
+    view: { id: ViewInterface.dashboardExplore } as View,
+  },
+  {
+    role: { id: RoleInterface.user } as Role,
+    view: { id: ViewInterface.dashboardCompare } as View,
+  },
+  {
+    role: { id: RoleInterface.user } as Role,
+    view: { id: ViewInterface.providerExplore } as View,
+  },
+  {
+    role: { id: RoleInterface.user } as Role,
+    view: { id: ViewInterface.providerSettings } as View,
+  },
+  {
+    role: { id: RoleInterface.user } as Role,
+    view: { id: ViewInterface.deployAws } as View,
   },
 ];

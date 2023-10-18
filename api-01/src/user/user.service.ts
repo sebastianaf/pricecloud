@@ -195,11 +195,6 @@ export class UserService {
         `Error al restablecer la contraseña (USRP-001)`,
       );
 
-    if (!user.isEmailVerified)
-      throw new ConflictException(
-        `El email no se encuentra verificado, error al restablecer la contraseña (USRP-002)`,
-      );
-
     await this.userRepository.update(user.id, {
       password: bcrypt.hashSync(password, 10),
     });
@@ -208,5 +203,9 @@ export class UserService {
       title: `Contraseña actualizada`,
       message: `Tu contraseña ha sido actualizada exitosamente`,
     };
+  }
+
+  async profile(user: User) {
+    console.log(user);
   }
 }

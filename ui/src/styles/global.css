@@ -15,8 +15,8 @@ select:-webkit-autofill:focus,
 .custom-alert {
   background-color: #051d21 !important;
   opacity: 0.95 !important;
-  font-weight: bold !important;
-  color: #969696 !important;
+  font-weight: lighter !important;
+  color: #cfcfcf !important;
 }
 
 a {
