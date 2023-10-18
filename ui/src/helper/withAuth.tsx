@@ -14,7 +14,8 @@ const withAuth = (WrappedComponent: any) => {
     useEffect(() => {
       setIsClient(true);
       if (isClient) {
-        check();
+        const runCheck = async () => await check();
+        runCheck();
       }
       if (!isAuth) {
         router.push(paths.web.login);

@@ -7,6 +7,7 @@ import {
   styled
 } from '@mui/material';
 import { useEffect, type ReactElement } from 'react';
+import NextLink from 'next/link';
 
 import BaseLayout from 'src/layouts/BaseLayout';
 import Link from 'src/components/Link';
@@ -41,7 +42,8 @@ function Overview() {
   const router = useRouter();
 
   useEffect(() => {
-    check();
+    const runCheck = async () => await check();
+    runCheck();
     isAuth && router.push(paths.web.dashboard.root);
   }, [isAuth]);
 
@@ -62,15 +64,11 @@ function Overview() {
             >
               <Box />
               <Box>
-                <Button
-                  component={Link}
-                  href="/login"
-                  variant="contained"
-                  size="large"
-                  sx={{ ml: 2 }}
-                >
-                  Iniciar sesión
-                </Button>
+                <NextLink href={paths.web.login}>
+                  <Button variant="contained" size="large" sx={{ ml: 2 }}>
+                    Iniciar sesión
+                  </Button>
+                </NextLink>
               </Box>
             </Box>
           </Box>

@@ -1,3 +1,3 @@
 export type RecoveryType = {
-  password: string;
+  email: string;
 };

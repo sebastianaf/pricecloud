@@ -4,36 +4,45 @@ import { NotificationType } from '../types/notification.type';
 import { SnackbarContextReference } from '../contexts/SnackbarContext';
 
 const processSuccess = (response: AxiosResponse) => {
-  console.log(response);
   if (response.status === 200 || response.status === 201) {
     const data = response.data;
     showNotification(data, 'success');
   }
 };
 
-const processError = (response: any) => {
-  const status = response?.response?.data?.statusCode;
+const processError = (error: any) => {
+  if (error?.code === `ECONNABORTED`)
+    showNotification(
+      {
+        message: `Solicitud no procesada, por favor intente de nuevo (APE-001)`
+      },
+      'info'
+    );
+
+  const status = error?.response?.response?.data?.statusCode;
+  const data = error?.response?.response?.data;
+
   switch (status) {
     case HttpStatusCode.BadRequest:
-      showNotification(response.response.data, 'warning');
+      showNotification(data, 'warning');
       break;
     case HttpStatusCode.InternalServerError:
-      showNotification(response.response.data, 'error');
+      showNotification(data, 'error');
       break;
     case HttpStatusCode.Unauthorized:
-      showNotification(response.response.data, 'warning');
+      showNotification(data, 'warning');
       break;
     case HttpStatusCode.Forbidden:
-      showNotification(response.response.data, 'warning');
+      showNotification(data, 'warning');
       break;
     case HttpStatusCode.NotFound:
-      showNotification(response.response.data, 'warning');
+      showNotification(data, 'warning');
       break;
     case HttpStatusCode.Conflict:
-      showNotification(response.response.data, 'warning');
+      showNotification(data, 'warning');
       break;
     case HttpStatusCode.Gone:
-      showNotification(response.response.data, 'info');
+      showNotification(data, 'info');
       break;
   }
 };

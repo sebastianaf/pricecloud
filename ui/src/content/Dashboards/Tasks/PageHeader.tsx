@@ -10,8 +10,8 @@ import {
 import { EmojiEmotions } from '@mui/icons-material';
 import { ManageAccounts } from '@mui/icons-material';
 import { useAppContext } from '../../../contexts/AppContext';
-import { useEffect } from 'react';
 import paths from '../../../helper/paths';
+import NextLink from 'next/link';
 
 const AvatarPageTitle = styled(Avatar)(
   ({ theme }) => `
@@ -67,13 +67,11 @@ function PageHeader() {
         </Box>
       </Box>
       <Box mt={{ xs: 3, md: 0 }}>
-        <Button
-          href={paths.web.profile}
-          variant="contained"
-          startIcon={<ManageAccounts />}
-        >
-          Configurar cuenta
-        </Button>
+        <NextLink href={paths.web.profile}>
+          <Button variant="contained" startIcon={<ManageAccounts />}>
+            Configurar cuenta
+          </Button>
+        </NextLink>
       </Box>
     </Box>
   );

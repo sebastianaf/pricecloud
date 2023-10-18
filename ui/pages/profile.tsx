@@ -1,4 +1,4 @@
-import { useState, ChangeEvent } from 'react';
+import { useState, ChangeEvent, useEffect } from 'react';
 import Head from 'next/head';
 import SidebarLayout from '@/layouts/SidebarLayout';
 import PageHeader from '@/content/Management/Users/settings/PageHeader';
@@ -7,11 +7,12 @@ import { Container, Tabs, Tab, Grid } from '@mui/material';
 import Footer from '@/components/Footer';
 import { styled } from '@mui/material/styles';
 
-//import ActivityTab from '@/content/Management/Users/settings/ActivityTab';
 import EditProfileTab from '@/content/Management/Users/settings/EditProfileTab';
 import NotificationsTab from '@/content/Management/Users/settings/NotificationsTab';
 import SecurityTab from '@/content/Management/Users/settings/SecurityTab';
 import withAuth from '../src/helper/withAuth';
+import { customAxios } from '../src/helper/customAxios';
+import paths from '../src/helper/paths';
 
 const TabsWrapper = styled(Tabs)(
   () => `
@@ -33,6 +34,14 @@ function Profile() {
   const handleTabsChange = (_event: ChangeEvent<{}>, value: string): void => {
     setCurrentTab(value);
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await customAxios.get(paths.api.user.root);
+
+    };
+    fetchData();
+  }, []);
 
   return (
     <>

@@ -7,12 +7,7 @@ import {
   ConflictException,
   Patch,
 } from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -20,6 +15,8 @@ import { Protect } from '../auth/decorators/protect.decorator';
 import { ViewInterface } from '../auth/interfaces/view.interface';
 import { RecoveryDto } from './dto/recovery.dto';
 import { PasswordResetDto } from './dto/password-reset.dto';
+import { User } from './entities/user.entity';
+import { GetUser } from '../auth/decorators/get-user.decorator';
 
 @ApiTags(`user`)
 @Controller('user')
@@ -28,7 +25,6 @@ import { PasswordResetDto } from './dto/password-reset.dto';
     example: new ConflictException(`Error message`),
   },
 })
-@ApiBearerAuth()
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -43,7 +39,7 @@ export class UserController {
   }
 
   @Get()
-  @Protect([ViewInterface.dashboard])
+  @Protect([ViewInterface.dashboard, ViewInterface.profile])
   @ApiOperation({ summary: `Find user` })
   findOne(@Param('id') id: string) {
     return this.userService.findOne(id);
@@ -91,5 +87,12 @@ export class UserController {
   })
   recovery(@Body() recoveryDto: RecoveryDto) {
     return this.userService.recovery(recoveryDto);
+  }
+
+  @Get(`profile`)
+  @Protect([ViewInterface.profile])
+  @ApiOperation({ summary: `Find user` })
+  profile(@GetUser() user: User) {
+    return this.userService.profile(user);
   }
 }

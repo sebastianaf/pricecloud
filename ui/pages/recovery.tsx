@@ -59,10 +59,10 @@ function Recovery() {
     formState: { errors, isSubmitting },
     register,
     handleSubmit
-  } = useForm<LoginType>();
+  } = useForm<RecoveryType>();
 
-  const onSubmit = handleSubmit((data: RecoveryType) => {
-    recovery(data);
+  const onSubmit = handleSubmit(async (data: RecoveryType) => {
+    await recovery(data);
   });
 
   return (
@@ -135,7 +135,7 @@ function Recovery() {
                   fullWidth
                   disabled={isSubmitting}
                 >
-                  {!isSubmitting ? <>Restablecer </> : <>Cargando...</>}
+                  {!isSubmitting ? <>Acceder</> : <>Iniciando...</>}
                 </LoadingButton>
               </Container>
             </form>
