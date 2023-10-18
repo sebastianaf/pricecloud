@@ -7,8 +7,10 @@ import {
   Typography,
   styled
 } from '@mui/material';
+import NextLink from 'next/link';
 
 import Link from 'src/components/Link';
+import paths from '../../../helper/paths';
 
 const TypographyH1 = styled(Typography)(
   ({ theme }) => `
@@ -129,15 +131,11 @@ function Hero() {
           >
             Ver en GitHub
           </Button>
-          <Button
-            sx={{ ml: 2 }}
-            component="a"
-            href="/signup"
-            size="large"
-            variant="contained"
-          >
-            Regístrate
-          </Button>
+          <NextLink href={paths.web.signup}>
+            <Button sx={{ ml: 2 }} size="large" variant="contained">
+              Regístrate
+            </Button>
+          </NextLink>
           <Grid container spacing={3} mt={5}>
             <Grid item md={4}>
               <MuiAvatar>
@@ -151,7 +149,8 @@ function Hero() {
                   <b>Basado en (Material-UI)</b>
                 </Box>
                 <Typography component="span" variant="subtitle2">
-                  Es una librería de componentes personalizable para construir aplicaciones de React rápidas y accesibles.
+                  Es una librería de componentes personalizable para construir
+                  aplicaciones de React rápidas y accesibles.
                 </Typography>
               </Typography>
             </Grid>
@@ -164,7 +163,8 @@ function Hero() {
                   <b>Construido con Next.js</b>
                 </Box>
                 <Typography component="span" variant="subtitle2">
-                  Next.js te da la mejor experiencia de desarrollo con todas las características que necesitas en producción.
+                  Next.js te da la mejor experiencia de desarrollo con todas las
+                  características que necesitas en producción.
                 </Typography>
               </Typography>
             </Grid>
@@ -180,7 +180,8 @@ function Hero() {
                   <b>Construido con Typescript</b>
                 </Box>
                 <Typography component="span" variant="subtitle2">
-                  Al igual que el backend Pricecloud usa Typescript en su front-end.
+                  Al igual que el backend Pricecloud usa Typescript en su
+                  front-end.
                 </Typography>
               </Typography>
             </Grid>
