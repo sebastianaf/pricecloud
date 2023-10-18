@@ -18,12 +18,12 @@ import { useSnackbar } from './SnackbarContext';
 type AuthContextProps = {
   isAuth: boolean;
   setIsAuth: (isAuth: boolean) => void;
-  signin: (data: LoginType) => void;
-  signup: (data: SignupType) => void;
-  recovery: (data: RecoveryType) => void;
-  passwordReset: (data: PasswordResetType) => void;
-  check: () => void;
-  signout: () => void;
+  signin: (data: LoginType) => Promise<void>;
+  signup: (data: SignupType) => Promise<void>;
+  recovery: (data: RecoveryType) => Promise<void>;
+  passwordReset: (data: PasswordResetType) => Promise<void>;
+  check: () => Promise<void>;
+  signout: () => Promise<void>;
 };
 
 export const AuthContext = createContext<AuthContextProps | undefined>(

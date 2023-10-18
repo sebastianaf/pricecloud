@@ -4,7 +4,6 @@ import { NotificationType } from '../types/notification.type';
 import { SnackbarContextReference } from '../contexts/SnackbarContext';
 
 const processSuccess = (response: AxiosResponse) => {
-  console.log(response);
   if (response.status === 200 || response.status === 201) {
     const data = response.data;
     showNotification(data, 'success');

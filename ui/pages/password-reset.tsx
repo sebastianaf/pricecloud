@@ -74,8 +74,6 @@ function PasswordReset() {
     event.preventDefault();
   };
 
-  useEffect(() => {}, []);
-
   return (
     <>
       <Head>

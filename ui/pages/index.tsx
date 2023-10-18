@@ -42,7 +42,8 @@ function Overview() {
   const router = useRouter();
 
   useEffect(() => {
-    check();
+    const runCheck = async () => await check();
+    runCheck();
     isAuth && router.push(paths.web.dashboard.root);
   }, [isAuth]);
 
@@ -64,11 +65,7 @@ function Overview() {
               <Box />
               <Box>
                 <NextLink href={paths.web.login}>
-                  <Button
-                    variant="contained"
-                    size="large"
-                    sx={{ ml: 2 }}
-                  >
+                  <Button variant="contained" size="large" sx={{ ml: 2 }}>
                     Iniciar sesión
                   </Button>
                 </NextLink>

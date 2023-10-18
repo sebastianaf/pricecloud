@@ -56,12 +56,13 @@ function Signin() {
   } = useForm<LoginType>();
 
   useEffect(() => {
-    check();
+    const runCheck = async () => await check();
+    runCheck();
     isAuth && router.push(paths.web.dashboard.root);
   }, [isAuth]);
 
   const onSubmit = handleSubmit(async (data: LoginType) => {
-    signin(data);
+    await signin(data);
   });
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);

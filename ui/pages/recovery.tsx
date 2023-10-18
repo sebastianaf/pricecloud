@@ -61,8 +61,8 @@ function Recovery() {
     handleSubmit
   } = useForm<RecoveryType>();
 
-  const onSubmit = handleSubmit((data: RecoveryType) => {
-    recovery(data);
+  const onSubmit = handleSubmit(async (data: RecoveryType) => {
+    await recovery(data);
   });
 
   return (
