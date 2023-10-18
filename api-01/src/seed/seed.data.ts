@@ -52,6 +52,14 @@ export const viewSeed: Partial<View>[] = [
     id: ViewInterface.deployAws,
     label: 'AWS',
   },
+  {
+    id: ViewInterface.managementUsers,
+    label: 'Gestion de usuarios',
+  },
+  {
+    id: ViewInterface.managementPrices,
+    label: 'Gestión de precios',
+  },
 ];
 
 export const roleSeed: Partial<Role>[] = [

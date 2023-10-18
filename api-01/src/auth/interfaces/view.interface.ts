@@ -6,4 +6,6 @@ export enum ViewInterface {
   providerExplore = 5,
   providerSettings = 6,
   deployAws = 7,
+  managementUsers = 8,
+  managementPrices = 9,
 }

@@ -90,7 +90,7 @@ export class UserController {
   }
 
   @Get(`profile`)
-  @Protect([ViewInterface.dashboard, ViewInterface.profile])
+  @Protect([ViewInterface.profile])
   @ApiOperation({ summary: `Find user` })
   profile(@GetUser() user: User) {
     return this.userService.profile(user);

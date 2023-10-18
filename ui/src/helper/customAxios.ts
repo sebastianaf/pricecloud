@@ -4,7 +4,8 @@ import { processSuccess, processError } from './processAxios';
 
 export const customAxios = axios.create({
   baseURL: `https://${process.env.NEXT_PUBLIC_API_HOST}`,
-  withCredentials: true
+  withCredentials: true,
+  timeout: 10000
 });
 
 customAxios.interceptors.request.use(

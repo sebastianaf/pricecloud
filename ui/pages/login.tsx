@@ -61,7 +61,7 @@ function Signin() {
   }, [isAuth]);
 
   const onSubmit = handleSubmit(async (data: LoginType) => {
-    await signin(data);
+    signin(data);
   });
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
