@@ -1,7 +1,5 @@
 import { useRef, useState } from 'react';
-
 import NextLink from 'next/link';
-
 import {
   Avatar,
   Box,
@@ -21,7 +19,7 @@ import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
 import LockOpenTwoToneIcon from '@mui/icons-material/LockOpenTwoTone';
 import { Settings } from '@mui/icons-material';
 import { useAuth } from '../../../../contexts/AuthContext';
-
+import paths from '../../../../helper/paths';
 
 const UserBoxButton = styled(Button)(
   ({ theme }) => `
@@ -118,7 +116,7 @@ function HeaderUserbox() {
         </MenuUserBox>
         <Divider sx={{ mb: 0 }} />
         <List sx={{ p: 1 }} component="nav">
-          <NextLink href="/management/profile/settings" passHref>
+          <NextLink href={paths.web.profile} passHref>
             <ListItem button>
               <Settings fontSize="small" />
               <ListItemText primary="Configurar cuenta" />
@@ -127,17 +125,18 @@ function HeaderUserbox() {
         </List>
         <Divider />
         <Box sx={{ m: 1 }}>
-          <Button
-            color="primary"
-            href="/"
-            fullWidth
-            onClick={() => {
-              signout();
-            }}
-          >
-            <LockOpenTwoToneIcon sx={{ mr: 1 }} />
-            Cerrar sesión
-          </Button>
+          <NextLink href={paths.web.profile}>
+            <Button
+              color="primary"
+              fullWidth
+              onClick={() => {
+                signout();
+              }}
+            >
+              <LockOpenTwoToneIcon sx={{ mr: 1 }} />
+              Cerrar sesión
+            </Button>
+          </NextLink>
         </Box>
       </Popover>
     </>
