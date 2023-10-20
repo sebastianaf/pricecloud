@@ -89,7 +89,7 @@ function HeaderUserbox() {
             <UserBoxLabel variant="body1">
               {user ? user?.firstName : `N/D`}
             </UserBoxLabel>
-            <UserBoxDescription variant="body2" >
+            <UserBoxDescription variant="body2">
               {user?.role?.label || `N/D`}
             </UserBoxDescription>
           </UserBoxText>
