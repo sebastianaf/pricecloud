@@ -12,11 +12,15 @@ import {
 import { EncryptionLowerCaseTransformer } from '../../auth/transformer/encryption-lowercase.transformer';
 import { EncryptionTransformer } from '../../auth/transformer/encryption.transformer';
 import { Role } from '../../auth/entities/role.entity';
+import { UserLogin } from './user-login.entity';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @OneToMany(() => UserLogin, (userLogin) => userLogin.user)
+  userLogins: UserLogin[];
 
   @ApiProperty({ description: `User's role` })
   @ManyToOne(() => Role, (role) => role.users, { nullable: false })

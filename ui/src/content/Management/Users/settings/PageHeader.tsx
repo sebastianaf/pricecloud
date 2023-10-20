@@ -1,10 +1,15 @@
 import { Typography } from '@mui/material';
+import { useEffect } from 'react';
+import { useAuth } from '../../../../contexts/AuthContext';
 
 function PageHeader() {
-  const user = {
-    name: 'Catherine Pike',
-    avatar: '/static/images/avatars/1.jpg'
-  };
+  const { user, getUser } = useAuth();
+  useEffect(() => {
+    if (!user) {
+      const handleGetUser = async () => await getUser();
+      handleGetUser();
+    }
+  }, []);
 
   return (
     <>
@@ -12,7 +17,8 @@ function PageHeader() {
         Configurar cuenta
       </Typography>
       <Typography variant="subtitle2">
-        {user.name}, aquí puedes configurar las preferencias de tu cuenta.
+        {user ? `${user?.firstName}, ` : `Hola, `} aquí puedes configurar las
+        preferencias de tu cuenta.
       </Typography>
     </>
   );

@@ -1,12 +1,17 @@
 import { Typography, Button, Grid } from '@mui/material';
-
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
+import { useAuth } from '../../../contexts/AuthContext';
+import { useEffect } from 'react';
 
 function PageHeader() {
-  const user = {
-    name: 'Catherine Pike',
-    avatar: '/static/images/avatars/1.jpg'
-  };
+  const { user, getUser } = useAuth();
+  useEffect(() => {
+    if (!user) {
+      const handleGetUser = async () => await getUser();
+      handleGetUser();
+    }
+  }, []);
+
   return (
     <Grid container justifyContent="space-between" alignItems="center">
       <Grid item>
@@ -14,7 +19,8 @@ function PageHeader() {
           Transactions
         </Typography>
         <Typography variant="subtitle2">
-          {user.name}, these are your recent transactions
+          {user ? `${user?.firstName}, ` : `Hi, `} these are your recent
+          transactions
         </Typography>
       </Grid>
       <Grid item>
