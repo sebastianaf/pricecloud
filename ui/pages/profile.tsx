@@ -35,14 +35,6 @@ function Profile() {
     setCurrentTab(value);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await customAxios.get(paths.api.user.root);
-
-    };
-    fetchData();
-  }, []);
-
   return (
     <>
       <Head>

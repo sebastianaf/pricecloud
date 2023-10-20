@@ -27,7 +27,7 @@ import createEmotionCache from 'src/createEmotionCache';
 import { SidebarProvider } from 'src/contexts/SidebarContext';
 import 'src/styles/global.css';
 import { ModalProvider } from '../src/contexts/ModalContext';
-import { AppProvider } from '../src/contexts/AppContext';
+//import { AppProvider } from '../src/contexts/AppContext';
 import { SnackbarProvider } from '../src/contexts/SnackbarContext';
 import { AuthProvider } from '../src/contexts/AuthContext';
 
@@ -69,7 +69,7 @@ function PricecloudApp(props: TokyoAppProps) {
           content="width=device-width, initial-scale=1, shrink-to-fit=no"
         />
       </Head>
-      <AppProvider>
+      {/* <AppProvider> */}
         <SnackbarProvider>
           <AuthProvider>
             <SidebarProvider>
@@ -84,7 +84,7 @@ function PricecloudApp(props: TokyoAppProps) {
             </SidebarProvider>
           </AuthProvider>
         </SnackbarProvider>
-      </AppProvider>
+      {/* </AppProvider> */}
     </CacheProvider>
   );
 }

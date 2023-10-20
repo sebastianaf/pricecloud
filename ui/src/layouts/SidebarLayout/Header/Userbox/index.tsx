@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import NextLink from 'next/link';
 import {
   Avatar,
@@ -57,11 +57,13 @@ const UserBoxDescription = styled(Typography)(
 );
 
 function HeaderUserbox() {
-  const user = {
-    name: 'John Doe',
-    avatar: '/static/images/avatars/3.jpg',
-    jobtitle: 'Administrador'
-  };
+  const { user, getUser } = useAuth();
+  useEffect(() => {
+    if (!user) {
+      const handleGetUser = async () => await getUser();
+      handleGetUser();
+    }
+  }, []);
 
   const ref = useRef<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
@@ -79,12 +81,16 @@ function HeaderUserbox() {
   return (
     <>
       <UserBoxButton color="secondary" ref={ref} onClick={handleOpen}>
-        <Avatar variant="rounded" alt={user.name} src={user.avatar} />
+        <Avatar variant="rounded">
+          {user ? user?.firstName.substring(0, 1).toUpperCase() : `N/D`}
+        </Avatar>
         <Hidden mdDown>
           <UserBoxText>
-            <UserBoxLabel variant="body1">{user.name}</UserBoxLabel>
+            <UserBoxLabel variant="body1">
+              {user ? user?.firstName : `N/D`}
+            </UserBoxLabel>
             <UserBoxDescription variant="body2">
-              {user.jobtitle}
+              {user?.role?.label || `N/D`}
             </UserBoxDescription>
           </UserBoxText>
         </Hidden>
@@ -106,11 +112,15 @@ function HeaderUserbox() {
         }}
       >
         <MenuUserBox sx={{ minWidth: 210 }} display="flex">
-          <Avatar variant="rounded" alt={user.name} src={user.avatar} />
+          <Avatar variant="rounded">
+            {user ? user?.firstName.substring(0, 1).toUpperCase() : `N/D`}
+          </Avatar>
           <UserBoxText>
-            <UserBoxLabel variant="body1">{user.name}</UserBoxLabel>
+            <UserBoxLabel variant="body1">
+              {user ? user?.firstName : `N/D`}
+            </UserBoxLabel>
             <UserBoxDescription variant="body2">
-              {user.jobtitle}
+              {user ? user?.role?.label : `N/D`}
             </UserBoxDescription>
           </UserBoxText>
         </MenuUserBox>

@@ -19,8 +19,8 @@ const processError = (error: any) => {
       'info'
     );
 
-  const status = error?.response?.response?.data?.statusCode;
-  const data = error?.response?.response?.data;
+  const status = error?.response?.data?.statusCode;
+  const data = error?.response?.data;
 
   switch (status) {
     case HttpStatusCode.BadRequest:

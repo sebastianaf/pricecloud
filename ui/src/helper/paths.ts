@@ -5,7 +5,8 @@ const paths = {
       root: `user`,
       verifyEmail: `user/verify-email`,
       passwordReset: `user/password-reset`,
-      recovery: `user/recovery`
+      recovery: `user/recovery`,
+      profile: `user/profile`
     }
   },
   web: {

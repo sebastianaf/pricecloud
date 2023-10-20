@@ -41,8 +41,8 @@ export class UserController {
   @Get()
   @Protect([ViewInterface.dashboard, ViewInterface.profile])
   @ApiOperation({ summary: `Find user` })
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(id);
+  findOne(@GetUser() user: User) {
+    return this.userService.findOne(user);
   }
 
   @Post(`verify-email`)
@@ -87,12 +87,5 @@ export class UserController {
   })
   recovery(@Body() recoveryDto: RecoveryDto) {
     return this.userService.recovery(recoveryDto);
-  }
-
-  @Get(`profile`)
-  @Protect([ViewInterface.profile])
-  @ApiOperation({ summary: `Find user` })
-  profile(@GetUser() user: User) {
-    return this.userService.profile(user);
   }
 }

@@ -1,19 +1,13 @@
-import {
-  ReactNode,
-  createContext,
-  useContext,
-  useState,
-  useEffect
-} from 'react';
+import { ReactNode, createContext, useContext, useState } from 'react';
 import { customAxios } from '../helper/customAxios';
 import paths from '../helper/paths';
-import { useAppContext } from './AppContext';
 import { LoginType } from '../types/FormStates';
 import { useRouter } from 'next/router';
 import { SignupType } from '../types/signup.type';
 import { RecoveryType } from '../types/recovery.type';
 import { PasswordResetType } from '../types/password-reset.type';
 import { useSnackbar } from './SnackbarContext';
+import { UserType } from '../types/user.type';
 
 type AuthContextProps = {
   isAuth: boolean;
@@ -24,6 +18,8 @@ type AuthContextProps = {
   passwordReset: (data: PasswordResetType) => Promise<void>;
   check: () => Promise<void>;
   signout: () => Promise<void>;
+  getUser: () => Promise<void>;
+  user: UserType | null;
 };
 
 export const AuthContext = createContext<AuthContextProps | undefined>(
@@ -36,9 +32,16 @@ type Props = {
 
 export function AuthProvider({ children }: Props) {
   const [isAuth, setIsAuth] = useState(false);
+  const [user, setUser] = useState<UserType | null>(null);
   const { showSnackbar } = useSnackbar();
-  const { setUserProfile } = useAppContext();
   const router = useRouter();
+
+  const getUser = async (): Promise<void> => {
+    const response = await customAxios.get<UserType>(paths.api.user.root);
+    if (response.status === 200) {
+      response.data && setUser(response.data);
+    }
+  };
 
   const check = async () => {
     const response = await customAxios.get(paths.api.auth);
@@ -52,7 +55,6 @@ export function AuthProvider({ children }: Props) {
     const response = await customAxios.post(paths.api.auth, data);
     if (response.status === 200) {
       router.push(paths.web.dashboard.root);
-      setUserProfile(response.data);
       setIsAuth(true);
       showSnackbar('Bienvenido a Priceclcoud', 'success');
     }
@@ -94,7 +96,9 @@ export function AuthProvider({ children }: Props) {
         recovery,
         passwordReset,
         check,
-        signout
+        signout,
+        getUser,
+        user
       }}
     >
       {children}

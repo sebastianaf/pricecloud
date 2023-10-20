@@ -7,11 +7,12 @@ import {
   Avatar,
   styled
 } from '@mui/material';
+import { useEffect } from 'react';
 import { EmojiEmotions } from '@mui/icons-material';
 import { ManageAccounts } from '@mui/icons-material';
-import { useAppContext } from '../../../contexts/AppContext';
 import paths from '../../../helper/paths';
 import NextLink from 'next/link';
+import { useAuth } from '../../../contexts/AuthContext';
 
 const AvatarPageTitle = styled(Avatar)(
   ({ theme }) => `
@@ -38,12 +39,13 @@ const AvatarPageTitle = styled(Avatar)(
 );
 
 function PageHeader() {
-  const { userProfile } = useAppContext();
-
-  const user = {
-    name: 'John Doe',
-    avatar: '/static/images/avatars/3.jpg'
-  };
+  const { user, getUser } = useAuth();
+  useEffect(() => {
+    if (!user) {
+      const handleGetUser = async () => await getUser();
+      handleGetUser();
+    }
+  }, []);
 
   return (
     <Box
@@ -58,7 +60,7 @@ function PageHeader() {
         </AvatarPageTitle>
         <Box>
           <Typography variant="h3" component="h3" gutterBottom>
-            Bienvenido, {user.name}!
+            Bienvenido{user ? `, ${user?.firstName}` : ``}!
           </Typography>
           <Typography variant="subtitle2">
             Entérate de los cambios de precios en los principales servicios de
