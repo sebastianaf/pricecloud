@@ -65,11 +65,11 @@ export const viewSeed: Partial<View>[] = [
 export const roleSeed: Partial<Role>[] = [
   {
     id: RoleInterface.admin,
-    label: 'Admin',
+    label: 'Administrador',
   },
   {
     id: RoleInterface.user,
-    label: 'User',
+    label: 'Usuario de consultas',
   },
 ];
 

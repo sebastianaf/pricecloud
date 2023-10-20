@@ -33,13 +33,26 @@ export class UserService {
     private readonly commonService: CommonService,
   ) {}
 
-  async findOne(id: string) {
-    const user = await this.userRepository.findOne({
-      where: { id },
+  async findOne(user: User) {
+    const user2 = await this.userRepository.findOne({
+      where: { id: user.id },
+      relations: ['role'],
+      select: [
+        'id',
+        'email',
+        'firstName',
+        'secondName',
+        'firstLastName',
+        'secondLastName',
+        'loginCount',
+        'isEmailVerified',
+        'role',
+      ],
     });
 
-    if (!user) throw new ConflictException(`User do not exist (USFO-001)`);
-    return user;
+    console.log(user2);
+
+    return user2;
   }
 
   async findAll() {
@@ -203,9 +216,5 @@ export class UserService {
       title: `Contraseña actualizada`,
       message: `Tu contraseña ha sido actualizada exitosamente`,
     };
-  }
-
-  async profile(user: User) {
-    console.log(user);
   }
 }

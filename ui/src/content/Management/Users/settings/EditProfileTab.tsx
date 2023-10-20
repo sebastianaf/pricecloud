@@ -5,15 +5,29 @@ import {
   Card,
   Box,
   Divider,
-  Button
+  Button,
+  CircularProgress,
+  Skeleton,
+  LinearProgress
 } from '@mui/material';
+import { useEffect } from 'react';
 
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DoneTwoToneIcon from '@mui/icons-material/DoneTwoTone';
 import Text from '@/components/Text';
 import Label from '@/components/Label';
+import { useAuth } from '../../../../contexts/AuthContext';
+import { InfoOutlined } from '@mui/icons-material';
 
 function EditProfileTab() {
+  const { user, getUser } = useAuth();
+  useEffect(() => {
+    if (!user) {
+      const handleGetUser = async () => await getUser();
+      handleGetUser();
+    }
+  }, []);
+
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>
@@ -32,9 +46,9 @@ function EditProfileTab() {
                 Administre la información personal de su cuenta.
               </Typography>
             </Box>
-            <Button variant="text" startIcon={<EditTwoToneIcon />}>
+            {/* <Button variant="text" startIcon={<EditTwoToneIcon />}>
               Editar
-            </Button>
+            </Button> */}
           </Box>
           <Divider />
           <CardContent sx={{ p: 4 }}>
@@ -47,7 +61,15 @@ function EditProfileTab() {
                 </Grid>
                 <Grid item xs={12} sm={8} md={9}>
                   <Text color="black">
-                    <b>Craig Donin</b>
+                    {user ? (
+                      <b>{`${user?.firstName}${
+                        user?.secondName ? ` ${user?.secondName}` : ''
+                      }${user?.firstLastName ? ` ${user?.firstLastName}` : ''}${
+                        user?.secondLastName ? ` ${user?.secondLastName}` : ''
+                      }`}</b>
+                    ) : (
+                      <CircularProgress size={16} />
+                    )}
                   </Text>
                 </Grid>
                 <Grid item xs={12} sm={4} md={3} textAlign={{ sm: 'right' }}>
@@ -57,7 +79,15 @@ function EditProfileTab() {
                 </Grid>
                 <Grid item xs={12} sm={8} md={9}>
                   <Box sx={{ maxWidth: { xs: 'auto', sm: 300 } }}>
-                    <Text color="black">Administrador</Text>
+                    {user?.role?.label ? (
+                      <Text color="black">
+                        <b>{user?.role?.label}</b>
+                      </Text>
+                    ) : (
+                      <Text color="black">
+                        <b>N/D</b>
+                      </Text>
+                    )}
                   </Box>
                 </Grid>
                 <Grid item xs={12} sm={4} md={3} textAlign={{ sm: 'right' }}>
@@ -67,7 +97,15 @@ function EditProfileTab() {
                 </Grid>
                 <Grid item xs={12} sm={8} md={9}>
                   <Box sx={{ maxWidth: { xs: 'auto', sm: 300 } }}>
-                    <Text color="black">Colombia</Text>
+                    {user?.country ? (
+                      <b>
+                        <Text color="black">{user?.role?.label}</Text>
+                      </b>
+                    ) : (
+                      <Text color="black">
+                        <b>N/D</b>
+                      </Text>
+                    )}
                   </Box>
                 </Grid>
               </Grid>
@@ -91,9 +129,9 @@ function EditProfileTab() {
                 Administre los detalles relacionados con su cuenta.
               </Typography>
             </Box>
-            <Button variant="text" startIcon={<EditTwoToneIcon />}>
+            {/* <Button variant="text" startIcon={<EditTwoToneIcon />}>
               Editar
-            </Button>
+            </Button> */}
           </Box>
           <Divider />
           <CardContent sx={{ p: 4 }}>
@@ -101,23 +139,19 @@ function EditProfileTab() {
               <Grid container spacing={0}>
                 <Grid item xs={12} sm={4} md={3} textAlign={{ sm: 'right' }}>
                   <Box pr={3} pb={2}>
-                    Lenguaje:
-                  </Box>
-                </Grid>
-                <Grid item xs={12} sm={8} md={9}>
-                  <Text color="black">
-                    <b>Español (CO)</b>
-                  </Text>
-                </Grid>
-                <Grid item xs={12} sm={4} md={3} textAlign={{ sm: 'right' }}>
-                  <Box pr={3} pb={2}>
                     Zona horaria:
                   </Box>
                 </Grid>
                 <Grid item xs={12} sm={8} md={9}>
-                  <Text color="black">
-                    <b>GMT -5</b>
-                  </Text>
+                  {user?.timezone ? (
+                    <Text color="black">
+                      <b>{user?.timezone}</b>
+                    </Text>
+                  ) : (
+                    <Text color="black">
+                      <b>N/D</b>
+                    </Text>
+                  )}
                 </Grid>
                 <Grid item xs={12} sm={4} md={3} textAlign={{ sm: 'right' }}>
                   <Box pr={3} pb={2}>
@@ -125,10 +159,17 @@ function EditProfileTab() {
                   </Box>
                 </Grid>
                 <Grid item xs={12} sm={8} md={9}>
-                  <Label color="success">
-                    <DoneTwoToneIcon fontSize="medium" />
-                    <b>Activa</b>
-                  </Label>
+                  {user?.active ? (
+                    <Label color="success">
+                      <DoneTwoToneIcon fontSize="medium" />
+                      <b>Activa</b>
+                    </Label>
+                  ) : (
+                    <Label color="warning">
+                      <InfoOutlined fontSize="medium" />
+                      <b>N/D</b>
+                    </Label>
+                  )}
                 </Grid>
               </Grid>
             </Typography>
@@ -148,12 +189,13 @@ function EditProfileTab() {
                 Correos electrónicos
               </Typography>
               <Typography variant="subtitle2">
-                Administre los detalles relacionados con sus correos electrónicos.
+                Administre los detalles relacionados con sus correos
+                electrónicos.
               </Typography>
             </Box>
-            <Button variant="text" startIcon={<EditTwoToneIcon />}>
+            {/* <Button variant="text" startIcon={<EditTwoToneIcon />}>
               Editar
-            </Button>
+            </Button> */}
           </Box>
           <Divider />
           <CardContent sx={{ p: 4 }}>
@@ -165,22 +207,18 @@ function EditProfileTab() {
                   </Box>
                 </Grid>
                 <Grid item xs={12} sm={8} md={9}>
-                  <Text color="black">
-                    <b>john.doe@pricecloud.org</b>
-                  </Text>
+                  {user?.email ? (
+                    <Text color="black">
+                      <b>{user?.email}</b>
+                    </Text>
+                  ) : (
+                    <Text color="black">
+                      <b>N/D</b>
+                    </Text>
+                  )}
                   <Box pl={1} component="span">
                     <Label color="success">Principal</Label>
                   </Box>
-                </Grid>
-                <Grid item xs={12} sm={4} md={3} textAlign={{ sm: 'right' }}>
-                  <Box pr={3} pb={2}>
-                    ID de email:
-                  </Box>
-                </Grid>
-                <Grid item xs={12} sm={8} md={9}>
-                  <Text color="black">
-                    <b>john.doe@gmail.com</b>
-                  </Text>
                 </Grid>
               </Grid>
             </Typography>
