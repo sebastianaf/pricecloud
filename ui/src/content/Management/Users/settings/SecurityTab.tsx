@@ -1,4 +1,4 @@
-import { useState, MouseEvent, ChangeEvent } from 'react';
+import { useState, MouseEvent, ChangeEvent, useEffect } from 'react';
 import {
   Box,
   Card,
@@ -16,14 +16,23 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  TableContainer
+  TableContainer,
+  CircularProgress
 } from '@mui/material';
 
 import { format, subHours, subWeeks, subDays } from 'date-fns';
+import { useAuth } from '../../../../contexts/AuthContext';
 
 function SecurityTab() {
   const [page, setPage] = useState(2);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const { loginData, getLoginData } = useAuth();
+  useEffect(() => {
+    if (!loginData) {
+      const handleGetLoginData = async () => await getLoginData();
+      handleGetLoginData();
+    }
+  }, []);
 
   const handleChangePage = (
     _event: MouseEvent<HTMLButtonElement> | null,
@@ -128,22 +137,24 @@ function SecurityTab() {
                   <TableCell>Navegador</TableCell>
                   <TableCell>Dirección IP</TableCell>
                   <TableCell>Ubicación</TableCell>
-                  <TableCell>Fecha/Hora</TableCell>
+                  <TableCell>Ocurrencia</TableCell>
                   <TableCell>Evento</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {logs.map((log) => (
-                  <TableRow key={log.id} hover>
-                    <TableCell>{log.browser}</TableCell>
-                    <TableCell>{log.ipaddress}</TableCell>
-                    <TableCell>{log.location}</TableCell>
-                    <TableCell>
-                      {format(log.date, 'dd MMMM, yyyy - h:mm:ss a')}
-                    </TableCell>
-                    <TableCell>Inicio de sesión</TableCell>
-                  </TableRow>
-                ))}
+                {loginData ? (
+                  loginData.map((loginRecord) => (
+                    <TableRow key={loginRecord.id} hover>
+                      <TableCell>{loginRecord.userAgent.browser}</TableCell>
+                      <TableCell>{loginRecord.ip}</TableCell>
+                      <TableCell>{loginRecord.location}</TableCell>
+                      <TableCell>{loginRecord.createdAt}</TableCell>
+                      <TableCell>{loginRecord.event}</TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <CircularProgress />
+                )}
               </TableBody>
             </Table>
           </TableContainer>

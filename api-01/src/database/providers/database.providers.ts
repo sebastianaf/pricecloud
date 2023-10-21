@@ -1,6 +1,7 @@
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DataSource } from 'typeorm';
 import { dataSource } from '../../config/constants';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 export const databaseProviders = [
   {
@@ -16,8 +17,8 @@ export const databaseProviders = [
         username: configService.get('DB_USER'),
         password: configService.get('DB_PASSWORD'),
         entities: [__dirname + '/../../**/*.entity{.ts,.js}'],
-        //synchronize: process.env.ENV === 'prod' ? false : true,
         synchronize: false,
+        namingStrategy: new SnakeNamingStrategy(),
       });
 
       return dataSource.initialize();

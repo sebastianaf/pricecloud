@@ -8,6 +8,7 @@ import { RecoveryType } from '../types/recovery.type';
 import { PasswordResetType } from '../types/password-reset.type';
 import { useSnackbar } from './SnackbarContext';
 import { UserType } from '../types/user.type';
+import { LoginDataType } from '../types/login-data.type';
 
 type AuthContextProps = {
   isAuth: boolean;
@@ -20,6 +21,8 @@ type AuthContextProps = {
   signout: () => Promise<void>;
   getUser: () => Promise<void>;
   user: UserType | null;
+  getLoginData: () => Promise<void>;
+  loginData: LoginDataType[] | null;
 };
 
 export const AuthContext = createContext<AuthContextProps | undefined>(
@@ -33,6 +36,7 @@ type Props = {
 export function AuthProvider({ children }: Props) {
   const [isAuth, setIsAuth] = useState(false);
   const [user, setUser] = useState<UserType | null>(null);
+  const [loginData, setLoginData] = useState<LoginDataType[] | null>(null);
   const { showSnackbar } = useSnackbar();
   const router = useRouter();
 
@@ -43,8 +47,17 @@ export function AuthProvider({ children }: Props) {
     }
   };
 
+  const getLoginData = async (): Promise<void> => {
+    const response = await customAxios.get<LoginDataType[]>(
+      paths.api.auth.login
+    );
+    if (response.status === 200) {
+      response.data && setLoginData(response.data);
+    }
+  };
+
   const check = async () => {
-    const response = await customAxios.get(paths.api.auth);
+    const response = await customAxios.get(paths.api.auth.root);
 
     if (response.data) {
       setIsAuth(true);
@@ -52,7 +65,7 @@ export function AuthProvider({ children }: Props) {
   };
 
   const signin = async (data: LoginType) => {
-    const response = await customAxios.post(paths.api.auth, data);
+    const response = await customAxios.post(paths.api.auth.root, data);
     if (response.status === 200) {
       router.push(paths.web.dashboard.root);
       setIsAuth(true);
@@ -82,7 +95,7 @@ export function AuthProvider({ children }: Props) {
   };
 
   const signout = async () => {
-    await customAxios.delete(paths.api.auth);
+    await customAxios.delete(paths.api.auth.root);
     setIsAuth(false);
   };
 
@@ -98,7 +111,9 @@ export function AuthProvider({ children }: Props) {
         check,
         signout,
         getUser,
-        user
+        user,
+        getLoginData,
+        loginData
       }}
     >
       {children}

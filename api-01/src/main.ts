@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as Express from 'express';
 import * as cookieParser from 'cookie-parser';
+import * as moment from 'moment';
 
 import { AppModule } from './app.module';
 import { mainDocs } from './docs';
@@ -16,6 +17,8 @@ const server = Express();
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
+
+  moment.locale('es');
 
   app.useGlobalPipes(
     new ValidationPipe({

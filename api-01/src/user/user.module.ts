@@ -8,11 +8,11 @@ import { AuthModule } from '../auth/auth.module';
 import { UserGateway } from './user.gateway';
 import { EmailModule } from '../email/email.module';
 import { CommonModule } from '../common/common.module';
-import { UserLogin } from './entities/user-login.entity';
+import { Login } from '../auth/entities/login.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, UserLogin]),
+    TypeOrmModule.forFeature([User]),
     forwardRef(() => AuthModule),
     EmailModule,
     CommonModule,

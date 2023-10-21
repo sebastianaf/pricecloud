@@ -2,6 +2,7 @@ import { Module, Global } from '@nestjs/common';
 import { ConfigModule, ConfigService, ConfigType } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { databaseProviders } from './providers/database.providers';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 @Global()
 @Module({
@@ -19,8 +20,8 @@ import { databaseProviders } from './providers/database.providers';
           password: configService.get('DB_PASSWORD'),
           entities: [__dirname + '/**/*.entity{.ts,.js}'],
           autoLoadEntities: true,
-          //synchronize: process.env.ENV === 'prod' ? false : true,
           synchronize: false,
+          namingStrategy: new SnakeNamingStrategy(),
         };
       },
     }),

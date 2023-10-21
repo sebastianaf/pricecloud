@@ -8,6 +8,7 @@ import config from '../config';
 import environments from '../config/environments';
 import validationSchema from '../config/validation-schema';
 import { AuthModule } from '../auth/auth.module';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { AuthModule } from '../auth/auth.module';
           autoLoadEntities: true,
           entities: [__dirname + '/../**/*.entity{.ts,.js}'],
           synchronize: false,
+          namingStrategy: new SnakeNamingStrategy(),
         };
       },
     }),

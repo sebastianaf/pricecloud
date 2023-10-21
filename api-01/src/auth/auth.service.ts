@@ -11,6 +11,8 @@ import { JwtService } from '@nestjs/jwt';
 import * as jwt from 'jsonwebtoken';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as moment from 'moment';
+moment.locale('es');
 
 import { UserService } from '../user/user.service';
 import { ValidateUserDto } from './dto/validate-user.dto';
@@ -18,6 +20,10 @@ import { JwtPayloadDto } from './dto/jwt-payload.dto';
 import { User } from '../user/entities/user.entity';
 import { RoleView } from './entities/role-view.entity';
 import { CommonService } from '../common/common.service';
+import { Login } from './entities/login.entity';
+import { LoginEventInterface } from './interfaces/login-event.interface';
+import { IpInfo2Interface } from '../common/interfaces/ip-info.interface';
+
 
 @Injectable()
 export class AuthService {
@@ -26,6 +32,8 @@ export class AuthService {
     private readonly userRepository: Repository<User>,
     @InjectRepository(RoleView)
     private readonly roleViewRepository: Repository<RoleView>,
+    @InjectRepository(Login)
+    private readonly loginRepository: Repository<Login>,
 
     @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
@@ -64,7 +72,7 @@ export class AuthService {
     return user;
   }
 
-  async auth(validateUserDTO: ValidateUserDto) {
+  async auth(validateUserDTO: ValidateUserDto, ipInfo: IpInfo2Interface) {
     const { password, email } = validateUserDTO;
 
     const user = await this.userRepository.findOne({
@@ -101,13 +109,13 @@ export class AuthService {
       );
     }
 
-    await this.userService.addLoginCount(user);
-    delete user.password;
+    await this.createLogin(ipInfo, user);
 
     let token = this.generateToken({ id: user.id });
 
     token = await this.commonService.encrypt(token);
 
+    delete user.password;
     return { token, user };
   }
 
@@ -122,5 +130,34 @@ export class AuthService {
       { id: user.id, email: user.email },
       { expiresIn: '5m' },
     );
+  }
+
+  async createLogin(ipInfo: IpInfo2Interface, user: User) {
+    await this.userService.addLoginCount(user);
+
+    const { country, timezone, ip, city } = ipInfo.ipInfo;
+
+    await this.loginRepository.save({
+      event: LoginEventInterface.login,
+      user,
+      ip: ip || null,
+      location: `${`${city} ` || ``}${country || ``}`.trim() || null,
+      timezone: timezone || null,
+      userAgent: ipInfo.userAgent || null,
+    });
+  }
+
+  async findAllLogin(user: User) {
+    const logins = await this.loginRepository.find({
+      where: { user },
+      order: { createdAt: `DESC` },
+    });
+    return logins.map((login) => {
+      const login2 = {
+        ...login,
+        createdAt: moment((login?.createdAt).toISOString()).fromNow(),
+      };
+      return login2;
+    });
   }
 }

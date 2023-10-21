@@ -19,6 +19,7 @@ import { RoleInterface } from '../auth/interfaces/role.interface';
 import paths from '../config/paths';
 import { RecoveryDto } from './dto/recovery.dto';
 import { PasswordResetDto } from './dto/password-reset.dto';
+import { IpInfoInterface } from '../common/interfaces/ip-info.interface';
 
 @Injectable()
 export class UserService {
@@ -47,10 +48,12 @@ export class UserService {
         'loginCount',
         'isEmailVerified',
         'role',
+        `active`,
+        `timezone`,
+        'country',
+        'language',
       ],
     });
-
-    console.log(user2);
 
     return user2;
   }
@@ -63,7 +66,7 @@ export class UserService {
     return user;
   }
 
-  async createUser(createUserDto: CreateUserDto) {
+  async createUser(createUserDto: CreateUserDto, ipInfo: IpInfoInterface) {
     const {
       password,
       email,
@@ -72,6 +75,7 @@ export class UserService {
       secondLastName,
       secondName,
     } = createUserDto;
+    const { country, timezone } = ipInfo;
 
     const user = await this.userRepository.findOne({
       where: { email },
@@ -90,6 +94,8 @@ export class UserService {
       email,
       password: bcrypt.hashSync(password, 10),
       role: <any>{ id: RoleInterface.user },
+      country: country || null,
+      timezone: timezone || null,
     });
 
     await this.sendVerificationEmail(newUser);

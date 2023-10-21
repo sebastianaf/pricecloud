@@ -1,6 +1,9 @@
 const paths = {
   api: {
-    auth: `auth`,
+    auth: {
+      root: `auth`,
+      login: `auth/login`
+    },
     user: {
       root: `user`,
       verifyEmail: `user/verify-email`,
