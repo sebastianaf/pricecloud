@@ -28,10 +28,8 @@ function SecurityTab() {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const { loginData, getLoginData } = useAuth();
   useEffect(() => {
-    if (!loginData) {
-      const handleGetLoginData = async () => await getLoginData();
-      handleGetLoginData();
-    }
+    const handleGetLoginData = async () => await getLoginData();
+    handleGetLoginData();
   }, []);
 
   const handleChangePage = (
@@ -47,44 +45,6 @@ function SecurityTab() {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
-  const logs = [
-    {
-      id: 1,
-      browser: ' Safari/537.36',
-      ipaddress: '3.70.73.142',
-      location: 'Estados Unidos',
-      date: subDays(new Date(), 2).getTime()
-    },
-    {
-      id: 2,
-      browser: 'Chrome/36.0.1985.67',
-      ipaddress: '138.13.136.179',
-      location: 'China',
-      date: subDays(new Date(), 6).getTime()
-    },
-    {
-      id: 3,
-      browser: 'Googlebot/2.1',
-      ipaddress: '119.229.170.253',
-      location: 'China',
-      date: subHours(new Date(), 15).getTime()
-    },
-    {
-      id: 4,
-      browser: 'AppleWebKit/535.1',
-      ipaddress: '206.8.99.49',
-      location: 'Filipinas',
-      date: subDays(new Date(), 4).getTime()
-    },
-    {
-      id: 5,
-      browser: 'Mozilla/5.0',
-      ipaddress: '235.40.59.85',
-      location: 'China',
-      date: subWeeks(new Date(), 3).getTime()
-    }
-  ];
 
   return (
     <Grid container spacing={3}>
@@ -135,6 +95,9 @@ function SecurityTab() {
               <TableHead>
                 <TableRow>
                   <TableCell>Navegador</TableCell>
+                  <TableCell>Versión</TableCell>
+                  <TableCell>Plataforma</TableCell>
+                  <TableCell>OS</TableCell>
                   <TableCell>Dirección IP</TableCell>
                   <TableCell>Ubicación</TableCell>
                   <TableCell>Ocurrencia</TableCell>
@@ -145,11 +108,26 @@ function SecurityTab() {
                 {loginData ? (
                   loginData.map((loginRecord) => (
                     <TableRow key={loginRecord.id} hover>
-                      <TableCell>{loginRecord.userAgent.browser}</TableCell>
-                      <TableCell>{loginRecord.ip}</TableCell>
-                      <TableCell>{loginRecord.location}</TableCell>
-                      <TableCell>{loginRecord.createdAt}</TableCell>
-                      <TableCell>{loginRecord.event}</TableCell>
+                      <TableCell>
+                        {`${loginRecord.userAgent.browser || `N/A`}`}
+                      </TableCell>
+                      <TableCell>{`${
+                        loginRecord.userAgent.version || `N/A`
+                      }`}</TableCell>
+                      <TableCell>{`${
+                        loginRecord.userAgent.platform || `N/A`
+                      }`}</TableCell>
+                      <TableCell>{`${
+                        loginRecord.userAgent.os || `N/A`
+                      }`}</TableCell>
+                      <TableCell>{`${loginRecord.ip || `N/A`}`}</TableCell>
+                      <TableCell>{`${
+                        loginRecord.location || `N/A`
+                      }`}</TableCell>
+                      <TableCell>{`${
+                        loginRecord.createdAt || `N/A`
+                      }`}</TableCell>
+                      <TableCell>{`${loginRecord.event || `N/A`}`}</TableCell>
                     </TableRow>
                   ))
                 ) : (
