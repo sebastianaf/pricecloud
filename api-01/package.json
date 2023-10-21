@@ -39,6 +39,7 @@
     "@nestjs/swagger": "^7.1.13",
     "@nestjs/typeorm": "^10.0.0",
     "@nestjs/websockets": "^10.2.7",
+    "axios": "^1.5.1",
     "bcrypt": "^5.1.1",
     "change-case": "^5.0.2",
     "class-transformer": "^0.5.1",
@@ -46,8 +47,10 @@
     "cookie-parser": "^1.4.6",
     "copyfiles": "^2.4.1",
     "cors": "^2.8.5",
+    "express-useragent": "^1.0.15",
     "joi": "^17.11.0",
     "jsonwebtoken": "^9.0.2",
+    "moment": "^2.29.4",
     "nodemailer": "^6.9.6",
     "passport": "^0.6.0",
     "passport-custom": "^1.1.1",
@@ -57,7 +60,8 @@
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
     "tsconfig-paths": "^4.2.0",
-    "typeorm": "^0.3.17"
+    "typeorm": "^0.3.17",
+    "typeorm-naming-strategies": "^4.1.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",

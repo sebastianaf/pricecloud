@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
 import { UserModule } from './user/user.module';
@@ -10,6 +10,7 @@ import { EmailModule } from './email/email.module';
 import { CommonModule } from './common/common.module';
 import config from './config';
 import validationSchema from './config/validation-schema';
+import { UserAgentMiddleware } from './auth/middlewares/user-agent.middleware';
 
 @Module({
   imports: [
@@ -30,4 +31,8 @@ import validationSchema from './config/validation-schema';
   providers: [],
   exports: [],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(UserAgentMiddleware).forRoutes('*');
+  }
+}

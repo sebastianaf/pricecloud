@@ -6,8 +6,11 @@ import {
   Param,
   ConflictException,
   Patch,
+  Req,
+  Request,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import axios from 'axios';
 
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -17,6 +20,9 @@ import { RecoveryDto } from './dto/recovery.dto';
 import { PasswordResetDto } from './dto/password-reset.dto';
 import { User } from './entities/user.entity';
 import { GetUser } from '../auth/decorators/get-user.decorator';
+import { CommonService } from '../common/common.service';
+import { IpInfo } from '../common/decorators/get-ip-info.decorator';
+import { IpInfoInterface } from '../common/interfaces/ip-info.interface';
 
 @ApiTags(`user`)
 @Controller('user')
@@ -26,7 +32,10 @@ import { GetUser } from '../auth/decorators/get-user.decorator';
   },
 })
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly commonService: CommonService,
+  ) {}
 
   @Post()
   @ApiOperation({ summary: `Create users` })
@@ -34,8 +43,11 @@ export class UserController {
     status: 200,
     description: `Se ha enviado un correo de verificación a tu email.`,
   })
-  createUser(@Body() createUserDto: CreateUserDto) {
-    return this.userService.createUser(createUserDto);
+  async createUser(
+    @Body() createUserDto: CreateUserDto,
+    @IpInfo() ipInfo: IpInfoInterface,
+  ) {
+    return this.userService.createUser(createUserDto, ipInfo);
   }
 
   @Get()

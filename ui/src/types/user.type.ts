@@ -7,11 +7,12 @@ export type UserType = {
   secondLastName: string;
   loginCount: number;
   isEmailVerified: boolean;
-  country: string;
-  timezone: string;
-  active: boolean;
   role: {
     id: number;
     label: string;
   };
+  country: string;
+  timezone: string;
+  active: boolean;
+  language: string;
 };

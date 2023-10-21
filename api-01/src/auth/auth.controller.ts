@@ -1,17 +1,12 @@
-import {
-  Controller,
-  Post,
-  Body,
-  Get,
-  Res,
-  UnauthorizedException,
-  Req,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Post, Body, Get, Res, Req, Delete } from '@nestjs/common';
 import { ValidateUserDto } from './dto/validate-user.dto';
 import { AuthService } from './auth.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CookieOptions, Response, Request } from 'express';
+import { IpInfo } from '../common/decorators/get-ip-info.decorator';
+import { IpInfo2Interface } from '../common/interfaces/ip-info.interface';
+import { GetUser } from './decorators/get-user.decorator';
+import { User } from '../user/entities/user.entity';
 
 @ApiTags(`auth`)
 @Controller('auth')
@@ -45,11 +40,14 @@ export class AuthController {
   }
 
   @Post()
+  @ApiOperation({ summary: `Create user's token from user password auth` })
   async validateUser(
     @Body() validateUser: ValidateUserDto,
     @Res() response: Response,
+    @IpInfo()
+    ipInfo: IpInfo2Interface,
   ) {
-    const { token, user } = await this.authService.auth(validateUser);
+    const { token, user } = await this.authService.auth(validateUser, ipInfo);
 
     const cookieOptions: CookieOptions = {
       httpOnly: this.sameSite === `none` ? false : true,
@@ -65,6 +63,7 @@ export class AuthController {
   }
 
   @Get()
+  @ApiOperation({ summary: `Check user's token` })
   async validateToken(@Req() req: Request, @Res() response: Response) {
     if (req.cookies.token) {
       const user = await this.authService.validateToken(req.cookies.token);
@@ -75,11 +74,18 @@ export class AuthController {
   }
 
   @Delete()
+  @ApiOperation({ summary: `Delete user's cookie encrypt token` })
   logout(@Res() response: Response) {
     response.cookie('token', null, {
       domain: process.env.API_COOKIE_DOMAIN,
       expires: new Date(0),
     });
     response.send({ message: '¡Vuelve pronto!' });
+  }
+
+  @Get(`login`)
+  @ApiOperation({ summary: `Get login info from a user` })
+  findAllLogin(@GetUser() user: User) {
+    return this.authService.findAllLogin(user);
   }
 }

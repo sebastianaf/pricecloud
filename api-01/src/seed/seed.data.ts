@@ -20,6 +20,9 @@ export const userSeed: Partial<User>[] = [
     isEmailVerified: true,
     createdAt: undefined,
     updatedAt: undefined,
+    active: true,
+    country: 'CO',
+    timezone: 'America/Bogota',
   },
 ];
 
@@ -65,11 +68,11 @@ export const viewSeed: Partial<View>[] = [
 export const roleSeed: Partial<Role>[] = [
   {
     id: RoleInterface.admin,
-    label: 'Administrador',
+    label: 'Admin',
   },
   {
     id: RoleInterface.user,
-    label: 'Usuario de consultas',
+    label: 'Viewer',
   },
 ];
 

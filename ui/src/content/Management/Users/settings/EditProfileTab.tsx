@@ -97,10 +97,10 @@ function EditProfileTab() {
                 </Grid>
                 <Grid item xs={12} sm={8} md={9}>
                   <Box sx={{ maxWidth: { xs: 'auto', sm: 300 } }}>
-                    {user?.country ? (
-                      <b>
-                        <Text color="black">{user?.role?.label}</Text>
-                      </b>
+                    {user ? (
+                      <Text color="black">
+                        <b>{`${user?.country || `N/D`}`.toUpperCase()}</b>
+                      </Text>
                     ) : (
                       <Text color="black">
                         <b>N/D</b>
@@ -143,7 +143,7 @@ function EditProfileTab() {
                   </Box>
                 </Grid>
                 <Grid item xs={12} sm={8} md={9}>
-                  {user?.timezone ? (
+                  {user ? (
                     <Text color="black">
                       <b>{user?.timezone}</b>
                     </Text>

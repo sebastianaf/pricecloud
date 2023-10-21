@@ -1,5 +1,6 @@
 import { DataSource } from 'typeorm';
 require('dotenv').config();
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
@@ -14,6 +15,7 @@ export const AppDataSource = new DataSource({
   //synchronize: process.env.ENV === 'prod' ? false : true,
   synchronize: false,
   logging: true,
+  namingStrategy: new SnakeNamingStrategy(),
 });
 
 AppDataSource.initialize()

@@ -12,15 +12,15 @@ import {
 import { EncryptionLowerCaseTransformer } from '../../auth/transformer/encryption-lowercase.transformer';
 import { EncryptionTransformer } from '../../auth/transformer/encryption.transformer';
 import { Role } from '../../auth/entities/role.entity';
-import { UserLogin } from './user-login.entity';
+import { Login } from '../../auth/entities/login.entity';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @OneToMany(() => UserLogin, (userLogin) => userLogin.user)
-  userLogins: UserLogin[];
+  @OneToMany(() => Login, (login) => login.user)
+  logins: Login[];
 
   @ApiProperty({ description: `User's role` })
   @ManyToOne(() => Role, (role) => role.users, { nullable: false })
@@ -64,6 +64,22 @@ export class User {
   @ApiProperty({ description: `User's email verification status` })
   @Column({ default: false })
   isEmailVerified: boolean;
+
+  @ApiProperty({ description: `User's ISO2 country code` })
+  @Column({ nullable: true, transformer: EncryptionTransformer })
+  country: string;
+
+  @ApiProperty({ description: `User's timezone` })
+  @Column({ nullable: true, transformer: EncryptionTransformer })
+  timezone: string;
+
+  @ApiProperty({ description: `User's account status is enable` })
+  @Column({ default: true })
+  active: boolean;
+
+  @ApiProperty({ description: `User's language` })
+  @Column({ default: 'es' })
+  language: string;
 
   @CreateDateColumn({
     type: 'timestamptz',
