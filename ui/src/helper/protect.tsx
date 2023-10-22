@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { NextPageWithLayout } from '../../pages/_app';
 import { useAuth } from '../contexts/AuthContext';
-import { ro } from 'date-fns/locale';
 import paths from './paths';
 import { useRouter } from 'next/router';
 
-const withAuth = (WrappedComponent: any) => {
+export const protect = (WrappedComponent: any) => {
   const AuthComponent: NextPageWithLayout = (props) => {
     const [isClient, setIsClient] = useState(false);
     const { check, isAuth } = useAuth();
@@ -35,5 +34,3 @@ const withAuth = (WrappedComponent: any) => {
 
   return AuthComponent;
 };
-
-export default withAuth;

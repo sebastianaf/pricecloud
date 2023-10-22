@@ -10,6 +10,9 @@ const paths = {
       passwordReset: `user/password-reset`,
       recovery: `user/recovery`,
       profile: `user/profile`
+    },
+    notification: {
+      root: `notification`
     }
   },
   web: {

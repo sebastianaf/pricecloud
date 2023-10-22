@@ -18,6 +18,7 @@ import Text from '@/components/Text';
 import Label from '@/components/Label';
 import { useAuth } from '../../../../contexts/AuthContext';
 import { InfoOutlined } from '@mui/icons-material';
+import { protect } from '../../../../helper/protect';
 
 function EditProfileTab() {
   const { user, getUser } = useAuth();
@@ -229,4 +230,4 @@ function EditProfileTab() {
   );
 }
 
-export default EditProfileTab;
+export default protect(EditProfileTab);
