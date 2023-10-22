@@ -8,13 +8,13 @@ import { Protect } from '../auth/decorators/protect.decorator';
 import { ViewInterface } from '../auth/interfaces/view.interface';
 import { GetUser } from '../auth/decorators/get-user.decorator';
 import { User } from '../user/entities/user.entity';
-import { defaultNotificationStatus } from './interfaces/notification-type.interface';
+import { defaultNotificationStatus } from './interfaces/notification-status-type.interface';
 
 @Controller('notification')
 export class NotificationController {
   constructor(private readonly notificationService: NotificationService) {}
 
-  @Get()
+  @Get(`status`)
   @ApiOperation({ summary: `Get user's notifications` })
   @ApiResponse({
     status: 200,
@@ -24,10 +24,10 @@ export class NotificationController {
   })
   @Protect([ViewInterface.profile])
   findAll(@GetUser() user: User) {
-    return this.notificationService.findAll(user);
+    return this.notificationService.findOneStatus(user);
   }
 
-  @Put()
+  @Put(`status`)
   @ApiOperation({ summary: `Update user's notifications` })
   @ApiResponse({
     status: 201,
@@ -42,6 +42,6 @@ export class NotificationController {
     @Body() updateNotificationDto: UpdateNotificationDto,
     @GetUser() user: User,
   ) {
-    return this.notificationService.update(updateNotificationDto, user);
+    return this.notificationService.updateStatus(updateNotificationDto, user);
   }
 }

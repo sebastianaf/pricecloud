@@ -9,10 +9,10 @@ import {
   Unique,
 } from 'typeorm';
 import { User } from '../../user/entities/user.entity';
-import { NotificationTypeInterface } from '../interfaces/notification-type.interface';
+import { NotificationStatusTypeInterface } from '../interfaces/notification-status-type.interface';
 
 @Entity()
-@Unique(['user', 'notificationType'])
+@Unique(['user', 'notificationStatusType'])
 export class NotificationStatus {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -21,12 +21,12 @@ export class NotificationStatus {
   @ManyToOne(() => User, (user) => user.notificationStatuses)
   user: User;
 
-  @ApiProperty({ description: `Notification's type` })
+  @ApiProperty({ description: `Notification's status type` })
   @Column({
     type: 'enum',
-    enum: NotificationTypeInterface,
+    enum: NotificationStatusTypeInterface,
   })
-  notificationType: NotificationTypeInterface;
+  notificationStatusType: NotificationStatusTypeInterface;
 
   @ApiProperty({ description: `Is notification active` })
   @Column({ default: true })

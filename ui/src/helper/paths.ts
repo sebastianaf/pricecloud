@@ -12,7 +12,8 @@ const paths = {
       profile: `user/profile`
     },
     notification: {
-      root: `notification`
+      root: `notification`,
+      status: `notification/status`
     }
   },
   web: {

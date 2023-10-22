@@ -33,7 +33,7 @@ function NotificationsTab() {
     try {
       setIsLoading(true);
       const response = await customAxios.get<NotificationStatus>(
-        paths.api.notification.root
+        paths.api.notification.status
       );
 
       setNotificationData(response.data);
@@ -48,7 +48,7 @@ function NotificationsTab() {
     active: boolean
   ) => {
     try {
-      await customAxios.put(paths.api.notification.root, {
+      await customAxios.put(paths.api.notification.status, {
         notificationType,
         active
       });
