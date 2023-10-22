@@ -18,6 +18,7 @@ import ThumbUpAltTwoToneIcon from '@mui/icons-material/ThumbUpAltTwoTone';
 import CommentTwoToneIcon from '@mui/icons-material/CommentTwoTone';
 import ShareTwoToneIcon from '@mui/icons-material/ShareTwoTone';
 import Text from '@/components/Text';
+import { protect } from '../../../../helper/protect';
 
 const CardActionsWrapper = styled(CardActions)(
   ({ theme }) => `
@@ -123,4 +124,4 @@ function ActivityTab() {
   );
 }
 
-export default ActivityTab;
+export default protect(ActivityTab);

@@ -10,7 +10,7 @@ import { styled } from '@mui/material/styles';
 import EditProfileTab from '@/content/Management/Users/settings/EditProfileTab';
 import NotificationsTab from '@/content/Management/Users/settings/NotificationsTab';
 import SecurityTab from '@/content/Management/Users/settings/SecurityTab';
-import withAuth from '../src/helper/withAuth';
+import { protect } from '../src/helper/protect';
 import { customAxios } from '../src/helper/customAxios';
 import paths from '../src/helper/paths';
 
@@ -79,4 +79,4 @@ function Profile() {
 
 Profile.getLayout = (page) => <SidebarLayout>{page}</SidebarLayout>;
 
-export default withAuth(Profile);
+export default protect(Profile);

@@ -13,12 +13,21 @@ import { EncryptionLowerCaseTransformer } from '../../auth/transformer/encryptio
 import { EncryptionTransformer } from '../../auth/transformer/encryption.transformer';
 import { Role } from '../../auth/entities/role.entity';
 import { Login } from '../../auth/entities/login.entity';
+import { NotificationStatus } from '../../notification/entities/notification-status.entity';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @ApiProperty({ description: `User's notifications statuses` })
+  @OneToMany(
+    () => NotificationStatus,
+    (notificationStatus) => notificationStatus.user,
+  )
+  notificationStatuses: NotificationStatus[];
+
+  @ApiProperty({ description: `User's logins` })
   @OneToMany(() => Login, (login) => login.user)
   logins: Login[];
 

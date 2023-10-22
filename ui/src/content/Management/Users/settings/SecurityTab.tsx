@@ -20,8 +20,8 @@ import {
   CircularProgress
 } from '@mui/material';
 
-import { format, subHours, subWeeks, subDays } from 'date-fns';
 import { useAuth } from '../../../../contexts/AuthContext';
+import { protect } from '../../../../helper/protect';
 
 function SecurityTab() {
   const [page, setPage] = useState(2);
@@ -152,4 +152,4 @@ function SecurityTab() {
   );
 }
 
-export default SecurityTab;
+export default protect(SecurityTab);
