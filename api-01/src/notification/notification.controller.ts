@@ -15,7 +15,7 @@ export class NotificationController {
   constructor(private readonly notificationService: NotificationService) {}
 
   @Get(`status`)
-  @ApiOperation({ summary: `Get user's notifications` })
+  @ApiOperation({ summary: `Get user's notifications status` })
   @ApiResponse({
     status: 200,
     schema: {

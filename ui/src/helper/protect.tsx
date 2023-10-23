@@ -13,8 +13,8 @@ export const protect = (WrappedComponent: any) => {
     useEffect(() => {
       setIsClient(true);
       if (isClient) {
-        const runCheck = async () => await check();
-        runCheck();
+        const handleCheck = async () => await check();
+        handleCheck();
       }
       if (!isAuth) {
         router.push(paths.web.login);

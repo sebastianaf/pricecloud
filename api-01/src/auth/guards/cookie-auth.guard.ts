@@ -6,9 +6,9 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Reflector } from '@nestjs/core';
+
 import { AuthService } from '../auth.service';
 import { RoleInterface } from '../interfaces/role.interface';
-import { log } from 'console';
 
 @Injectable()
 export class CookieAuthGuard extends AuthGuard('cookie') {

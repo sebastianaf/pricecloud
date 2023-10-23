@@ -14,6 +14,7 @@ import { EncryptionTransformer } from '../../auth/transformer/encryption.transfo
 import { Role } from '../../auth/entities/role.entity';
 import { Login } from '../../auth/entities/login.entity';
 import { NotificationStatus } from '../../notification/entities/notification-status.entity';
+import { AuthStatus } from '../../auth/entities/auth-status.entity';
 
 @Entity()
 export class User {
@@ -26,6 +27,13 @@ export class User {
     (notificationStatus) => notificationStatus.user,
   )
   notificationStatuses: NotificationStatus[];
+
+  @ApiProperty({ description: `User's auth statuses` })
+  @OneToMany(
+    () => AuthStatus,
+    (authStatus) => authStatus.user,
+  )
+  authStatuses: AuthStatus[];
 
   @ApiProperty({ description: `User's logins` })
   @OneToMany(() => Login, (login) => login.user)

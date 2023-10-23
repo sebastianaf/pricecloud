@@ -44,12 +44,12 @@ function NotificationsTab() {
   };
 
   const updateNotification = async (
-    notificationType: NotificationType,
+    notificationStatusType: NotificationType,
     active: boolean
   ) => {
     try {
       await customAxios.put(paths.api.notification.status, {
-        notificationType,
+        notificationStatusType,
         active
       });
     } catch (error) {}

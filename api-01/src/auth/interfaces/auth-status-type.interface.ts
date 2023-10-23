@@ -1,5 +1,5 @@
-export interface AuthStatusTypeInterface {
-  mfa: `mfa`;
+export enum AuthStatusTypeInterface {
+  mfa = `mfa`,
 }
 
 export interface AuthStatusInterface {

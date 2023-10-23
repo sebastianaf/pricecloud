@@ -23,7 +23,13 @@ import { CommonService } from '../common/common.service';
 import { Login } from './entities/login.entity';
 import { LoginEventInterface } from './interfaces/login-event.interface';
 import { IpInfo2Interface } from '../common/interfaces/ip-info.interface';
-
+import {
+  AuthStatusInterface,
+  AuthStatusTypeInterface,
+  defaultAuthStatus,
+} from './interfaces/auth-status-type.interface';
+import { AuthStatus } from './entities/auth-status.entity';
+import { UpdateAuthStatusDto } from './dto/update-auth-status.dto';
 
 @Injectable()
 export class AuthService {
@@ -34,6 +40,8 @@ export class AuthService {
     private readonly roleViewRepository: Repository<RoleView>,
     @InjectRepository(Login)
     private readonly loginRepository: Repository<Login>,
+    @InjectRepository(AuthStatus)
+    private readonly authStatusRepository: Repository<AuthStatus>,
 
     @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
@@ -149,9 +157,10 @@ export class AuthService {
 
   async findAllLogin(user: User) {
     const logins = await this.loginRepository.find({
-      where: { user },
+      where: { user: <any>{ id: user.id } },
       order: { createdAt: `DESC` },
     });
+
     return logins.map((login) => {
       const login2 = {
         ...login,
@@ -159,5 +168,42 @@ export class AuthService {
       };
       return login2;
     });
+  }
+
+  async findOneStatus(user: User): Promise<AuthStatusInterface> {
+    const authStatuses = await this.authStatusRepository.find({
+      where: { user: <any>{ id: user.id } },
+    });
+
+    const authStatus: AuthStatusInterface = defaultAuthStatus;
+
+    authStatuses.forEach((setting) => {
+      authStatus[setting.authStatusType] = setting.active;
+    });
+
+    return authStatus;
+  }
+
+  async updateStatus(updateAuthStatusDto: UpdateAuthStatusDto, user: User) {
+    const { authStatusType, active } = updateAuthStatusDto;
+
+    const existingAuthStatus = await this.authStatusRepository.findOne({
+      where: { user: <any>{ id: user.id }, authStatusType },
+    });
+
+    if (existingAuthStatus) {
+      existingAuthStatus.active = active;
+      await this.authStatusRepository.save(existingAuthStatus);
+    } else {
+      await this.authStatusRepository.save({
+        authStatusType,
+        active,
+        user,
+      });
+    }
+
+    return {
+      message: `Configuración aplicada exitosamente`,
+    };
   }
 }

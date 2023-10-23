@@ -2,7 +2,8 @@ const paths = {
   api: {
     auth: {
       root: `auth`,
-      login: `auth/login`
+      login: `auth/login`,
+      status: `auth/status`
     },
     user: {
       root: `user`,
