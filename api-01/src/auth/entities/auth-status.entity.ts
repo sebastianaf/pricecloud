@@ -9,26 +9,26 @@ import {
   Unique,
 } from 'typeorm';
 import { User } from '../../user/entities/user.entity';
-import { NotificationStatusTypeInterface } from '../interfaces/notification-status-type.interface';
+import { AuthStatusTypeInterface } from '../interfaces/auth-status-type.interface';
 
 @Entity()
-@Unique(['user', 'notificationStatusType'])
-export class NotificationStatus {
+@Unique(['user', 'authStatusType'])
+export class AuthStatus {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ApiProperty({ description: `User related with the notification status` })
-  @ManyToOne(() => User, (user) => user.notificationStatuses)
+  @ApiProperty({ description: `User related with the auth status` })
+  @ManyToOne(() => User, (user) => user.authStatuses)
   user: User;
 
-  @ApiProperty({ description: `Notification's status type` })
+  @ApiProperty({ description: `auth's status type` })
   @Column({
     type: 'enum',
-    enum: NotificationStatusTypeInterface,
+    enum: AuthStatusTypeInterface,
   })
-  notificationStatusType: NotificationStatusTypeInterface;
+  authStatusType: AuthStatusTypeInterface;
 
-  @ApiProperty({ description: `Is notification active` })
+  @ApiProperty({ description: `Is auth active` })
   @Column({ default: true })
   active: boolean;
 

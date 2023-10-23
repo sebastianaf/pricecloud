@@ -1,14 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsBoolean, IsEnum } from 'class-validator';
-import { NotificationTypeInterface } from '../interfaces/notification-type.interface';
+import { NotificationStatusTypeInterface } from '../interfaces/notification-status-type.interface';
 
 export class UpdateNotificationDto {
   @ApiProperty({
     description: `Notification type`,
-    enum: NotificationTypeInterface,
+    enum: NotificationStatusTypeInterface,
   })
-  @IsEnum(NotificationTypeInterface, { message: 'Invalid notification type' })
-  notificationType: NotificationTypeInterface;
+  @IsEnum(NotificationStatusTypeInterface, { message: 'Invalid notification type' })
+  notificationStatusType: NotificationStatusTypeInterface;
 
   @ApiProperty({ description: `Active status`, example: true })
   @IsBoolean({ message: 'Invalid active status' })

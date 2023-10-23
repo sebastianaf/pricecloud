@@ -2,7 +2,8 @@ const paths = {
   api: {
     auth: {
       root: `auth`,
-      login: `auth/login`
+      login: `auth/login`,
+      status: `auth/status`
     },
     user: {
       root: `user`,
@@ -12,7 +13,8 @@ const paths = {
       profile: `user/profile`
     },
     notification: {
-      root: `notification`
+      root: `notification`,
+      status: `notification/status`
     }
   },
   web: {

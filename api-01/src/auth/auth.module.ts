@@ -13,10 +13,11 @@ import { RoleView } from './entities/role-view.entity';
 import { Role } from './entities/role.entity';
 import { CommonModule } from '../common/common.module';
 import { Login } from './entities/login.entity';
+import { AuthStatus } from './entities/auth-status.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Role, RoleView, View, Login]),
+    TypeOrmModule.forFeature([Role, RoleView, View, Login, AuthStatus]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

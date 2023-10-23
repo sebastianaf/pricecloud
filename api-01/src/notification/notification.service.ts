@@ -7,7 +7,7 @@ import { User } from '../user/entities/user.entity';
 import {
   NotificationStatusInterface,
   defaultNotificationStatus,
-} from './interfaces/notification-type.interface';
+} from './interfaces/notification-status-type.interface';
 
 @Injectable()
 export class NotificationService {
@@ -16,7 +16,7 @@ export class NotificationService {
     private readonly notificationStatusRepository: Repository<NotificationStatus>,
   ) {}
 
-  async findAll(user: User): Promise<NotificationStatusInterface> {
+  async findOneStatus(user: User): Promise<NotificationStatusInterface> {
     const notificationStatuses = await this.notificationStatusRepository.find({
       where: { user: <any>{ id: user.id } },
     });
@@ -25,18 +25,18 @@ export class NotificationService {
       defaultNotificationStatus;
 
     notificationStatuses.forEach((setting) => {
-      notificationStatus[setting.notificationType] = setting.active;
+      notificationStatus[setting.notificationStatusType] = setting.active;
     });
 
     return notificationStatus;
   }
 
-  async update(updateNotificationDto: UpdateNotificationDto, user: User) {
-    const { notificationType, active } = updateNotificationDto;
+  async updateStatus(updateNotificationDto: UpdateNotificationDto, user: User) {
+    const { notificationStatusType, active } = updateNotificationDto;
 
     const existingNotification =
       await this.notificationStatusRepository.findOne({
-        where: { user: <any>{ id: user.id }, notificationType },
+        where: { user: <any>{ id: user.id }, notificationStatusType },
       });
 
     if (existingNotification) {
@@ -44,7 +44,7 @@ export class NotificationService {
       await this.notificationStatusRepository.save(existingNotification);
     } else {
       await this.notificationStatusRepository.save({
-        notificationType,
+        notificationStatusType,
         active,
         user,
       });

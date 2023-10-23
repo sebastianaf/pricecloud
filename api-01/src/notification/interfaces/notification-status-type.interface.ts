@@ -1,4 +1,4 @@
-export enum NotificationTypeInterface {
+export enum NotificationStatusTypeInterface {
   priceDbUpdated = 'priceDbUpdated',
   newsletter = 'newsletter',
 }

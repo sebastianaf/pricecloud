@@ -22,8 +22,59 @@ import {
 
 import { useAuth } from '../../../../contexts/AuthContext';
 import { protect } from '../../../../helper/protect';
+import { customAxios } from '../../../../helper/customAxios';
+import paths from '../../../../helper/paths';
+
+type AuthType = 'mfa';
+
+export interface AuthStatus {
+  mfa: boolean;
+}
 
 function SecurityTab() {
+  const [authData, setAuthData] = useState({
+    mfa: false
+  });
+  const [isLoading, setIsLoading] = useState(true);
+
+  const getAuthData = async () => {
+    try {
+      setIsLoading(true);
+      const response = await customAxios.get<AuthStatus>(paths.api.auth.status);
+
+      setAuthData(response.data);
+    } catch (error) {
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const updateAuth = async (authStatusType: AuthType, active: boolean) => {
+    try {
+      await customAxios.put(paths.api.auth.status, {
+        authStatusType,
+        active
+      });
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    getAuthData();
+  }, []);
+
+  const handleChange = async (
+    event: ChangeEvent<HTMLInputElement>,
+    authType: AuthType
+  ) => {
+    const { checked } = event.target;
+    setAuthData((prevData) => ({
+      ...prevData,
+      [authType]: checked
+    }));
+
+    await updateAuth(authType, checked);
+  };
+
   const [page, setPage] = useState(2);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const { loginData, getLoginData } = useAuth();
@@ -76,7 +127,13 @@ function SecurityTab() {
                 primary="Autenticación de dos factores"
                 secondary="Enviar PIN de verifición al correo electrónico."
               />
-              <Switch color="primary" />
+              <Switch
+                color="primary"
+                checked={authData?.mfa}
+                onChange={(event) => handleChange(event, 'mfa')}
+                disabled={isLoading}
+              />
+              {isLoading && <CircularProgress size={24} />}
             </ListItem>
           </List>
         </Card>
