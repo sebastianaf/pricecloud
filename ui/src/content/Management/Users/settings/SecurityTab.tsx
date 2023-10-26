@@ -24,6 +24,8 @@ import { useAuth } from '../../../../contexts/AuthContext';
 import { protect } from '../../../../helper/protect';
 import { customAxios } from '../../../../helper/customAxios';
 import paths from '../../../../helper/paths';
+import ChangePasswordModal from '../../../../components/ChangePasswordModal';
+import { useRouter } from 'next/router';
 
 type AuthType = 'mfa';
 
@@ -36,6 +38,8 @@ function SecurityTab() {
     mfa: false
   });
   const [isLoading, setIsLoading] = useState(true);
+  const [showPasswordChangeModal, setShowPasswordChangeModal] = useState(false);
+  const router = useRouter();
 
   const getAuthData = async () => {
     try {
@@ -97,115 +101,136 @@ function SecurityTab() {
     setPage(0);
   };
 
+  const handleChangeShowModal = () => {
+    setShowPasswordChangeModal(!showPasswordChangeModal);
+    router.push(`${paths.web.profile}?change-password=true`);
+  };
+
+  const handleCloseShowModal = () => {
+    setShowPasswordChangeModal(false);
+    router.push(`${paths.web.profile}`);
+  };
+
   return (
-    <Grid container spacing={3}>
-      <Grid item xs={12}>
-        <Card>
-          <List>
-            <ListItem sx={{ p: 3 }}>
-              <ListItemText
-                primaryTypographyProps={{ variant: 'h5', gutterBottom: true }}
-                secondaryTypographyProps={{
-                  variant: 'subtitle2',
-                  lineHeight: 1
-                }}
-                primary="Cambiar contraseña"
-                secondary="Se recomienda fijar una contraseña segura."
-              />
-              <Button size="large" variant="outlined">
-                Cambiar contraseña
-              </Button>
-            </ListItem>
-            <Divider component="li" />
-            <ListItem sx={{ p: 3 }}>
-              <ListItemText
-                primaryTypographyProps={{ variant: 'h5', gutterBottom: true }}
-                secondaryTypographyProps={{
-                  variant: 'subtitle2',
-                  lineHeight: 1
-                }}
-                primary="Autenticación de dos factores"
-                secondary="Enviar PIN de verifición al correo electrónico."
-              />
-              <Switch
-                color="primary"
-                checked={authData?.mfa}
-                onChange={(event) => handleChange(event, 'mfa')}
-                disabled={isLoading}
-              />
-              {isLoading && <CircularProgress size={24} />}
-            </ListItem>
-          </List>
-        </Card>
-      </Grid>
-      <Grid item xs={12}>
-        <Card>
-          <CardHeader
-            subheaderTypographyProps={{}}
-            titleTypographyProps={{}}
-            title="Inicios de sesión"
-            subheader="Actividad reciente de la cuenta"
-          />
-          <Divider />
-          <TableContainer>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Navegador</TableCell>
-                  <TableCell>Versión</TableCell>
-                  <TableCell>Plataforma</TableCell>
-                  <TableCell>OS</TableCell>
-                  <TableCell>Dirección IP</TableCell>
-                  <TableCell>Ubicación</TableCell>
-                  <TableCell>Ocurrencia</TableCell>
-                  <TableCell>Evento</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {loginData ? (
-                  loginData.map((loginRecord) => (
-                    <TableRow key={loginRecord.id} hover>
-                      <TableCell>
-                        {`${loginRecord.userAgent.browser || `N/A`}`}
-                      </TableCell>
-                      <TableCell>{`${
-                        loginRecord.userAgent.version || `N/A`
-                      }`}</TableCell>
-                      <TableCell>{`${
-                        loginRecord.userAgent.platform || `N/A`
-                      }`}</TableCell>
-                      <TableCell>{`${
-                        loginRecord.userAgent.os || `N/A`
-                      }`}</TableCell>
-                      <TableCell>{`${loginRecord.ip || `N/A`}`}</TableCell>
-                      <TableCell>{`${
-                        loginRecord.location || `N/A`
-                      }`}</TableCell>
-                      <TableCell>{`${
-                        loginRecord.createdAt || `N/A`
-                      }`}</TableCell>
-                      <TableCell>{`${loginRecord.event || `N/A`}`}</TableCell>
-                    </TableRow>
-                  ))
-                ) : (
-                  <CircularProgress />
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <Box p={2}>
-            <TablePagination
-              component="div"
-              count={100}
-              page={page}
-              onPageChange={handleChangePage}
-              rowsPerPage={rowsPerPage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
+    <>
+      <ChangePasswordModal
+        open={showPasswordChangeModal}
+        onClose={handleCloseShowModal}
+        key={`someBoredKey`}
+      />
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <Card>
+            <List>
+              <ListItem sx={{ p: 3 }}>
+                <ListItemText
+                  primaryTypographyProps={{ variant: 'h5', gutterBottom: true }}
+                  secondaryTypographyProps={{
+                    variant: 'subtitle2',
+                    lineHeight: 1
+                  }}
+                  primary="Cambiar contraseña"
+                  secondary="Se recomienda fijar una contraseña segura."
+                />
+                <Button
+                  size="large"
+                  variant="outlined"
+                  onClick={handleChangeShowModal}
+                >
+                  Cambiar contraseña
+                </Button>
+              </ListItem>
+              <Divider component="li" />
+              <ListItem sx={{ p: 3 }}>
+                <ListItemText
+                  primaryTypographyProps={{ variant: 'h5', gutterBottom: true }}
+                  secondaryTypographyProps={{
+                    variant: 'subtitle2',
+                    lineHeight: 1
+                  }}
+                  primary="Autenticación de dos factores"
+                  secondary="Enviar PIN de verifición al correo electrónico."
+                />
+                <Switch
+                  color="primary"
+                  checked={authData?.mfa}
+                  onChange={(event) => handleChange(event, 'mfa')}
+                  disabled={isLoading}
+                />
+                {isLoading && <CircularProgress size={24} />}
+              </ListItem>
+            </List>
+          </Card>
+        </Grid>
+        <Grid item xs={12}>
+          <Card>
+            <CardHeader
+              subheaderTypographyProps={{}}
+              titleTypographyProps={{}}
+              title="Inicios de sesión"
+              subheader="Actividad reciente de la cuenta"
             />
-          </Box>
-        </Card>
+            <Divider />
+            <TableContainer>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Navegador</TableCell>
+                    <TableCell>Versión</TableCell>
+                    <TableCell>Plataforma</TableCell>
+                    <TableCell>OS</TableCell>
+                    <TableCell>Dirección IP</TableCell>
+                    <TableCell>Ubicación</TableCell>
+                    <TableCell>Ocurrencia</TableCell>
+                    <TableCell>Evento</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {loginData ? (
+                    loginData.map((loginRecord) => (
+                      <TableRow key={loginRecord.id} hover>
+                        <TableCell>
+                          {`${loginRecord.userAgent.browser || `N/A`}`}
+                        </TableCell>
+                        <TableCell>{`${
+                          loginRecord.userAgent.version || `N/A`
+                        }`}</TableCell>
+                        <TableCell>{`${
+                          loginRecord.userAgent.platform || `N/A`
+                        }`}</TableCell>
+                        <TableCell>{`${
+                          loginRecord.userAgent.os || `N/A`
+                        }`}</TableCell>
+                        <TableCell>{`${loginRecord.ip || `N/A`}`}</TableCell>
+                        <TableCell>{`${
+                          loginRecord.location || `N/A`
+                        }`}</TableCell>
+                        <TableCell>{`${
+                          loginRecord.createdAt || `N/A`
+                        }`}</TableCell>
+                        <TableCell>{`${loginRecord.event || `N/A`}`}</TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <CircularProgress />
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <Box p={2}>
+              <TablePagination
+                component="div"
+                count={100}
+                page={page}
+                onPageChange={handleChangePage}
+                rowsPerPage={rowsPerPage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+              />
+            </Box>
+          </Card>
+        </Grid>
       </Grid>
-    </Grid>
+    </>
   );
 }
 

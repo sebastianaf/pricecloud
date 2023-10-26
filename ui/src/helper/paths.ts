@@ -3,7 +3,8 @@ const paths = {
     auth: {
       root: `auth`,
       login: `auth/login`,
-      status: `auth/status`
+      status: `auth/status`,
+      changePassword: `auth/change-password`
     },
     user: {
       root: `user`,

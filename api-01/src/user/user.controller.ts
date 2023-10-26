@@ -3,14 +3,10 @@ import {
   Get,
   Post,
   Body,
-  Param,
   ConflictException,
   Patch,
-  Req,
-  Request,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import axios from 'axios';
 
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -23,6 +19,7 @@ import { GetUser } from '../auth/decorators/get-user.decorator';
 import { CommonService } from '../common/common.service';
 import { IpInfo } from '../common/decorators/get-ip-info.decorator';
 import { IpInfoInterface } from '../common/interfaces/ip-info.interface';
+import { PasswordChangeDto } from '../auth/dto/password-change.dto';
 
 @ApiTags(`user`)
 @Controller('user')

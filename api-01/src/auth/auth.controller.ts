@@ -7,6 +7,7 @@ import {
   Req,
   Delete,
   Put,
+  Patch,
 } from '@nestjs/common';
 import { ValidateUserDto } from './dto/validate-user.dto';
 import { AuthService } from './auth.service';
@@ -21,6 +22,7 @@ import { defaultAuthStatus } from './interfaces/auth-status-type.interface';
 import { Protect } from './decorators/protect.decorator';
 import { ViewInterface } from './interfaces/view.interface';
 import { UpdateAuthStatusDto } from './dto/update-auth-status.dto';
+import { PasswordChangeDto } from './dto/password-change.dto';
 
 @ApiTags(`auth`)
 @Controller('auth')
@@ -153,5 +155,24 @@ export class AuthController {
     @GetUser() user: User,
   ) {
     return this.authService.updateStatus(updateAuthStatusDto, user);
+  }
+
+  @Patch(`change-password`)
+  @ApiOperation({ summary: `Change a user's password` })
+  @ApiResponse({
+    status: 201,
+    schema: {
+      example: {
+        title: `Contraseña actualizada`,
+        message: `Tu contraseña ha sido actualizada exitosamente`,
+      },
+    },
+  })
+  @Protect([ViewInterface.profile])
+  changePassword(
+    @Body() passwordChangeDto: PasswordChangeDto,
+    @GetUser() user: User,
+  ) {
+    return this.authService.changePassword(passwordChangeDto, user);
   }
 }

@@ -6,6 +6,7 @@ import {
   UnauthorizedException,
   GoneException,
   Logger,
+  ConflictException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as jwt from 'jsonwebtoken';
@@ -30,6 +31,8 @@ import {
 } from './interfaces/auth-status-type.interface';
 import { AuthStatus } from './entities/auth-status.entity';
 import { UpdateAuthStatusDto } from './dto/update-auth-status.dto';
+import { ChangePasswordDto } from './dto/check-password.dto';
+import { PasswordChangeDto } from './dto/password-change.dto';
 
 @Injectable()
 export class AuthService {
@@ -204,6 +207,42 @@ export class AuthService {
 
     return {
       message: `Configuración aplicada exitosamente`,
+    };
+  }
+
+  async checkPassword(changePasswordDto: ChangePasswordDto) {
+    const { password, user } = changePasswordDto;
+
+    const isPassword = bcrypt.compareSync(password, user.password);
+
+    if (!isPassword)
+      throw new UnauthorizedException(`La contraseña es incorrecta (ACKP-001)`);
+  }
+
+  async changePassword(passwordChangeDto: PasswordChangeDto, user: User) {
+    const { oldPassword, newPassword } = passwordChangeDto;
+
+    const user2 = await this.userRepository.findOne({
+      select: [`id`, `password`],
+      where: { id: user.id },
+    });
+
+    if (!user2)
+      throw new ConflictException(
+        `Error al restablecer la contraseña (ACGP-001)`,
+      );
+
+    await this.checkPassword({
+      password: oldPassword,
+      user: user2,
+    });
+
+    user2.password = bcrypt.hashSync(newPassword, 10);
+    await this.userRepository.save(user2);
+
+    return {
+      title: `Contraseña actualizada`,
+      message: `Tu contraseña ha sido actualizada exitosamente`,
     };
   }
 }
