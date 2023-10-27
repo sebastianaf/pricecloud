@@ -39,7 +39,16 @@ function SecurityTab() {
   });
   const [isLoading, setIsLoading] = useState(true);
   const [showPasswordChangeModal, setShowPasswordChangeModal] = useState(false);
+  const [page, setPage] = useState(2);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const { loginData, getLoginData } = useAuth();
   const router = useRouter();
+
+  useEffect(() => {
+    const handleGetLoginData = async () => await getLoginData();
+    handleGetLoginData();
+    getAuthData();
+  }, []);
 
   const getAuthData = async () => {
     try {
@@ -62,10 +71,6 @@ function SecurityTab() {
     } catch (error) {}
   };
 
-  useEffect(() => {
-    getAuthData();
-  }, []);
-
   const handleChange = async (
     event: ChangeEvent<HTMLInputElement>,
     authType: AuthType
@@ -78,14 +83,6 @@ function SecurityTab() {
 
     await updateAuth(authType, checked);
   };
-
-  const [page, setPage] = useState(2);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const { loginData, getLoginData } = useAuth();
-  useEffect(() => {
-    const handleGetLoginData = async () => await getLoginData();
-    handleGetLoginData();
-  }, []);
 
   const handleChangePage = (
     _event: MouseEvent<HTMLButtonElement> | null,
