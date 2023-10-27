@@ -39,8 +39,8 @@ function SecurityTab() {
   });
   const [isLoading, setIsLoading] = useState(true);
   const [showPasswordChangeModal, setShowPasswordChangeModal] = useState(false);
-  const [page, setPage] = useState(2);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const { loginData, getLoginData } = useAuth();
   const router = useRouter();
 
@@ -184,30 +184,37 @@ function SecurityTab() {
                 </TableHead>
                 <TableBody>
                   {loginData ? (
-                    loginData.map((loginRecord) => (
-                      <TableRow key={loginRecord.id} hover>
-                        <TableCell>
-                          {`${loginRecord.userAgent.browser || `N/A`}`}
-                        </TableCell>
-                        <TableCell>{`${
-                          loginRecord.userAgent.version || `N/A`
-                        }`}</TableCell>
-                        <TableCell>{`${
-                          loginRecord.userAgent.platform || `N/A`
-                        }`}</TableCell>
-                        <TableCell>{`${
-                          loginRecord.userAgent.os || `N/A`
-                        }`}</TableCell>
-                        <TableCell>{`${loginRecord.ip || `N/A`}`}</TableCell>
-                        <TableCell>{`${
-                          loginRecord.location || `N/A`
-                        }`}</TableCell>
-                        <TableCell>{`${
-                          loginRecord.createdAt || `N/A`
-                        }`}</TableCell>
-                        <TableCell>{`${loginRecord.event || `N/A`}`}</TableCell>
-                      </TableRow>
-                    ))
+                    loginData
+                      .slice(
+                        page * rowsPerPage,
+                        page * rowsPerPage + rowsPerPage
+                      )
+                      .map((loginRecord) => (
+                        <TableRow key={loginRecord.id} hover>
+                          <TableCell>
+                            {`${loginRecord.userAgent.browser || `N/A`}`}
+                          </TableCell>
+                          <TableCell>{`${
+                            loginRecord.userAgent.version || `N/A`
+                          }`}</TableCell>
+                          <TableCell>{`${
+                            loginRecord.userAgent.platform || `N/A`
+                          }`}</TableCell>
+                          <TableCell>{`${
+                            loginRecord.userAgent.os || `N/A`
+                          }`}</TableCell>
+                          <TableCell>{`${loginRecord.ip || `N/A`}`}</TableCell>
+                          <TableCell>{`${
+                            loginRecord.location || `N/A`
+                          }`}</TableCell>
+                          <TableCell>{`${
+                            loginRecord.createdAt || `N/A`
+                          }`}</TableCell>
+                          <TableCell>{`${
+                            loginRecord.event || `N/A`
+                          }`}</TableCell>
+                        </TableRow>
+                      ))
                   ) : (
                     <CircularProgress />
                   )}
@@ -217,11 +224,13 @@ function SecurityTab() {
             <Box p={2}>
               <TablePagination
                 component="div"
-                count={100}
+                count={loginData ? loginData.length : 0}
                 page={page}
                 onPageChange={handleChangePage}
                 rowsPerPage={rowsPerPage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
+                labelRowsPerPage="Registros por página"
+                rowsPerPageOptions={[5, 10, 25, 50]}
               />
             </Box>
           </Card>

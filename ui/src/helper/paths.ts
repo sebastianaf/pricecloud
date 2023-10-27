@@ -4,13 +4,13 @@ const paths = {
       root: `auth`,
       login: `auth/login`,
       status: `auth/status`,
-      changePassword: `auth/change-password`
+      changePassword: `auth/change-password`,
+      verifyEmail: `user/verify-email`,
+      passwordReset: `user/password-reset`,
+      recovery: `user/recovery`
     },
     user: {
       root: `user`,
-      verifyEmail: `user/verify-email`,
-      passwordReset: `user/password-reset`,
-      recovery: `user/recovery`,
       profile: `user/profile`
     },
     notification: {

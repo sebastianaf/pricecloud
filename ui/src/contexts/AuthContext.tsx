@@ -83,13 +83,13 @@ export function AuthProvider({ children }: Props) {
   };
 
   const recovery = async (data: RecoveryType) => {
-    await customAxios.post(paths.api.user.recovery, data);
+    await customAxios.post(paths.api.auth.recovery, data);
     router.push(`/`);
   };
 
   const passwordReset = async (data: PasswordResetType) => {
     const token = router.query.token;
-    await customAxios.patch(paths.api.user.passwordReset, {
+    await customAxios.patch(paths.api.auth.passwordReset, {
       token,
       password: data.password
     });

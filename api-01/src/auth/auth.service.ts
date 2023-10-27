@@ -33,6 +33,7 @@ import { AuthStatus } from './entities/auth-status.entity';
 import { UpdateAuthStatusDto } from './dto/update-auth-status.dto';
 import { ChangePasswordDto } from './dto/check-password.dto';
 import { PasswordChangeDto } from './dto/password-change.dto';
+import { PasswordResetDto } from './dto/password-reset.dto';
 
 @Injectable()
 export class AuthService {
@@ -207,6 +208,48 @@ export class AuthService {
 
     return {
       message: `Configuración aplicada exitosamente`,
+    };
+  }
+
+  async verifyEmail(uriEncodedEncryptedTempToken: string) {
+    const encryptedTempToken = decodeURIComponent(uriEncodedEncryptedTempToken);
+
+    const user = await this.validateToken(encryptedTempToken);
+
+    if (!user)
+      throw new ConflictException(`Error al verificar el email (USVE-001)`);
+
+    if (user.isEmailVerified)
+      throw new ConflictException(
+        `El email ya se encuentra verificado (USVE-002)`,
+      );
+
+    await this.userRepository.update(user.id, { isEmailVerified: true });
+
+    return { message: `Email verificado exitosamente` };
+  }
+
+  async resetPassword(passwordResetDto: PasswordResetDto) {
+    const { password, token } = passwordResetDto;
+
+    const uriEncodedEncryptedTempToken = token;
+
+    const encryptedTempToken = decodeURIComponent(uriEncodedEncryptedTempToken);
+
+    const user = await this.validateToken(encryptedTempToken);
+
+    if (!user)
+      throw new ConflictException(
+        `Error al restablecer la contraseña (USRP-001)`,
+      );
+
+    await this.userRepository.update(user.id, {
+      password: bcrypt.hashSync(password, 10),
+    });
+
+    return {
+      title: `Contraseña actualizada`,
+      message: `Tu contraseña ha sido actualizada exitosamente`,
     };
   }
 

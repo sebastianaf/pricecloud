@@ -23,6 +23,8 @@ import { Protect } from './decorators/protect.decorator';
 import { ViewInterface } from './interfaces/view.interface';
 import { UpdateAuthStatusDto } from './dto/update-auth-status.dto';
 import { PasswordChangeDto } from './dto/password-change.dto';
+import { PasswordResetDto } from './dto/password-reset.dto';
+import { RecoveryDto } from './dto/recovery.dto';
 
 @ApiTags(`auth`)
 @Controller('auth')
@@ -155,6 +157,50 @@ export class AuthController {
     @GetUser() user: User,
   ) {
     return this.authService.updateStatus(updateAuthStatusDto, user);
+  }
+
+  @Post(`verify-email`)
+  @ApiOperation({ summary: `Verify email` })
+  @ApiResponse({
+    status: 200,
+    schema: {
+      example: {
+        message: `Email verificado correctamente.`,
+      },
+    },
+  })
+  verifyEmail(@Body() body: { token: string }) {
+    return this.authService.verifyEmail(body.token);
+  }
+
+  @Patch(`password-reset`)
+  @ApiOperation({ summary: `Reset a user's password` })
+  @ApiResponse({
+    status: 200,
+    schema: {
+      example: {
+        title: `Contraseña actualizada`,
+        message: `Tu contraseña ha sido actualizada exitosamente`,
+      },
+    },
+  })
+  resetPassword(@Body() passwordResetDto: PasswordResetDto) {
+    return this.authService.resetPassword(passwordResetDto);
+  }
+
+  @Post(`recovery`)
+  @ApiOperation({ summary: `Recovery email account` })
+  @ApiResponse({
+    status: 200,
+    schema: {
+      example: {
+        title: `Restablecer contraseña`,
+        message: `Se envió un enlace de restablecimiento a su email`,
+      },
+    },
+  })
+  recovery(@Body() recoveryDto: RecoveryDto) {
+    return this.recovery(recoveryDto);
   }
 
   @Patch(`change-password`)

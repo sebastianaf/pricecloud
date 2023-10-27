@@ -32,7 +32,7 @@ function Verify() {
     if (!!router.query) {
       const { token } = router.query;
       if (token) {
-        customAxios.post(paths.api.user.verifyEmail, {
+        customAxios.post(paths.api.auth.verifyEmail, {
           token
         });
       }

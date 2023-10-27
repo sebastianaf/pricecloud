@@ -17,8 +17,8 @@ import { AuthService } from '../auth/auth.service';
 import { CommonService } from '../common/common.service';
 import { RoleInterface } from '../auth/interfaces/role.interface';
 import paths from '../config/paths';
-import { RecoveryDto } from './dto/recovery.dto';
-import { PasswordResetDto } from './dto/password-reset.dto';
+import { RecoveryDto } from '../auth/dto/recovery.dto';
+import { PasswordResetDto } from '../auth/dto/password-reset.dto';
 import { IpInfoInterface } from '../common/interfaces/ip-info.interface';
 
 @Injectable()
@@ -140,23 +140,7 @@ export class UserService {
     }
   }
 
-  async verifyEmail(uriEncodedEncryptedTempToken: string) {
-    const encryptedTempToken = decodeURIComponent(uriEncodedEncryptedTempToken);
 
-    const user = await this.authService.validateToken(encryptedTempToken);
-
-    if (!user)
-      throw new ConflictException(`Error al verificar el email (USVE-001)`);
-
-    if (user.isEmailVerified)
-      throw new ConflictException(
-        `El email ya se encuentra verificado (USVE-002)`,
-      );
-
-    await this.userRepository.update(user.id, { isEmailVerified: true });
-
-    return { message: `Email verificado exitosamente` };
-  }
 
   async recovery(recoveryDto: RecoveryDto) {
     const { email } = recoveryDto;
@@ -198,29 +182,5 @@ export class UserService {
         `Hubo un error al enviar el email de recuperación de cuenta, por favor intente de nuevo (USSRE-001)`,
       );
     }
-  }
-
-  async resetPassword(passwordResetDto: PasswordResetDto) {
-    const { password, token } = passwordResetDto;
-
-    const uriEncodedEncryptedTempToken = token;
-
-    const encryptedTempToken = decodeURIComponent(uriEncodedEncryptedTempToken);
-
-    const user = await this.authService.validateToken(encryptedTempToken);
-
-    if (!user)
-      throw new ConflictException(
-        `Error al restablecer la contraseña (USRP-001)`,
-      );
-
-    await this.userRepository.update(user.id, {
-      password: bcrypt.hashSync(password, 10),
-    });
-
-    return {
-      title: `Contraseña actualizada`,
-      message: `Tu contraseña ha sido actualizada exitosamente`,
-    };
   }
 }
