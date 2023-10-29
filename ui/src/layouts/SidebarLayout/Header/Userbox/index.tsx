@@ -139,8 +139,8 @@ function HeaderUserbox() {
             <Button
               color="primary"
               fullWidth
-              onClick={() => {
-                signout();
+              onClick={async () => {
+                await signout();
               }}
             >
               <LockOpenTwoToneIcon sx={{ mr: 1 }} />

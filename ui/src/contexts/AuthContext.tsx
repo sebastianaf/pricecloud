@@ -69,9 +69,9 @@ export function AuthProvider({ children }: Props) {
   const signin = async (data: LoginType) => {
     const response = await customAxios.post(paths.api.auth.root, data);
     if (response.status === 200) {
+      showSnackbar('Bienvenido a Priceclcoud', 'success');
       router.push(paths.web.dashboard.root);
       setIsAuth(true);
-      showSnackbar('Bienvenido a Priceclcoud', 'success');
     }
   };
 
