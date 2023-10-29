@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, useEffect } from 'react';
+import { ChangeEvent, useEffect } from 'react';
 import {
   Box,
   Typography,
@@ -11,65 +11,19 @@ import {
   Switch,
   CircularProgress
 } from '@mui/material';
-import { customAxios } from '../../../../helper/customAxios';
-import paths from '../../../../helper/paths';
 import { protect } from '../../../../helper/protect';
-
-type NotificationType = 'newsletter' | 'priceDbUpdated';
-
-export interface NotificationStatus {
-  priceDbUpdated: boolean;
-  newsletter: boolean;
-}
+import useSettings from '../../../../hooks/useSettings';
+import { NotificationSettingsType } from '../../../../types/settings.type';
 
 function NotificationsTab() {
-  const [notificationData, setNotificationData] = useState({
-    priceDbUpdated: false,
-    newsletter: false
-  });
-  const [isLoading, setIsLoading] = useState(true);
-
-  const getNotificationData = async () => {
-    try {
-      setIsLoading(true);
-      const response = await customAxios.get<NotificationStatus>(
-        paths.api.notification.status
-      );
-
-      setNotificationData(response.data);
-    } catch (error) {
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const updateNotification = async (
-    notificationStatusType: NotificationType,
-    active: boolean
-  ) => {
-    try {
-      await customAxios.put(paths.api.notification.status, {
-        notificationStatusType,
-        active
-      });
-    } catch (error) {}
-  };
-
-  useEffect(() => {
-    getNotificationData();
-  }, []);
+  const { isLoading, setSettings, settings } = useSettings();
 
   const handleChange = async (
     event: ChangeEvent<HTMLInputElement>,
-    notificationType: NotificationType
+    notificationSettingsType: NotificationSettingsType
   ) => {
     const { checked } = event.target;
-    setNotificationData((prevData) => ({
-      ...prevData,
-      [notificationType]: checked
-    }));
-
-    await updateNotification(notificationType, checked);
+    await setSettings({ [notificationSettingsType]: checked });
   };
 
   return (
@@ -95,8 +49,12 @@ function NotificationsTab() {
               />
               <Switch
                 color="primary"
-                checked={notificationData?.priceDbUpdated}
-                onChange={(event) => handleChange(event, 'priceDbUpdated')}
+                checked={
+                  settings ? settings.notificationEmailPriceDbUpdated : false
+                }
+                onChange={(event) =>
+                  handleChange(event, 'notificationEmailPriceDbUpdated')
+                }
                 disabled={isLoading}
               />
               {isLoading && <CircularProgress size={24} />}
@@ -114,8 +72,12 @@ function NotificationsTab() {
               />
               <Switch
                 color="primary"
-                checked={notificationData?.newsletter}
-                onChange={(event) => handleChange(event, 'newsletter')}
+                checked={
+                  settings ? settings.notificationEmailNewsletter : false
+                }
+                onChange={(event) =>
+                  handleChange(event, 'notificationEmailNewsletter')
+                }
                 disabled={isLoading}
               />
               {isLoading && <CircularProgress size={24} />}

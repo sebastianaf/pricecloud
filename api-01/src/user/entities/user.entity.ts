@@ -13,27 +13,23 @@ import { EncryptionLowerCaseTransformer } from '../../auth/transformer/encryptio
 import { EncryptionTransformer } from '../../auth/transformer/encryption.transformer';
 import { Role } from '../../auth/entities/role.entity';
 import { Login } from '../../auth/entities/login.entity';
-import { NotificationStatus } from '../../notification/entities/notification-status.entity';
-import { AuthStatus } from '../../auth/entities/auth-status.entity';
+import { VerificationCode } from '../../auth/entities/verification-code.entity';
+import {
+  SettingsInterface,
+  settingsDefault,
+} from '../interfaces/settings.interface';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ApiProperty({ description: `User's notifications statuses` })
+  @ApiProperty({ description: `User's verification codes` })
   @OneToMany(
-    () => NotificationStatus,
-    (notificationStatus) => notificationStatus.user,
+    () => VerificationCode,
+    (verificationCode) => verificationCode.user,
   )
-  notificationStatuses: NotificationStatus[];
-
-  @ApiProperty({ description: `User's auth statuses` })
-  @OneToMany(
-    () => AuthStatus,
-    (authStatus) => authStatus.user,
-  )
-  authStatuses: AuthStatus[];
+  verificationsCodes: VerificationCode[];
 
   @ApiProperty({ description: `User's logins` })
   @OneToMany(() => Login, (login) => login.user)
@@ -97,6 +93,10 @@ export class User {
   @ApiProperty({ description: `User's language` })
   @Column({ default: 'es' })
   language: string;
+
+  @ApiProperty({ description: `User's settings parameters` })
+  @Column({ type: 'json', nullable: true, default: settingsDefault })
+  settings: SettingsInterface;
 
   @CreateDateColumn({
     type: 'timestamptz',

@@ -22,66 +22,31 @@ import {
 
 import { useAuth } from '../../../../contexts/AuthContext';
 import { protect } from '../../../../helper/protect';
-import { customAxios } from '../../../../helper/customAxios';
 import paths from '../../../../helper/paths';
 import ChangePasswordModal from '../../../../components/ChangePasswordModal';
 import { useRouter } from 'next/router';
-
-type AuthType = 'mfa';
-
-export interface AuthStatus {
-  mfa: boolean;
-}
+import useSettings from '../../../../hooks/useSettings';
+import { AuthSettingsType } from '../../../../types/settings.type';
 
 function SecurityTab() {
-  const [authData, setAuthData] = useState({
-    mfa: false
-  });
-  const [isLoading, setIsLoading] = useState(true);
   const [showPasswordChangeModal, setShowPasswordChangeModal] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const { loginData, getLoginData } = useAuth();
   const router = useRouter();
+  const { isLoading, setSettings, settings } = useSettings();
 
   useEffect(() => {
     const handleGetLoginData = async () => await getLoginData();
     handleGetLoginData();
-    getAuthData();
   }, []);
-
-  const getAuthData = async () => {
-    try {
-      setIsLoading(true);
-      const response = await customAxios.get<AuthStatus>(paths.api.auth.status);
-
-      setAuthData(response.data);
-    } catch (error) {
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const updateAuth = async (authStatusType: AuthType, active: boolean) => {
-    try {
-      await customAxios.put(paths.api.auth.status, {
-        authStatusType,
-        active
-      });
-    } catch (error) {}
-  };
 
   const handleChange = async (
     event: ChangeEvent<HTMLInputElement>,
-    authType: AuthType
+    authSettingsType: AuthSettingsType
   ) => {
     const { checked } = event.target;
-    setAuthData((prevData) => ({
-      ...prevData,
-      [authType]: checked
-    }));
-
-    await updateAuth(authType, checked);
+    await setSettings({ [authSettingsType]: checked });
   };
 
   const handleChangePage = (
@@ -150,8 +115,8 @@ function SecurityTab() {
                 />
                 <Switch
                   color="primary"
-                  checked={authData?.mfa}
-                  onChange={(event) => handleChange(event, 'mfa')}
+                  checked={settings?.authMfa}
+                  onChange={(event) => handleChange(event, 'authMfa')}
                   disabled={isLoading}
                 />
                 {isLoading && <CircularProgress size={24} />}
@@ -175,7 +140,7 @@ function SecurityTab() {
                     <TableCell>Navegador</TableCell>
                     <TableCell>Versión</TableCell>
                     <TableCell>Plataforma</TableCell>
-                    <TableCell>OS</TableCell>
+                    <TableCell>SO</TableCell>
                     <TableCell>Dirección IP</TableCell>
                     <TableCell>Ubicación</TableCell>
                     <TableCell>Ocurrencia</TableCell>
