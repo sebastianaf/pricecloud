@@ -9,6 +9,7 @@ import { PasswordResetType } from '../types/password-reset.type';
 import { useSnackbar } from './SnackbarContext';
 import { UserType } from '../types/user.type';
 import { LoginDataType } from '../types/login-data.type';
+import { PasswordChangeType } from '../types/password-change.type';
 
 type AuthContextProps = {
   isAuth: boolean;
@@ -23,6 +24,7 @@ type AuthContextProps = {
   user: UserType | null;
   getLoginData: () => Promise<void>;
   loginData: LoginDataType[] | null;
+  passwordChange: (data: PasswordChangeType) => Promise<boolean>;
 };
 
 export const AuthContext = createContext<AuthContextProps | undefined>(
@@ -81,17 +83,28 @@ export function AuthProvider({ children }: Props) {
   };
 
   const recovery = async (data: RecoveryType) => {
-    await customAxios.post(paths.api.user.recovery, data);
+    await customAxios.post(paths.api.auth.recovery, data);
     router.push(`/`);
   };
 
   const passwordReset = async (data: PasswordResetType) => {
     const token = router.query.token;
-    await customAxios.patch(paths.api.user.passwordReset, {
+    await customAxios.patch(paths.api.auth.passwordReset, {
       token,
       password: data.password
     });
     router.push(paths.web.login);
+  };
+
+  const passwordChange = async (data: PasswordChangeType) => {
+    const response = await customAxios.patch(paths.api.auth.changePassword, {
+      oldPassword: data.oldPassword,
+      newPassword: data.newPassword
+    });
+    if (response.status === 201 || response.status === 200) {
+      return true;
+    }
+    return false;
   };
 
   const signout = async () => {
@@ -113,7 +126,8 @@ export function AuthProvider({ children }: Props) {
         getUser,
         user,
         getLoginData,
-        loginData
+        loginData,
+        passwordChange
       }}
     >
       {children}

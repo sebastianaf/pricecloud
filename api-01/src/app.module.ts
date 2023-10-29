@@ -11,7 +11,6 @@ import { CommonModule } from './common/common.module';
 import config from './config';
 import validationSchema from './config/validation-schema';
 import { UserAgentMiddleware } from './auth/middlewares/user-agent.middleware';
-import { NotificationModule } from './notification/notification.module';
 
 @Module({
   imports: [
@@ -27,7 +26,6 @@ import { NotificationModule } from './notification/notification.module';
     DatabaseModule,
     EmailModule,
     CommonModule,
-    NotificationModule,
   ],
   controllers: [],
   providers: [],

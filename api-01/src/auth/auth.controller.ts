@@ -7,6 +7,7 @@ import {
   Req,
   Delete,
   Put,
+  Patch,
 } from '@nestjs/common';
 import { ValidateUserDto } from './dto/validate-user.dto';
 import { AuthService } from './auth.service';
@@ -17,10 +18,11 @@ import { IpInfo2Interface } from '../common/interfaces/ip-info.interface';
 import { GetUser } from './decorators/get-user.decorator';
 import { User } from '../user/entities/user.entity';
 import { getAuth, getAuthLogin } from './examples/auth.example';
-import { defaultAuthStatus } from './interfaces/auth-status-type.interface';
 import { Protect } from './decorators/protect.decorator';
 import { ViewInterface } from './interfaces/view.interface';
-import { UpdateAuthStatusDto } from './dto/update-auth-status.dto';
+import { PasswordChangeDto } from './dto/password-change.dto';
+import { PasswordResetDto } from './dto/password-reset.dto';
+import { RecoveryDto } from './dto/recovery.dto';
 
 @ApiTags(`auth`)
 @Controller('auth')
@@ -124,34 +126,66 @@ export class AuthController {
     return this.authService.findAllLogin(user);
   }
 
-  @Get(`status`)
-  @ApiOperation({ summary: `Get user's setting's status` })
+  @Post(`verify-email`)
+  @ApiOperation({ summary: `Verify email` })
   @ApiResponse({
     status: 200,
     schema: {
-      example: defaultAuthStatus,
+      example: {
+        message: `Email verificado correctamente.`,
+      },
     },
   })
-  @Protect([ViewInterface.profile])
-  findOneStatus(@GetUser() user: User) {
-    return this.authService.findOneStatus(user);
+  verifyEmail(@Body() body: { token: string }) {
+    return this.authService.verifyEmail(body.token);
   }
 
-  @Put(`status`)
-  @ApiOperation({ summary: `Update user's auth status` })
+  @Patch(`password-reset`)
+  @ApiOperation({ summary: `Reset a user's password` })
+  @ApiResponse({
+    status: 200,
+    schema: {
+      example: {
+        title: `Contraseña actualizada`,
+        message: `Tu contraseña ha sido actualizada exitosamente`,
+      },
+    },
+  })
+  resetPassword(@Body() passwordResetDto: PasswordResetDto) {
+    return this.authService.resetPassword(passwordResetDto);
+  }
+
+  @Post(`recovery`)
+  @ApiOperation({ summary: `Recovery email account` })
+  @ApiResponse({
+    status: 200,
+    schema: {
+      example: {
+        title: `Restablecer contraseña`,
+        message: `Se envió un enlace de restablecimiento a su email`,
+      },
+    },
+  })
+  recovery(@Body() recoveryDto: RecoveryDto) {
+    return this.authService.recovery(recoveryDto);
+  }
+
+  @Patch(`change-password`)
+  @ApiOperation({ summary: `Change a user's password` })
   @ApiResponse({
     status: 201,
     schema: {
       example: {
-        message: `Configuración aplicada exitosamente`,
+        title: `Contraseña actualizada`,
+        message: `Tu contraseña ha sido actualizada exitosamente`,
       },
     },
   })
   @Protect([ViewInterface.profile])
-  update(
-    @Body() updateAuthStatusDto: UpdateAuthStatusDto,
+  changePassword(
+    @Body() passwordChangeDto: PasswordChangeDto,
     @GetUser() user: User,
   ) {
-    return this.authService.updateStatus(updateAuthStatusDto, user);
+    return this.authService.changePassword(passwordChangeDto, user);
   }
 }

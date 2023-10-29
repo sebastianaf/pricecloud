@@ -3,8 +3,6 @@ import {
   Injectable,
   Inject,
   forwardRef,
-  Logger,
-  GoneException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -17,9 +15,8 @@ import { AuthService } from '../auth/auth.service';
 import { CommonService } from '../common/common.service';
 import { RoleInterface } from '../auth/interfaces/role.interface';
 import paths from '../config/paths';
-import { RecoveryDto } from './dto/recovery.dto';
-import { PasswordResetDto } from './dto/password-reset.dto';
 import { IpInfoInterface } from '../common/interfaces/ip-info.interface';
+import { UpdateSettingsDto } from './dto/update-settings.dto';
 
 @Injectable()
 export class UserService {
@@ -31,8 +28,24 @@ export class UserService {
     private readonly authService: AuthService,
 
     private readonly emailService: EmailService,
-    private readonly commonService: CommonService,
   ) {}
+
+  async getUserFromAuth(email: string) {
+    return await this.userRepository.findOne({
+      where: { email },
+      select: [
+        `id`,
+        `email`,
+        `firstName`,
+        `secondName`,
+        `firstLastName`,
+        `secondLastName`,
+        `password`,
+        `loginCount`,
+        `isEmailVerified`,
+      ],
+    });
+  }
 
   async findOne(user: User) {
     const user2 = await this.userRepository.findOne({
@@ -56,6 +69,47 @@ export class UserService {
     });
 
     return user2;
+  }
+
+  async findOneSettings(user: User) {
+    const user2 = await this.userRepository.findOne({
+      where: { id: user.id },
+    });
+    const settings = user2.settings;
+    delete settings.auth.mfaFailedTries;
+
+    return settings;
+  }
+
+  async updateOneSettings(user: User, updateSettingsDto: UpdateSettingsDto) {
+    const {
+      authMfa,
+      notificationEmailNewsletter,
+      notificationEmailPriceDbUpdated,
+    } = updateSettingsDto;
+
+    const settings = await this.findOneSettings(user);
+
+    await this.userRepository.update(user.id, {
+      settings: {
+        auth: { mfa: authMfa !== undefined ? authMfa : settings.auth.mfa },
+        notification: {
+          email: {
+            newsletter:
+              notificationEmailNewsletter !== undefined
+                ? notificationEmailNewsletter
+                : settings.notification.email.newsletter,
+            priceDbUpdated:
+              notificationEmailPriceDbUpdated !== undefined
+                ? notificationEmailPriceDbUpdated
+                : settings.notification.email.priceDbUpdated,
+          },
+        },
+      },
+    });
+    return {
+      message: `Configuración actualizada.`,
+    };
   }
 
   async findAll() {
@@ -113,13 +167,9 @@ export class UserService {
     });
   }
 
-  private async createVerificationToken(user: User) {
-    const tempToken = await this.authService.createTempToken(user);
-    return await this.commonService.encrypt(tempToken);
-  }
-
   async sendVerificationEmail(user: User) {
-    const encryptedTempToken = await this.createVerificationToken(user);
+    const encryptedTempToken =
+      await this.authService.createVerificationToken(user);
     const uriEncodedEncryptedTempToken = encodeURIComponent(encryptedTempToken);
 
     const url = `https://${process.env.API_COOKIE_DOMAIN}${paths.web.verify}?token=${uriEncodedEncryptedTempToken}`;
@@ -140,46 +190,9 @@ export class UserService {
     }
   }
 
-  async verifyEmail(uriEncodedEncryptedTempToken: string) {
-    const encryptedTempToken = decodeURIComponent(uriEncodedEncryptedTempToken);
-
-    const user = await this.authService.validateToken(encryptedTempToken);
-
-    if (!user)
-      throw new ConflictException(`Error al verificar el email (USVE-001)`);
-
-    if (user.isEmailVerified)
-      throw new ConflictException(
-        `El email ya se encuentra verificado (USVE-002)`,
-      );
-
-    await this.userRepository.update(user.id, { isEmailVerified: true });
-
-    return { message: `Email verificado exitosamente` };
-  }
-
-  async recovery(recoveryDto: RecoveryDto) {
-    const { email } = recoveryDto;
-
-    const user = await this.userRepository.findOne({
-      where: { email },
-    });
-
-    if (!user)
-      throw new GoneException(
-        `Se envió un enlace de recuperación a su email (USR-001)`,
-      );
-
-    await this.sendRecoveryEmail(user);
-
-    return {
-      title: `Restablecer contraseña`,
-      message: `Se envió un enlace de restablecimiento a su email`,
-    };
-  }
-
   async sendRecoveryEmail(user: User) {
-    const encryptedTempToken = await this.createVerificationToken(user);
+    const encryptedTempToken =
+      await this.authService.createVerificationToken(user);
     const uriEncodedEncryptedTempToken = encodeURIComponent(encryptedTempToken);
 
     const url = `https://${process.env.API_COOKIE_DOMAIN}${paths.web.passwordReset}?token=${uriEncodedEncryptedTempToken}`;
@@ -198,29 +211,5 @@ export class UserService {
         `Hubo un error al enviar el email de recuperación de cuenta, por favor intente de nuevo (USSRE-001)`,
       );
     }
-  }
-
-  async resetPassword(passwordResetDto: PasswordResetDto) {
-    const { password, token } = passwordResetDto;
-
-    const uriEncodedEncryptedTempToken = token;
-
-    const encryptedTempToken = decodeURIComponent(uriEncodedEncryptedTempToken);
-
-    const user = await this.authService.validateToken(encryptedTempToken);
-
-    if (!user)
-      throw new ConflictException(
-        `Error al restablecer la contraseña (USRP-001)`,
-      );
-
-    await this.userRepository.update(user.id, {
-      password: bcrypt.hashSync(password, 10),
-    });
-
-    return {
-      title: `Contraseña actualizada`,
-      message: `Tu contraseña ha sido actualizada exitosamente`,
-    };
   }
 }

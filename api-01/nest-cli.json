@@ -5,9 +5,11 @@
   "compilerOptions": {
     "assets": [
       {
+        "watchAssets": true,
         "include": "**/*.svg"
       },
       {
+        "watchAssets": true,
         "include": "**/*.md"
       }
     ]

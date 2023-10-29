@@ -13,11 +13,11 @@ import { RoleView } from './entities/role-view.entity';
 import { Role } from './entities/role.entity';
 import { CommonModule } from '../common/common.module';
 import { Login } from './entities/login.entity';
-import { AuthStatus } from './entities/auth-status.entity';
+import { EmailModule } from '../email/email.module';
+import { VerificationCode } from './entities/verification-code.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Role, RoleView, View, Login, AuthStatus]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -30,11 +30,19 @@ import { AuthStatus } from './entities/auth-status.entity';
         };
       },
     }),
+    TypeOrmModule.forFeature([
+      Role,
+      RoleView,
+      View,
+      Login,
+      VerificationCode,
+    ]),
     forwardRef(() => UserModule),
     PassportModule,
     PassportModule.register({ defaultStrategy: 'cookie' }),
     forwardRef(() => UserModule),
     CommonModule,
+    EmailModule,
   ],
   providers: [CookieStrategy, AuthService],
   controllers: [AuthController],

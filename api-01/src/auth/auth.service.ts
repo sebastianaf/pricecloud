@@ -6,6 +6,7 @@ import {
   UnauthorizedException,
   GoneException,
   Logger,
+  ConflictException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as jwt from 'jsonwebtoken';
@@ -23,16 +24,18 @@ import { CommonService } from '../common/common.service';
 import { Login } from './entities/login.entity';
 import { LoginEventInterface } from './interfaces/login-event.interface';
 import { IpInfo2Interface } from '../common/interfaces/ip-info.interface';
-import {
-  AuthStatusInterface,
-  AuthStatusTypeInterface,
-  defaultAuthStatus,
-} from './interfaces/auth-status-type.interface';
-import { AuthStatus } from './entities/auth-status.entity';
-import { UpdateAuthStatusDto } from './dto/update-auth-status.dto';
+import { ChangePasswordDto } from './dto/check-password.dto';
+import { PasswordChangeDto } from './dto/password-change.dto';
+import { PasswordResetDto } from './dto/password-reset.dto';
+import { EmailService } from '../email/email.service';
+import { VerificationCode } from './entities/verification-code.entity';
+import paths from '../config/paths';
+import { RecoveryDto } from './dto/recovery.dto';
 
 @Injectable()
 export class AuthService {
+  private verificationCodeDurationLimit: number = 2;
+
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
@@ -40,14 +43,15 @@ export class AuthService {
     private readonly roleViewRepository: Repository<RoleView>,
     @InjectRepository(Login)
     private readonly loginRepository: Repository<Login>,
-    @InjectRepository(AuthStatus)
-    private readonly authStatusRepository: Repository<AuthStatus>,
+    @InjectRepository(VerificationCode)
+    private readonly verificationCodeRepository: Repository<VerificationCode>,
 
     @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
 
     private readonly jwtService: JwtService,
     private readonly commonService: CommonService,
+    private readonly emailService: EmailService,
   ) {}
 
   private generateToken(jwtPayloadDto: JwtPayloadDto) {
@@ -80,24 +84,7 @@ export class AuthService {
     return user;
   }
 
-  async auth(validateUserDTO: ValidateUserDto, ipInfo: IpInfo2Interface) {
-    const { password, email } = validateUserDTO;
-
-    const user = await this.userRepository.findOne({
-      where: { email },
-      select: [
-        `id`,
-        `email`,
-        `firstName`,
-        `secondName`,
-        `firstLastName`,
-        `secondLastName`,
-        `password`,
-        `loginCount`,
-        `isEmailVerified`,
-      ],
-    });
-
+  async validateAuth(user: User, password: string) {
     if (!user)
       throw new UnauthorizedException(
         `El correo electrónico o la contraseña son incorrectos (AVU-001)`,
@@ -116,14 +103,68 @@ export class AuthService {
         `Se ha enviado un nuevo email para verificar su correo (AVU-003)`,
       );
     }
+  }
+
+  async validateVerificationCode(
+    verificationCode: VerificationCode,
+    user: User,
+  ) {
+    /* if (user.mfaFailedTries >= 3)
+      throw new ConflictException(`Demasiados intentos fallidos. (VVC-003)`);
+ */
+    if (verificationCode.timesUsed > 1)
+      throw new ConflictException(
+        `El código de verificación ha sido usado. (VVC-002)`,
+      );
+
+    const currentTime = new Date();
+    const timeDifference =
+      (currentTime.getTime() - new Date(verificationCode.createdAt).getTime()) /
+      1000 /
+      60;
+
+    if (timeDifference > this.verificationCodeDurationLimit)
+      throw new ConflictException(
+        'El código de verificación ha expirado. (VVC-003)',
+      );
+  }
+
+  async createVerficationCode(user: User, code: string) {
+    const verificationCode = await this.verificationCodeRepository.findOne({
+      select: [`id`, 'timesUsed', 'code', 'createdAt'],
+      where: { user: <any>{ id: user.id } },
+      order: { createdAt: `DESC` },
+    });
+  }
+
+  async sendCode(user: User) {
+    await this.emailService.send({
+      subject: `Pricecloud | Código de verificación`,
+      body: `Su código es ...`,
+      to: [user.email],
+    });
+  }
+
+  async auth(validateUserDTO: ValidateUserDto, ipInfo: IpInfo2Interface) {
+    const { password, email } = validateUserDTO;
+
+    const user = await this.userService.getUserFromAuth(email);
+    await this.validateAuth(user, password);
+
+
+
+    /* if (user.mfa) {
+      await this.sendCode(user);
+      throw new GoneException(
+        `Se ha enviado un código de verificación a su correo electrónico`,
+      );
+    } */
 
     await this.createLogin(ipInfo, user);
-
     let token = this.generateToken({ id: user.id });
-
     token = await this.commonService.encrypt(token);
-
     delete user.password;
+
     return { token, user };
   }
 
@@ -170,40 +211,106 @@ export class AuthService {
     });
   }
 
-  async findOneStatus(user: User): Promise<AuthStatusInterface> {
-    const authStatuses = await this.authStatusRepository.find({
-      where: { user: <any>{ id: user.id } },
-    });
+  async verifyEmail(uriEncodedEncryptedTempToken: string) {
+    const encryptedTempToken = decodeURIComponent(uriEncodedEncryptedTempToken);
 
-    const authStatus: AuthStatusInterface = defaultAuthStatus;
+    const user = await this.validateToken(encryptedTempToken);
 
-    authStatuses.forEach((setting) => {
-      authStatus[setting.authStatusType] = setting.active;
-    });
+    if (!user)
+      throw new ConflictException(`Error al verificar el email (USVE-001)`);
 
-    return authStatus;
+    if (user.isEmailVerified)
+      throw new ConflictException(
+        `El email ya se encuentra verificado (USVE-002)`,
+      );
+
+    await this.userRepository.update(user.id, { isEmailVerified: true });
+
+    return { message: `Email verificado exitosamente` };
   }
 
-  async updateStatus(updateAuthStatusDto: UpdateAuthStatusDto, user: User) {
-    const { authStatusType, active } = updateAuthStatusDto;
+  async resetPassword(passwordResetDto: PasswordResetDto) {
+    const { password, token } = passwordResetDto;
 
-    const existingAuthStatus = await this.authStatusRepository.findOne({
-      where: { user: <any>{ id: user.id }, authStatusType },
+    const uriEncodedEncryptedTempToken = token;
+
+    const encryptedTempToken = decodeURIComponent(uriEncodedEncryptedTempToken);
+
+    const user = await this.validateToken(encryptedTempToken);
+
+    if (!user)
+      throw new ConflictException(
+        `Error al restablecer la contraseña (USRP-001)`,
+      );
+
+    await this.userRepository.update(user.id, {
+      password: bcrypt.hashSync(password, 10),
     });
 
-    if (existingAuthStatus) {
-      existingAuthStatus.active = active;
-      await this.authStatusRepository.save(existingAuthStatus);
-    } else {
-      await this.authStatusRepository.save({
-        authStatusType,
-        active,
-        user,
-      });
-    }
+    return {
+      title: `Contraseña actualizada`,
+      message: `Tu contraseña ha sido actualizada exitosamente`,
+    };
+  }
+
+  async checkPassword(changePasswordDto: ChangePasswordDto) {
+    const { password, user } = changePasswordDto;
+
+    const isPassword = bcrypt.compareSync(password, user.password);
+
+    if (!isPassword)
+      throw new UnauthorizedException(`La contraseña es incorrecta (ACKP-001)`);
+  }
+
+  async changePassword(passwordChangeDto: PasswordChangeDto, user: User) {
+    const { oldPassword, newPassword } = passwordChangeDto;
+
+    const user2 = await this.userRepository.findOne({
+      select: [`id`, `password`],
+      where: { id: user.id },
+    });
+
+    if (!user2)
+      throw new ConflictException(
+        `Error al restablecer la contraseña (ACGP-001)`,
+      );
+
+    await this.checkPassword({
+      password: oldPassword,
+      user: user2,
+    });
+
+    user2.password = bcrypt.hashSync(newPassword, 10);
+    await this.userRepository.save(user2);
 
     return {
-      message: `Configuración aplicada exitosamente`,
+      title: `Contraseña actualizada`,
+      message: `Tu contraseña ha sido actualizada exitosamente`,
     };
+  }
+
+  async recovery(recoveryDto: RecoveryDto) {
+    const { email } = recoveryDto;
+
+    const user = await this.userRepository.findOne({
+      where: { email },
+    });
+
+    if (!user)
+      throw new GoneException(
+        `Se envió un enlace de recuperación a su email (USR-001)`,
+      );
+
+    await this.userService.sendRecoveryEmail(user);
+
+    return {
+      title: `Restablecer contraseña`,
+      message: `Se envió un enlace de restablecimiento a su email`,
+    };
+  }
+
+  async createVerificationToken(user: User) {
+    const tempToken = await this.createTempToken(user);
+    return await this.commonService.encrypt(tempToken);
   }
 }
