@@ -135,18 +135,16 @@ function HeaderUserbox() {
         </List>
         <Divider />
         <Box sx={{ m: 1 }}>
-          <NextLink href={paths.web.profile}>
-            <Button
-              color="primary"
-              fullWidth
-              onClick={async () => {
-                await signout();
-              }}
-            >
-              <LockOpenTwoToneIcon sx={{ mr: 1 }} />
-              Cerrar sesión
-            </Button>
-          </NextLink>
+          <Button
+            color="primary"
+            fullWidth
+            onClick={async () => {
+              await signout();
+            }}
+          >
+            <LockOpenTwoToneIcon sx={{ mr: 1 }} />
+            Cerrar sesión
+          </Button>
         </Box>
       </Popover>
     </>
