@@ -1,36 +1,36 @@
 const paths = {
   api: {
     auth: {
-      root: `auth`,
-      login: `auth/login`,
-      changePassword: `auth/change-password`,
-      verifyEmail: `auth/verify-email`,
-      passwordReset: `auth/password-reset`,
-      recovery: `auth/recovery`
+      root: `/auth`,
+      login: `/auth/login`,
+      changePassword: `/auth/change-password`,
+      verifyEmail: `/auth/verify-email`,
+      passwordReset: `/auth/password-reset`,
+      recovery: `/auth/recovery`
     },
     user: {
-      root: `user`,
-      profile: `user/profile`,
-      settings: `user/settings`
+      root: `/user`,
+      profile: `/user/profile`,
+      settings: `/user/settings`
     }
   },
   web: {
-    login: `login`,
-    signup: `signup`,
+    login: `/login`,
+    signup: `/signup`,
     dashboard: {
-      root: `dashboard`,
-      explore: `dashboard/explore`,
-      compare: `dashboard/compare`
+      root: `/dashboard`,
+      explore: `/dashboard/explore`,
+      compare: `/dashboard/compare`
     },
     providers: {
-      explore: `providers/explore`,
-      settings: `providers/settings`
+      explore: `/providers/explore`,
+      settings: `/providers/settings`
     },
     deploy: {
-      aws: `deploy/aws`
+      aws: `/deploy/aws`
     },
-    recovery: `recovery`,
-    profile: `profile`
+    recovery: `/recovery`,
+    profile: `/profile`
   }
 };
 
