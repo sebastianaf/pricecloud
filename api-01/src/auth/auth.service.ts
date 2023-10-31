@@ -34,7 +34,7 @@ import { RecoveryDto } from './dto/recovery.dto';
 
 @Injectable()
 export class AuthService {
-  private verificationCodeDurationLimit: number = 2;
+  private verificationCodeDurationLimit: number = 1;
 
   constructor(
     @InjectRepository(User)
@@ -73,7 +73,14 @@ export class AuthService {
 
     const user = await this.userRepository.findOne({
       where: { id },
-      select: ['id', 'email', 'password', 'loginCount', 'isEmailVerified'],
+      select: [
+        'id',
+        'email',
+        'password',
+        'loginCount',
+        'isEmailVerified',
+        'settings',
+      ],
       relations: [`role`, `role.roleViews`, `role.roleViews.view`],
     });
 
@@ -105,16 +112,32 @@ export class AuthService {
     }
   }
 
-  async validateVerificationCode(
-    verificationCode: VerificationCode,
-    user: User,
-  ) {
-    /* if (user.mfaFailedTries >= 3)
-      throw new ConflictException(`Demasiados intentos fallidos. (VVC-003)`);
- */
+  async validateCode(user: User, code: string) {
+    const verificationCode = await this.verificationCodeRepository.findOne({
+      select: [`id`, 'timesUsed', 'code', 'createdAt'],
+      where: { user: <any>{ id: user.id } },
+      order: { createdAt: `DESC` },
+    });
+
+    if (!verificationCode) {
+      user.settings.auth.mfaFailedTries += 3;
+      await this.userRepository.save(user);
+      throw new ConflictException(
+        `Código de verificación incorrecto (AVC-001)`,
+      );
+    }
+
+    if (code !== verificationCode?.code) {
+      user.settings.auth.mfaFailedTries += 1;
+      await this.userRepository.save(user);
+      throw new ConflictException(
+        `Código de verificación incorrecto (AVC-002)`,
+      );
+    }
+
     if (verificationCode.timesUsed > 1)
       throw new ConflictException(
-        `El código de verificación ha sido usado. (VVC-002)`,
+        `El código de verificación ya ha sido usado. (AVC-003)`,
       );
 
     const currentTime = new Date();
@@ -125,40 +148,58 @@ export class AuthService {
 
     if (timeDifference > this.verificationCodeDurationLimit)
       throw new ConflictException(
-        'El código de verificación ha expirado. (VVC-003)',
+        'El código de verificación ha expirado. (AVC-004)',
       );
+
+    verificationCode.timesUsed += 1;
+    await this.verificationCodeRepository.save(verificationCode);
+
+    user.settings.auth.mfaFailedTries = 0;
+    await this.userRepository.save(user);
   }
 
-  async createVerficationCode(user: User, code: string) {
-    const verificationCode = await this.verificationCodeRepository.findOne({
-      select: [`id`, 'timesUsed', 'code', 'createdAt'],
-      where: { user: <any>{ id: user.id } },
-      order: { createdAt: `DESC` },
+  async addMfaFailedTries(user: User) {
+    user.settings.auth.mfaFailedTries += 1;
+    await this.userRepository.save(user);
+  }
+
+  async createCode(user: User) {
+    const code = `${Math.floor(1000 + Math.random() * 9000)}`;
+    await this.verificationCodeRepository.save({
+      user: <any>{ id: user.id },
+      code,
     });
+    return code;
   }
 
   async sendCode(user: User) {
+    if (user.settings.auth.mfaFailedTries >= 3)
+      throw new ConflictException(
+        `Demasiados intentos fallidos, por favor restablezca su contraseña. (VVC-001)`,
+      );
+
+    const code = await this.createCode(user);
     await this.emailService.send({
       subject: `Pricecloud | Código de verificación`,
-      body: `Su código es ...`,
+      body: `${code} es su código de verificación para iniciar sesión.`,
       to: [user.email],
     });
   }
 
   async auth(validateUserDTO: ValidateUserDto, ipInfo: IpInfo2Interface) {
-    const { password, email } = validateUserDTO;
+    const { password, email, code } = validateUserDTO;
 
     const user = await this.userService.getUserFromAuth(email);
     await this.validateAuth(user, password);
 
+    code && (await this.validateCode(user, code));
 
-
-    /* if (user.mfa) {
+    if (user?.settings?.auth?.mfa && !code) {
       await this.sendCode(user);
       throw new GoneException(
-        `Se ha enviado un código de verificación a su correo electrónico`,
+        `Por favor indique el código de verificación enviado a su email`,
       );
-    } */
+    }
 
     await this.createLogin(ipInfo, user);
     let token = this.generateToken({ id: user.id });
@@ -245,6 +286,10 @@ export class AuthService {
 
     await this.userRepository.update(user.id, {
       password: bcrypt.hashSync(password, 10),
+      settings: {
+        ...user.settings,
+        auth: { ...user.settings.auth, mfaFailedTries: 0 },
+      },
     });
 
     return {

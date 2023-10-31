@@ -9,4 +9,9 @@ export class ValidateUserDto {
   @ApiProperty({ description: `Password` })
   @IsString()
   password: string;
+
+  @ApiProperty({ description: `Multi factor authentication code` })
+  @IsString()
+  @IsOptional()
+  code?: string;
 }

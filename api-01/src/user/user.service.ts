@@ -43,6 +43,7 @@ export class UserService {
         `password`,
         `loginCount`,
         `isEmailVerified`,
+        `settings`,
       ],
     });
   }
