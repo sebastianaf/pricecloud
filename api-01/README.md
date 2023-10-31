@@ -1,7 +1,7 @@
 Available docs in [pricecloud-api-01][pricecloud-api-01]
 
 pricecloud-api is a cloud computing service provider princing tool app, it collects pricing data from some CCSP and show you the best way to take you next cloud decision.
-This is part of pricecloud app.
+This is part of pricecloud app. 
 
 ## Docs
 

@@ -10,11 +10,12 @@ import { useSnackbar } from './SnackbarContext';
 import { UserType } from '../types/user.type';
 import { LoginDataType } from '../types/login-data.type';
 import { PasswordChangeType } from '../types/password-change.type';
+import { HttpStatusCode } from 'axios';
 
 type AuthContextProps = {
   isAuth: boolean;
   setIsAuth: (isAuth: boolean) => void;
-  signin: (data: LoginType) => Promise<void>;
+  signin: (data: LoginType) => Promise<boolean>;
   signup: (data: SignupType) => Promise<void>;
   recovery: (data: RecoveryType) => Promise<void>;
   passwordReset: (data: PasswordResetType) => Promise<void>;
@@ -44,7 +45,7 @@ export function AuthProvider({ children }: Props) {
 
   const getUser = async (): Promise<void> => {
     const response = await customAxios.get<UserType>(paths.api.user.root);
-    if (response.status === 200) {
+    if (response.status === HttpStatusCode.Ok) {
       response.data && setUser(response.data);
     }
   };
@@ -53,7 +54,7 @@ export function AuthProvider({ children }: Props) {
     const response = await customAxios.get<LoginDataType[]>(
       paths.api.auth.login
     );
-    if (response.status === 200) {
+    if (response.status === HttpStatusCode.Ok) {
       response.data && setLoginData(response.data);
     }
   };
@@ -68,16 +69,23 @@ export function AuthProvider({ children }: Props) {
 
   const signin = async (data: LoginType) => {
     const response = await customAxios.post(paths.api.auth.root, data);
-    if (response.status === 200) {
+    if (response.status === HttpStatusCode.Ok) {
       setIsAuth(true);
       showSnackbar('Bienvenido a Priceclcoud', 'success');
       router.push(paths.web.dashboard.root);
+      return false;
     }
+
+    if (response.status === HttpStatusCode.Gone) {
+      return true;
+    }
+
+    return false;
   };
 
   const signup = async (data: SignupType) => {
     const response = await customAxios.post(paths.api.user.root, data);
-    if (response.status === 201) {
+    if (response.status === HttpStatusCode.Created) {
       router.push(paths.web.login);
     }
   };
@@ -101,7 +109,10 @@ export function AuthProvider({ children }: Props) {
       oldPassword: data.oldPassword,
       newPassword: data.newPassword
     });
-    if (response.status === 201 || response.status === 200) {
+    if (
+      response.status === HttpStatusCode.Created ||
+      response.status === HttpStatusCode.Ok
+    ) {
       return true;
     }
     return false;

@@ -23,6 +23,7 @@ import { emailRegex, passwordRegex } from '../src/helper/regex';
 import paths from '../src/helper/paths';
 import { useRouter } from 'next/router';
 import { useAuth } from '../src/contexts/AuthContext';
+import MultiFactorAuthenticationModal from '../src/components/MultiFactorAuthenticationModal';
 
 const MainContent = styled(Box)(
   () => `
@@ -46,9 +47,13 @@ const TopWrapper = styled(Box)(
 
 function Signin() {
   const [showPassword, setShowPassword] = useState(false);
+  const [
+    showMultiFactorAuthenticationModal,
+    setShowMultiFactorAuthenticationModal
+  ] = useState(false);
   const { signin, isAuth, check } = useAuth();
   const router = useRouter();
-
+  const [loginData, setLoginData] = useState<LoginType | null>(null);
   const {
     formState: { errors, isSubmitting },
     register,
@@ -62,7 +67,9 @@ function Signin() {
   }, [isAuth]);
 
   const onSubmit = handleSubmit(async (data: LoginType) => {
-    await signin(data);
+    setLoginData(data);
+    const mfa = await signin(data);
+    mfa && handleChangeShowModal();
   });
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -71,8 +78,23 @@ function Signin() {
     event.preventDefault();
   };
 
+  const handleChangeShowModal = () => {
+    setShowMultiFactorAuthenticationModal(!showMultiFactorAuthenticationModal);
+    router.push(`${paths.web.login}?mfa=true`);
+  };
+
+  const handleCloseShowModal = () => {
+    setShowMultiFactorAuthenticationModal(false);
+    router.push(`${paths.web.login}`);
+  };
+
   return (
     <>
+      <MultiFactorAuthenticationModal
+        onClose={handleCloseShowModal}
+        open={showMultiFactorAuthenticationModal}
+        loginData={loginData}
+      />
       <Head>
         <title>Pricecloud | Iniciar sesión</title>
       </Head>

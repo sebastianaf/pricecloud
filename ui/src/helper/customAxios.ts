@@ -24,6 +24,6 @@ customAxios.interceptors.response.use(
   },
   (error) => {
     processError(error);
-    return error;
+    return error.response;
   }
 );

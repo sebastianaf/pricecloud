@@ -21,12 +21,12 @@ export class VerificationCode {
   })
   user: User;
 
-  @ApiProperty({ description: `Six-digit verification code ` })
+  @ApiProperty({ description: `Four-digit verification code` })
   @Column()
-  code: number;
+  code: string;
 
   @ApiProperty({ description: `Verification code times used` })
-  @Column()
+  @Column({ default: 0 })
   timesUsed: number;
 
   @ApiProperty({ description: `Verification code id creation date` })
