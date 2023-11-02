@@ -1,4 +1,4 @@
-list_images_schema = {
+compute_list_images_schema = {
     'responses': {
         200: {
             'description': 'List of available images',

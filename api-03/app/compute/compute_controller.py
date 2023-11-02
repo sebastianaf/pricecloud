@@ -1,12 +1,12 @@
 from flask import Blueprint, jsonify, request
 from flasgger import swag_from
-from .lib_cloud_service import list_images
-from .lib_cloud_schema import list_images_schema
+from .compute_service import list_images
+from .compute_schema import list_images_schema
 
-lib_cloud_blueprint = Blueprint('lib_cloud', __name__)
+compute_blueprint = Blueprint('compute', __name__)
 
 
-@lib_cloud_blueprint.route('/list_images', methods=['POST'])
+@compute_blueprint.route('/list_images', methods=['POST'])
 @swag_from(list_images_schema)
 def list_images_endpoint():
     request_data = request.json

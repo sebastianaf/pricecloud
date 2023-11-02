@@ -6,6 +6,8 @@ services:
     image: "uv-pricecloud-${ENV}-api-01"
     restart: always
     environment:
+      ENV: ${ENV}
+      TZ: ${TZ}
       API_PORT: ${API_PORT}
       API_JWT_SECRET: ${API_JWT_SECRET}
       API_JWT_EXPIRATION_TIME: ${API_JWT_EXPIRATION_TIME}
@@ -24,8 +26,7 @@ services:
       EMAIL_PASSWORD: ${EMAIL_PASSWORD}
       COMMON_SECRET: ${COMMON_SECRET}
       COMMON_IV: ${COMMON_IV}
-      ENV: ${ENV}
-      TZ: ${TZ}
+      LIB_CLOUD_HOST: ${LIB_CLOUD_HOST}
     build:
       context: ./api-01
       dockerfile: Dockerfile
@@ -33,6 +34,7 @@ services:
         API_PORT: ${API_PORT}
     depends_on:
       - uv-pricecloud-db-01
+      - uv-pricecloud-api-03
     networks:
       - uv-pricecloud
 

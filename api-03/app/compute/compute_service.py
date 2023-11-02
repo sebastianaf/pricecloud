@@ -14,4 +14,5 @@ def list_images(access_id, secret_key):
             'name': image.name,
         }
         serialized_images.append(serialized_image)
-    return jsonify(serialized_images)
+    return jsonify(serialized_images)    
+
