@@ -94,6 +94,16 @@ services:
     networks:
       - uv-pricecloud
 
+  uv-pricecloud-api-03:
+    container_name: "uv-pricecloud-${ENV}-api-03"
+    restart: always
+    image: "uv-pricecloud-${ENV}-api-03"
+    build:
+      context: ./api-03
+      dockerfile: Dockerfile
+    networks:
+      - uv-pricecloud
+
   uv-pricecloud-ui:
     container_name: "uv-pricecloud-${ENV}-ui"
     image: "uv-pricecloud-${ENV}-ui"

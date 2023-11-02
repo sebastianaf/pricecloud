@@ -1,28 +1,14 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 from flasgger import swag_from
 from .lib_cloud_service import list_images
+from .lib_cloud_schema import list_images_schema
 
 lib_cloud_blueprint = Blueprint('lib_cloud', __name__)
 
-@lib_cloud_blueprint.route('/listImages', methods=['GET'])
-@swag_from({
-    'responses': {
-        200: {
-            'description': 'List of available images',
-            'schema': {
-                'type': 'array',
-                'items': {
-                    'type': 'object',
-                    'properties': {
-                        'id': {'type': 'string'},
-                        'name': {'type': 'string'},
-                        # ... otros campos de la imagen
-                    }
-                }
-            }
-        }
-    }
-})
+
+@lib_cloud_blueprint.route('/list_images', methods=['POST'])
+@swag_from(list_images_schema)
 def list_images_endpoint():
-    images = list_images()
-    return jsonify(images)
+    request_data = request.json
+    images = list_images(request_data['access_id'], request_data['secret_key'])
+    return images
