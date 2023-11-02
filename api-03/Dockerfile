@@ -1,16 +1,6 @@
-FROM python:3.8-slim-buster
-
+FROM python:3.11
 WORKDIR /app
-
-COPY requirements.txt .
-
-RUN pip install --no-cache-dir -r requirements.txt
-COPY . .
-
-ENV FLASK_APP=app.py
-
-ENV FLASK_RUN_HOST=0.0.0.0
-
+COPY . /app
+RUN pip install -r requirements.txt
 EXPOSE 8080
-
-CMD ["waitress-serve", "app:app"]
+CMD ["waitress-serve", "--port=8080", "run:app"]
