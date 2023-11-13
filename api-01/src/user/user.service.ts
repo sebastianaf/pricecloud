@@ -176,11 +176,11 @@ export class UserService {
     const url = `https://${process.env.API_COOKIE_DOMAIN}${paths.web.verify}?token=${uriEncodedEncryptedTempToken}`;
 
     const body = `
-      <p>Para verificar tu cuenta, por favor haz click en el siguiente enlace:</p>
-      <a href="${url}">Verificar cuenta</a>
+      <p>Para verificar tu email, por favor haz click en el siguiente enlace:</p>
+      <a href="${url}">Verificar email</a>
     `;
 
-    const subject = `Verificación de cuenta Pricecloud`;
+    const subject = `Pricecloud | Verificación de email`;
 
     try {
       await this.emailService.send({ body, subject, to: [user.email] });
@@ -203,7 +203,7 @@ export class UserService {
       <a href="${url}">Recupera tu contraseña</a>
     `;
 
-    const subject = `Recuperación de cuenta Pricecloud`;
+    const subject = `Pricecloud | Restablecimiento de contraseña`;
 
     try {
       await this.emailService.send({ body, subject, to: [user.email] });
