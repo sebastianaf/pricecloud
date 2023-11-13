@@ -1,5 +1,6 @@
 import { Injectable, ConflictException, Logger } from '@nestjs/common';
 import { createDecipheriv, createCipheriv } from 'crypto';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class CommonService {
@@ -56,6 +57,24 @@ export class CommonService {
       return text;
     } catch (error) {
       throw new ConflictException(`Error al desencriptar (CD-001)`);
+    }
+  }
+
+  async seed(
+    name: string,
+    data: any[],
+    repository: Repository<any>,
+    module: string,
+  ) {
+    Logger.debug(`${name} seeding`, module);
+    for (let i = 0; i < data.length; i++) {
+      const item = await repository.findOne({ where: { id: data[i].id } });
+      if (item) {
+        Logger.log(`${name} with id "${data[i].id}" already created`, module);
+      } else {
+        await repository.save({ ...data[i] });
+        Logger.verbose(`${name} with id "${data[i].id}" created`, module);
+      }
     }
   }
 }
