@@ -3,6 +3,7 @@ import {
   Injectable,
   Inject,
   forwardRef,
+  Logger,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -17,6 +18,7 @@ import { RoleInterface } from '../auth/interfaces/role.interface';
 import paths from '../config/paths';
 import { IpInfoInterface } from '../common/interfaces/ip-info.interface';
 import { UpdateSettingsDto } from './dto/update-settings.dto';
+import { userData } from './data/user.data';
 
 @Injectable()
 export class UserService {
@@ -211,6 +213,22 @@ export class UserService {
       throw new ConflictException(
         `Hubo un error al enviar el email de recuperación de cuenta, por favor intente de nuevo (USSRE-001)`,
       );
+    }
+  }
+
+  async seedUser() {
+    Logger.debug(`User seeding`, `UserModule`);
+    for (let i = 0; i < userData.length; i++) {
+      const user = await this.userRepository.findOne({
+        where: { email: userData[i].email },
+      });
+      if (user) {
+        Logger.log(`User "${userData[i].email}" already created`, `UserModule`);
+      } else {
+        userData[i].password = bcrypt.hashSync(userData[i].password, 10);
+        await this.userRepository.save(userData[i]);
+        Logger.verbose(`User "${userData[0].email}" created`, `UserModule`);
+      }
     }
   }
 }

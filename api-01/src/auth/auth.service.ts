@@ -31,6 +31,11 @@ import { EmailService } from '../email/email.service';
 import { VerificationCode } from './entities/verification-code.entity';
 import paths from '../config/paths';
 import { RecoveryDto } from './dto/recovery.dto';
+import { roleViewData } from './data/role-view.data';
+import { View } from './entities/view.entity';
+import { Role } from './entities/role.entity';
+import { viewData } from './data/view.data';
+import { roleData } from './data/role.data';
 
 @Injectable()
 export class AuthService {
@@ -39,6 +44,10 @@ export class AuthService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @InjectRepository(View)
+    private readonly viewRepository: Repository<View>,
+    @InjectRepository(Role)
+    private readonly roleRepository: Repository<Role>,
     @InjectRepository(RoleView)
     private readonly roleViewRepository: Repository<RoleView>,
     @InjectRepository(Login)
@@ -357,5 +366,39 @@ export class AuthService {
   async createVerificationToken(user: User) {
     const tempToken = await this.createTempToken(user);
     return await this.commonService.encrypt(tempToken);
+  }
+
+  async seedView() {
+    await this.commonService.seed(
+      `View`,
+      viewData,
+      this.viewRepository,
+      `AuthModule`,
+    );
+  }
+
+  async seedRole() {
+    await this.commonService.seed(
+      `Role`,
+      roleData,
+      this.roleRepository,
+      `AuthModule`,
+    );
+  }
+
+  async seedRoleView() {
+    Logger.debug(`RoleView seeding`, `AuthModule`);
+    for (let i = 0; i < roleViewData.length; i++) {
+      const item = await this.roleViewRepository.findOne({
+        where: { role: roleViewData[i].role, view: roleViewData[i].view },
+      });
+      const debugField = `"{${roleViewData[i].role.id},${roleViewData[i].view.id}}"`;
+      if (item) {
+        Logger.log(`RoleView ${debugField} already created`, `AuthModule`);
+      } else {
+        await this.roleViewRepository.save(roleViewData[i]);
+        Logger.verbose(`RoleView ${debugField} created`, `AuthModule`);
+      }
+    }
   }
 }

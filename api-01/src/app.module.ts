@@ -11,6 +11,8 @@ import { CommonModule } from './common/common.module';
 import config from './config';
 import validationSchema from './config/validation-schema';
 import { UserAgentMiddleware } from './auth/middlewares/user-agent.middleware';
+import { ComputeModule } from './compute/compute.module';
+import { StorageModule } from './storage/storage.module';
 
 @Module({
   imports: [
@@ -26,6 +28,8 @@ import { UserAgentMiddleware } from './auth/middlewares/user-agent.middleware';
     DatabaseModule,
     EmailModule,
     CommonModule,
+    ComputeModule,
+    StorageModule,
   ],
   controllers: [],
   providers: [],
