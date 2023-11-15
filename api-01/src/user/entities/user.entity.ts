@@ -18,6 +18,11 @@ import {
   SettingsInterface,
   settingsDefault,
 } from '../interfaces/settings.interface';
+import {
+  CredentialsInterface,
+  credentialsDefault,
+} from '../interfaces/credentials.interface';
+import { ObjectEncryptionTransformer } from '../../auth/transformer/object-encryption.transformer';
 
 @Entity()
 export class User {
@@ -98,12 +103,22 @@ export class User {
   @Column({ type: 'json', nullable: true, default: settingsDefault })
   settings: SettingsInterface;
 
+  @ApiProperty({ description: `User's deploy credentials` })
+  @Column({
+    type: 'text',
+    default: credentialsDefault,
+    transformer: ObjectEncryptionTransformer,
+  })
+  credentials: CredentialsInterface;
+
+  @ApiProperty({ description: `User's created at` })
   @CreateDateColumn({
     type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',
   })
   createdAt: Date;
 
+  @ApiProperty({ description: `User's updated at` })
   @UpdateDateColumn({
     type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',

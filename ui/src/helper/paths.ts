@@ -11,7 +11,8 @@ const paths = {
     user: {
       root: `/user`,
       profile: `/user/profile`,
-      settings: `/user/settings`
+      settings: `/user/settings`,
+      credentials: `/user/credentials`
     }
   },
   web: {

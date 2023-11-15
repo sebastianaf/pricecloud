@@ -19,6 +19,9 @@ import { IpInfo } from '../common/decorators/get-ip-info.decorator';
 import { IpInfoInterface } from '../common/interfaces/ip-info.interface';
 import { SettingsInterface } from './interfaces/settings.interface';
 import { UpdateSettingsDto } from './dto/update-settings.dto';
+import { UpdateCredentialsDto } from './dto/update-credentials.dto';
+import { credentialsResponseDefault } from './interfaces/credentials.interface';
+import { HttpStatusCode } from 'axios';
 
 @ApiTags(`user`)
 @Controller('user')
@@ -26,6 +29,7 @@ import { UpdateSettingsDto } from './dto/update-settings.dto';
   schema: {
     example: new ConflictException(`Error message`),
   },
+  status: HttpStatusCode.Conflict,
 })
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -65,5 +69,36 @@ export class UserController {
     @GetUser() user: User,
   ) {
     return this.userService.updateOneSettings(user, updateSettingsDto);
+  }
+
+  @Get(`credentials`)
+  @Protect([ViewInterface.providerSettings])
+  @ApiOperation({ summary: `Find user credentials object` })
+  @ApiResponse({
+    status: HttpStatusCode.Ok,
+    schema: {
+      example: credentialsResponseDefault,
+    },
+  })
+  findOneCredentialsResponse(@GetUser() user: User) {
+    return this.userService.findOneCredentialsResponse(user);
+  }
+
+  @Put(`credentials`)
+  @Protect([ViewInterface.providerSettings])
+  @ApiOperation({ summary: `Update user credentials object` })
+  @ApiResponse({
+    status: HttpStatusCode.Created,
+    schema: {
+      example: {
+        message: `Credenciales actualizadas.`,
+      },
+    },
+  })
+  updateOneCredentials(
+    @Body() updateCredentialsDto: UpdateCredentialsDto,
+    @GetUser() user: User,
+  ) {
+    return this.userService.updateOneCredentials(user, updateCredentialsDto);
   }
 }

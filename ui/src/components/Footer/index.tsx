@@ -17,7 +17,7 @@ function Footer() {
         justifyContent="space-between"
       >
         <Box>
-          <Typography variant="subtitle1">&copy; {new Date().toISOString().substring(0,4)} - Pricecloud</Typography>
+          <Typography variant="subtitle1">Pricecloud v1.0.0</Typography>
         </Box>
         <Typography
           sx={{

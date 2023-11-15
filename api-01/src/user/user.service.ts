@@ -19,6 +19,11 @@ import paths from '../config/paths';
 import { IpInfoInterface } from '../common/interfaces/ip-info.interface';
 import { UpdateSettingsDto } from './dto/update-settings.dto';
 import { userData } from './data/user.data';
+import { UpdateCredentialsDto } from './dto/update-credentials.dto';
+import {
+  CredentialsResponseInterface,
+  credentialsResponseDefault,
+} from './interfaces/credentials.interface';
 
 @Injectable()
 export class UserService {
@@ -82,6 +87,29 @@ export class UserService {
     delete settings.auth.mfaFailedTries;
 
     return settings;
+  }
+
+  async findOneCredentialsResponse(user: User) {
+    const user2 = await this.userRepository.findOne({
+      where: { id: user.id },
+    });
+
+    const credentalsResponse: CredentialsResponseInterface = {
+      aws: {
+        accessId: user2.credentials.aws.accessId !== null,
+        secretKey: user2.credentials.aws.secretKey !== null,
+      },
+    };
+
+    return credentalsResponse;
+  }
+
+  async findOneCredentials(user: User) {
+    const user2 = await this.userRepository.findOne({
+      where: { id: user.id },
+    });
+
+    return user2.credentials;
   }
 
   async updateOneSettings(user: User, updateSettingsDto: UpdateSettingsDto) {
@@ -230,5 +258,31 @@ export class UserService {
         Logger.verbose(`User "${userData[0].email}" created`, `UserModule`);
       }
     }
+  }
+
+  async updateOneCredentials(
+    user: User,
+    UpdateCredentialsDto: UpdateCredentialsDto,
+  ) {
+    const { awsAccessId, awsSecretKey } = UpdateCredentialsDto;
+
+    const credentials = await this.findOneCredentials(user);
+
+    await this.userRepository.update(user.id, {
+      credentials: {
+        aws: {
+          accessId:
+            awsAccessId !== undefined ? awsAccessId : credentials.aws.accessId,
+          secretKey:
+            awsSecretKey !== undefined
+              ? awsSecretKey
+              : credentials.aws.secretKey,
+        },
+      },
+    });
+
+    return {
+      message: `Credenciales actualizadas.`,
+    };
   }
 }

@@ -1,16 +1,14 @@
 import { useState, ChangeEvent } from 'react';
+import { FaAws } from 'react-icons/fa';
 import Head from 'next/head';
 import SidebarLayout from '@/layouts/SidebarLayout';
-import PageHeader from '@/content/Management/Users/settings/PageHeader';
+import PageHeader from '@/content/Management/Providers/settings/PageHeader';
 import PageTitleWrapper from '@/components/PageTitleWrapper';
-import { Container, Tabs, Tab, Grid } from '@mui/material';
+import { Container, Tabs, Tab, Grid, Box } from '@mui/material';
 import Footer from '@/components/Footer';
 import { styled } from '@mui/material/styles';
 
-//import ActivityTab from '@/content/Management/Users/settings/ActivityTab';
-import EditProfileTab from '@/content/Management/Users/settings/EditProfileTab';
-import NotificationsTab from '@/content/Management/Users/settings/NotificationsTab';
-import SecurityTab from '@/content/Management/Users/settings/SecurityTab';
+import EditProfileTab from '@/content/Management/Providers/settings/AmazonWebServicesSettingsTab';
 
 const TabsWrapper = styled(Tabs)(
   () => `
@@ -20,13 +18,19 @@ const TabsWrapper = styled(Tabs)(
 `
 );
 
-function ManagementUserSettings() {
-  const [currentTab, setCurrentTab] = useState<string>('info');
+function ProvidersSettings() {
+  const [currentTab, setCurrentTab] = useState<string>('aws');
 
   const tabs = [
-    { value: 'info', label: 'Información' },
-    { value: 'notifications', label: 'Notificaciones' },
-    { value: 'security', label: 'Seguridad' }
+    {
+      value: 'aws',
+      label: (
+        <Box display={`flex`} alignItems={`center`} gap={1}>
+          <FaAws size={28} />
+          Amazon Web Services
+        </Box>
+      )
+    }
   ];
 
   const handleTabsChange = (_event: ChangeEvent<{}>, value: string): void => {
@@ -36,7 +40,7 @@ function ManagementUserSettings() {
   return (
     <>
       <Head>
-        <title>User Settings - Applications</title>
+        <title>Proveedores | Configuración</title>
       </Head>
       <PageTitleWrapper>
         <PageHeader />
@@ -64,9 +68,7 @@ function ManagementUserSettings() {
             </TabsWrapper>
           </Grid>
           <Grid item xs={12}>
-            {currentTab === 'info' && <EditProfileTab />}
-            {currentTab === 'notifications' && <NotificationsTab />}
-            {currentTab === 'security' && <SecurityTab />}
+            {currentTab === 'aws' && <EditProfileTab />}
           </Grid>
         </Grid>
       </Container>
@@ -75,8 +77,6 @@ function ManagementUserSettings() {
   );
 }
 
-ManagementUserSettings.getLayout = (page) => (
-  <SidebarLayout>{page}</SidebarLayout>
-);
+ProvidersSettings.getLayout = (page) => <SidebarLayout>{page}</SidebarLayout>;
 
-export default ManagementUserSettings;
+export default ProvidersSettings;
