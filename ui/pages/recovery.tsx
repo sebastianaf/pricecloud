@@ -135,7 +135,7 @@ function Recovery() {
                   fullWidth
                   disabled={isSubmitting}
                 >
-                  {!isSubmitting ? <>Restablecer</> : <>Iniciando...</>}
+                  Restablecer
                 </LoadingButton>
               </Container>
             </form>

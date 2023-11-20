@@ -1,6 +1,5 @@
 import { useContext } from 'react';
 import { useRouter } from 'next/router';
-
 import {
   ListSubheader,
   alpha,
@@ -11,17 +10,17 @@ import {
   ListItem
 } from '@mui/material';
 import NextLink from 'next/link';
-import { SidebarContext } from 'src/contexts/SidebarContext';
-
 import Dashboard from '@mui/icons-material/Dashboard';
 import {
   ManageSearch,
   ManageAccounts,
   Settings,
   CloudQueue,
-  CloudSync,
   CompareArrows
 } from '@mui/icons-material';
+import { FaAws } from 'react-icons/fa';
+
+import { SidebarContext } from 'src/contexts/SidebarContext';
 import paths from '../../../../helper/paths';
 
 const MenuWrapper = styled(Box)(
@@ -319,7 +318,7 @@ function SidebarMenu() {
           component="div"
           subheader={
             <ListSubheader component="div" disableSticky>
-              Despliegue
+              Aprovisionamiento
             </ListSubheader>
           }
         >
@@ -334,9 +333,9 @@ function SidebarMenu() {
                     disableRipple
                     component="a"
                     onClick={closeSidebar}
-                    startIcon={<CloudSync />}
+                    startIcon={<FaAws />}
                   >
-                    AWS
+                    Amazon Web Services
                   </Button>
                 </NextLink>
               </ListItem>

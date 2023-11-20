@@ -11,8 +11,6 @@ import EditProfileTab from '@/content/Management/Users/settings/EditProfileTab';
 import NotificationsTab from '@/content/Management/Users/settings/NotificationsTab';
 import SecurityTab from '@/content/Management/Users/settings/SecurityTab';
 import { protect } from '../src/helper/protect';
-import { customAxios } from '../src/helper/customAxios';
-import paths from '../src/helper/paths';
 
 const TabsWrapper = styled(Tabs)(
   () => `

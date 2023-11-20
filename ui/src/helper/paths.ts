@@ -11,7 +11,16 @@ const paths = {
     user: {
       root: `/user`,
       profile: `/user/profile`,
-      settings: `/user/settings`
+      settings: `/user/settings`,
+      credentials: `/user/credentials`
+    },
+    compute: {
+      location: `/compute/location`,
+      node: `/compute/node`,
+      image: `/compute/image`
+    },
+    storage: {
+      root: `/storage`
     }
   },
   web: {

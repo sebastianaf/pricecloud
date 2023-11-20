@@ -22,9 +22,9 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "seed": "ts-node -r tsconfig-paths/register src/seed/main.ts",
     "migrations:generate": "ts-node ./src/database/migrate.ts",
-    "migrations:run": "npm run typeorm -- migration:run -d \"./src/database/data-source.ts\"",
-    "migrations:show": "npm run typeorm -- migration:show -d \"./src/database/data-source.ts\"",
-    "migrations:drop": "npm run typeorm -- migration:drop -d \"./src/database/data-source.ts\"",
+    "migrations:run": "npm run typeorm -- migration:run -d \"./src/database/datasource.ts\"",
+    "migrations:show": "npm run typeorm -- migration:show -d \"./src/database/datasource.ts\"",
+    "migrations:drop": "npm run typeorm -- migration:drop -d \"./src/database/datasource.ts\"",
     "typeorm": "typeorm-ts-node-commonjs"
   },
   "dependencies": {
@@ -39,7 +39,7 @@
     "@nestjs/swagger": "^7.1.13",
     "@nestjs/typeorm": "^10.0.0",
     "@nestjs/websockets": "^10.2.7",
-    "axios": "^1.5.1",
+    "axios": "^1.6.1",
     "bcrypt": "^5.1.1",
     "change-case": "^5.0.2",
     "class-transformer": "^0.5.1",

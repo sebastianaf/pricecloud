@@ -6,15 +6,14 @@ import { SeedModule } from './seed.module';
 async function bootstrap() {
   NestFactory.createApplicationContext(SeedModule)
     .then((appContext) => {
-      const logger = appContext.get(Logger);
       const seeder = appContext.get(SeedService);
       seeder
         .runSeed()
         .then(() => {
-          logger.log('Seed executed successfully', `SeedModule`);
+          Logger.log('Seed executed successfully');
         })
         .catch((error) => {
-          logger.error('Seed failed', error.stack, `SeedModule`);
+          Logger.error('Seed failed', error.message);
           throw error;
         })
         .finally(() => appContext.close());

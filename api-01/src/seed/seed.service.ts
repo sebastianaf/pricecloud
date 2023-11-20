@@ -13,6 +13,6 @@ export class SeedService {
     await this.authService.seedView();
     await this.authService.seedRole();
     await this.authService.seedRoleView();
-    await this.userService.seedUser();
+    await this.userService.seed();
   }
 }

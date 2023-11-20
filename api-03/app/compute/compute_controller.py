@@ -13,6 +13,7 @@ def ec2_locations():
     )
     return locations
 
+
 @compute_blueprint.route('/images', methods=['POST'])
 def ec2_images():
     request_data = request.json
@@ -32,6 +33,16 @@ def ec2_sizes():
         request_data['secret_key']
     )
     return sizes
+
+
+@compute_blueprint.route('/nodes', methods=['POST'])
+def ec2_nodes():
+    request_data = request.json
+    nodes = compute_service.list_nodes(
+        request_data['access_id'],
+        request_data['secret_key']
+    )
+    return nodes
 
 
 @compute_blueprint.route('/deploy', methods=['POST'])

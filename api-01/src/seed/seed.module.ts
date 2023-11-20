@@ -1,14 +1,13 @@
-import { Logger, Module } from '@nestjs/common';
-import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 
 import { SeedService } from './seed.service';
 import { UserModule } from '../user/user.module';
-import config from '../config';
-import environments from '../config/environments';
-import validationSchema from '../config/validation-schema';
+import config from '../common/config';
+import environments from '../common/environments';
+import validationSchema from '../common/validation-schema';
 import { AuthModule } from '../auth/auth.module';
-import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { DatabaseModule } from '../database/database.module';
 
 @Module({
   imports: [
@@ -18,28 +17,11 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
       isGlobal: true,
       validationSchema,
     }),
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => {
-        return {
-          type: 'postgres',
-          host: configService.get('DB_HOST'),
-          port: parseInt(configService.get('DB_PORT')),
-          database: configService.get('DB_NAME'),
-          username: configService.get('DB_USER'),
-          password: configService.get('DB_PASSWORD'),
-          autoLoadEntities: true,
-          entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-          synchronize: false,
-          namingStrategy: new SnakeNamingStrategy(),
-        };
-      },
-    }),
+    DatabaseModule,
     UserModule,
     AuthModule,
   ],
   controllers: [],
-  providers: [SeedService, Logger],
+  providers: [SeedService],
 })
 export class SeedModule {}

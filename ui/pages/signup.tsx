@@ -109,11 +109,11 @@ function Signup() {
               <Container maxWidth="sm">
                 <Box textAlign="center">
                   <TextField
+                    id="email"
                     autoComplete="email"
                     fullWidth
                     sx={{ mb: 2 }}
-                    className=""
-                    id="email"
+                    
                     variant="outlined"
                     type="email"
                     label="Email"

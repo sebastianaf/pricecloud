@@ -39,7 +39,7 @@ type Props = {
 export function AuthProvider({ children }: Props) {
   const [isAuth, setIsAuth] = useState(false);
   const [user, setUser] = useState<UserType | null>(null);
-  const [loginData, setLoginData] = useState<LoginDataType[] | null>(null);
+  const [loginData, setLoginData] = useState<LoginDataType[]>([]);
   const { showSnackbar } = useSnackbar();
   const router = useRouter();
 

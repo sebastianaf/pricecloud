@@ -20,5 +20,11 @@ export const userData: Partial<User>[] = [
     active: true,
     country: 'CO',
     timezone: 'America/Bogota',
+    credentials: {
+      aws: {
+        accessId: null,
+        secretKey: null,
+      },
+    },
   },
 ];

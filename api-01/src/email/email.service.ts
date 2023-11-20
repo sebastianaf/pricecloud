@@ -5,7 +5,7 @@ import * as nodemailer from 'nodemailer';
 import Mail from 'nodemailer/lib/mailer';
 
 import { SendEmailDto } from './dto/send-email.dto';
-import { EnvironmentsInterface } from '../common/interfaces/environment.interface';
+import { EnvironmentInterface } from '../common/interfaces/environment.interface';
 
 @Injectable()
 export class EmailService {
@@ -42,7 +42,7 @@ export class EmailService {
       from: `Pricecloud<${this.emailUser}>`,
       to,
       subject: `${
-        this.env !== EnvironmentsInterface.production
+        this.env !== EnvironmentInterface.production
           ? `${this.env.toUpperCase()} | `
           : ``
       }${subject}`,

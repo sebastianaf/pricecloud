@@ -1,8 +1,7 @@
-// migrate.ts
 import { spawn } from 'child_process';
 
 const migrationName: string = process.argv[2];
-const command: string = `npm run typeorm -- migration:generate -d "./src/database/data-source.ts" "./src/database/migrations/${migrationName}"`;
+const command: string = `npm run typeorm -- migration:generate -d "./src/database/datasource.ts" "./src/database/migrations/${migrationName}"`;
 
 const [cmd, ...args] = command.split(' ');
 
