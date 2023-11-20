@@ -27,6 +27,8 @@ services:
       COMMON_SECRET: ${COMMON_SECRET}
       COMMON_IV: ${COMMON_IV}
       LIB_CLOUD_HOST: ${LIB_CLOUD_HOST}
+      API03_HOST: ${API03_HOST}
+      API03_PORT: ${API03_PORT}
     build:
       context: ./api-01
       dockerfile: Dockerfile
