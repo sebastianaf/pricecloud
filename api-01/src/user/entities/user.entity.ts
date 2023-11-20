@@ -23,11 +23,19 @@ import {
   credentialsDefault,
 } from '../interfaces/credentials.interface';
 import { ObjectEncryptionTransformer } from '../../auth/transformer/object-encryption.transformer';
+import { Log } from '../../log/entities/log.entity';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @ApiProperty({ description: `User's logs from events` })
+  @OneToMany(
+    () => Log,
+    (log) => log.user,
+  )
+  logs: Log[];
 
   @ApiProperty({ description: `User's verification codes` })
   @OneToMany(

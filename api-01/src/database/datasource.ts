@@ -11,7 +11,6 @@ export const AppDataSource = new DataSource({
   password: process.env.DB_PASSWORD,
   entities: ['src/**/*.entity{.ts,.js}'],
   migrations: ['src/database/migrations/*{.ts,.js}'],
-  subscribers: ['src/database/subscribers/*{.ts,.js}'],
   synchronize: false,
   logging: true,
   namingStrategy: new SnakeNamingStrategy(),

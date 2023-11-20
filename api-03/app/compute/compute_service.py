@@ -60,6 +60,24 @@ def list_sizes(access_id, secret_key):
         return jsonify({"error": f"Error al listar los tamaños: {e}"}), 500
 
 
+def list_nodes(access_id, secret_key):
+    try:
+        Driver = get_driver(Provider.EC2)
+        conn = Driver(access_id, secret_key)
+        nodes = conn.list_nodes()
+        serialized_nodes = []
+        for node in nodes:
+            serialized_node = common_service.serialize(
+                node,
+                exclude_keys=['driver', 'attach_time'],
+                max_depth=4
+            )
+            serialized_nodes.append(serialized_node)
+        return jsonify(serialized_nodes)
+    except Exception as e:
+        return jsonify({"error": f"Error al listar los nodos: {e}"}), 500
+
+
 def deploy_node(access_id, secret_key, node_name, image_id, size_id):
     try:
         Driver = get_driver(Provider.EC2)

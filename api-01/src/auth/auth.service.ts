@@ -29,7 +29,6 @@ import { PasswordChangeDto } from './dto/password-change.dto';
 import { PasswordResetDto } from './dto/password-reset.dto';
 import { EmailService } from '../email/email.service';
 import { VerificationCode } from './entities/verification-code.entity';
-import paths from '../config/paths';
 import { RecoveryDto } from './dto/recovery.dto';
 import { roleViewData } from './data/role-view.data';
 import { View } from './entities/view.entity';
@@ -390,7 +389,10 @@ export class AuthService {
     Logger.debug(`RoleView seeding`, `AuthModule`);
     for (let i = 0; i < roleViewData.length; i++) {
       const item = await this.roleViewRepository.findOne({
-        where: { role: roleViewData[i].role, view: roleViewData[i].view },
+        where: {
+          role: { id: roleViewData[i].role.id },
+          view: { id: roleViewData[i].view.id },
+        },
       });
       const debugField = `"{${roleViewData[i].role.id},${roleViewData[i].view.id}}"`;
       if (item) {
@@ -400,5 +402,10 @@ export class AuthService {
         Logger.verbose(`RoleView ${debugField} created`, `AuthModule`);
       }
     }
+  }
+
+  async getAwsCredentials(user: User) {
+    const credentials = await this.userService.findOneCredentials(user);
+    return credentials;
   }
 }

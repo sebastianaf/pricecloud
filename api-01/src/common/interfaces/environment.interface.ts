@@ -1,4 +1,4 @@
-export enum EnvironmentsInterface {
+export enum EnvironmentInterface {
   local = 'local',
   development = 'dev',
   production = 'prod',

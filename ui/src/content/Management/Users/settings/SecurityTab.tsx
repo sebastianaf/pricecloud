@@ -17,7 +17,8 @@ import {
   TablePagination,
   TableRow,
   TableContainer,
-  CircularProgress
+  CircularProgress,
+  styled
 } from '@mui/material';
 
 import { useAuth } from '../../../../contexts/AuthContext';
@@ -27,6 +28,18 @@ import ChangePasswordModal from '../../../../components/ChangePasswordModal';
 import { useRouter } from 'next/router';
 import useSettings from '../../../../hooks/useSettings';
 import { AuthSettingsType } from '../../../../types/settings.type';
+
+const MainContent = styled(Box)(
+  () => `
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 100px;
+    flex: 1;
+    flex-direction: column;
+`
+);
 
 function SecurityTab() {
   const [showPasswordChangeModal, setShowPasswordChangeModal] = useState(false);
@@ -144,11 +157,16 @@ function SecurityTab() {
                     <TableCell>Dirección IP</TableCell>
                     <TableCell>Ubicación</TableCell>
                     <TableCell>Ocurrencia</TableCell>
-                    <TableCell>Evento</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {loginData ? (
+                  {isLoading ? (
+                    <TableRow>
+                      <TableCell colSpan={7} align="center">
+                        <CircularProgress sx={{ my: 4 }} size={48} />
+                      </TableCell>
+                    </TableRow>
+                  ) : loginData.length > 0 ? (
                     loginData
                       .slice(
                         page * rowsPerPage,
@@ -175,13 +193,16 @@ function SecurityTab() {
                           <TableCell>{`${
                             loginRecord.createdAt || `N/A`
                           }`}</TableCell>
-                          <TableCell>{`${
-                            loginRecord.event || `N/A`
-                          }`}</TableCell>
                         </TableRow>
                       ))
                   ) : (
-                    <CircularProgress />
+                    <TableRow>
+                      <TableCell colSpan={7} align="center">
+                        <Box sx={{ my: 4 }}>
+                          ¡Parece que nunca has iniciado sesión!
+                        </Box>
+                      </TableCell>
+                    </TableRow>
                   )}
                 </TableBody>
               </Table>

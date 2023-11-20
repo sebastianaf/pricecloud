@@ -205,7 +205,7 @@ function Signin() {
                   fullWidth
                   disabled={isSubmitting}
                 >
-                  {!isSubmitting ? <>Acceder</> : <>Iniciando...</>}
+                  Acceder
                 </LoadingButton>
               </Container>
             </form>

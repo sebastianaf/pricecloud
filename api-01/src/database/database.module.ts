@@ -1,7 +1,6 @@
 import { Module, Global } from '@nestjs/common';
-import { ConfigModule, ConfigService, ConfigType } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { databaseProviders } from './providers/database.providers';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 @Global()
@@ -26,7 +25,6 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
       },
     }),
   ],
-  providers: [...databaseProviders],
-  exports: [...databaseProviders],
+  exports: [TypeOrmModule],
 })
 export class DatabaseModule {}

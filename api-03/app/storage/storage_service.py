@@ -4,20 +4,36 @@ from libcloud.storage.providers import get_driver
 from ..common import common_service
 
 
-def s3_container(access_id, secret_key, node_name):
+def create_s3_bucket(access_id, secret_key, bucket_name):
     try:
         Driver = get_driver(Provider.S3)
         conn = Driver(access_id, secret_key)
-        container = conn.create_container(node_name)
-
-        container_info = common_service.serialize(
-            container,
+        bucket = conn.create_container(bucket_name)
+        bucket_info = common_service.serialize(
+            bucket,
             exclude_keys=['driver'],
-            max_depth=3
+            max_depth=4
         )
-
-        return container_info
+        return bucket_info
 
     except Exception as e:
         print(e)
-        return jsonify({"error": f"Error al crear el nodo: {e}"}), 500
+        return jsonify({"error": f"Error al crear el contenedor: {e}"}), 500
+
+
+def list_s3_buckets(access_id, secret_key):
+    try:
+        Driver = get_driver(Provider.S3)
+        conn = Driver(access_id, secret_key)
+        buckets = conn.list_containers()
+        serialized_buckets = []
+        for bucket in buckets:
+            serialized_bucket = common_service.serialize(
+                bucket,
+                exclude_keys=['driver', 'attach_time'],
+                max_depth=2
+            )
+            serialized_buckets.append(serialized_bucket)
+        return jsonify(serialized_buckets)
+    except Exception as e:
+        return jsonify({"error": f"Error al listar los buckets: {e}"}), 500

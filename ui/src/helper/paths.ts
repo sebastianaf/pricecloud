@@ -13,6 +13,14 @@ const paths = {
       profile: `/user/profile`,
       settings: `/user/settings`,
       credentials: `/user/credentials`
+    },
+    compute: {
+      location: `/compute/location`,
+      node: `/compute/node`,
+      image: `/compute/image`
+    },
+    storage: {
+      root: `/storage`
     }
   },
   web: {

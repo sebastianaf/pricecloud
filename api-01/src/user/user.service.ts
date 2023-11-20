@@ -15,7 +15,7 @@ import { EmailService } from '../email/email.service';
 import { AuthService } from '../auth/auth.service';
 import { CommonService } from '../common/common.service';
 import { RoleInterface } from '../auth/interfaces/role.interface';
-import paths from '../config/paths';
+import paths from '../common/paths';
 import { IpInfoInterface } from '../common/interfaces/ip-info.interface';
 import { UpdateSettingsDto } from './dto/update-settings.dto';
 import { userData } from './data/user.data';
@@ -110,6 +110,22 @@ export class UserService {
     });
 
     return user2.credentials;
+  }
+
+  async checkCredentials(user: User, vendorName: string) {
+    const credentials = await this.findOneCredentials(user);
+    if (credentials[vendorName] === null) {
+      return false;
+    } else {
+      if (credentials[vendorName].accessId === null) {
+        return false;
+      } else if (credentials[vendorName].secretKey === null) {
+        return false;
+      } else {
+        return true;
+      }
+      return true;
+    }
   }
 
   async updateOneSettings(user: User, updateSettingsDto: UpdateSettingsDto) {
@@ -244,7 +260,7 @@ export class UserService {
     }
   }
 
-  async seedUser() {
+  async seed() {
     Logger.debug(`User seeding`, `UserModule`);
     for (let i = 0; i < userData.length; i++) {
       const user = await this.userRepository.findOne({

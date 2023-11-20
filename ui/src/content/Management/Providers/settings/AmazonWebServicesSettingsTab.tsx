@@ -94,7 +94,7 @@ function AmazonWebServicesSettingsTab() {
                 </Typography>
               </Box>
               <Button
-                variant={isEditable ? 'contained' : 'outlined'}
+                variant={'outlined'}
                 color={isEditable ? 'success' : 'info'}
                 startIcon={
                   isEditable ? <CheckCircleIcon /> : <EditTwoToneIcon />
