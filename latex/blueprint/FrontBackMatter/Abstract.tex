@@ -8,15 +8,16 @@
 \let\cleardoublepage\relax
 \let\cleardoublepage\relax
 
-\graffito{El Web Scraping son un conjunto de técnicas y tecnologías para extraer información de la web usando algoritmos de exploración recursiva en todos los \glspl{Endpoint} de un sitio web.\bigskip}
+\graffito{La \emph{Cloud Princing API}\footnote{\url{https://www.infracost.io/docs/cloud_pricing_api/overview/}} de \gls{Infracost} es una API basada en \gls{GraphQL} que incluye datos públicos de precios de \acrshort{GCP} \acrshort{AWS}
+	y \gls{Microsoft Azure}. \bigskip}
 
-\graffito{\gls{LibCloud} permite generar una capa de abstracción a partir de una \acrfull{API} unificada usando controladores para cada tipo de servicio que prestan muchos de los \acrshortpl{CCSP}.\bigskip}
+\graffito{\gls{LibCloud} crea una capa de abstracción a partir de una \acrfull{API} unificada usando controladores para cada tipo de servicio de los \acrshortpl{CCSP}.\bigskip}
 
 
 \chapter*{Resumen}
-La aplicación web \appName propone integrar la fase de evaluación de costos de los principales proveedores de servicios de \acrfull{CC} junto con su despligue en una única interfaz para dar un criterio informado que ayude a minimizar los costos de funcionamiento de un proyecto de software con respecto a sus necesidades iniciales.\bigskip
+La aplicación web \appName integra la fase de evaluación de costos de los principales proveedores de servicios de \acrfull{CC} junto con su despliegue en una única interfaz para dar un criterio informado que ayude a minimizar los costos de funcionamiento de un proyecto de software con respecto a sus necesidades iniciales.\bigskip
 
-Usando principalmente técnicas de \emph{Web Scraping} este trabajo propone crear un servicio que sea una fuente de información veraz y actual de los costos de funcionamiento de los servicios ofrecidos por los principales \acrfull{CCSP} y ademas una aplicación que presente esta información al usuario y le permita desplegar sus recuros a través de tecnologías agnósticas del proveedor para la gestión de recursos en la nube.
-\endgroup			
+Usando una arquitectura de microservicios este proyecto recupera los costos de los principales  \acrshort{CCSP} mediante la \emph{Cloud Pricing API} de \emph{Infracost} y  un proceso de actualización automático de la base de datos ejecutado semanalmente.\bigskip
+\endgroup
 
 \vfill
