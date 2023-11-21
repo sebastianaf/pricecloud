@@ -4,14 +4,16 @@
 
 %----------------------------------------------------------------------------------------
 
-\graffito{El archivo \texttt{robots.txt} ubicado en la raiz de un sitio web indica a los \glspl{Bot} que información es de caracter privado o no debe ser indexada.\bigskip}
+\graffito{La aplicación cuenta con  una base de 6 contenedores, api-01(NestJS), api-02(ApolloServer), api-03(Python Flask), ui(NextJS), db-01(PostgreSQL) y db-02(PostgreSQL) .\bigskip}
 
 \appName recupera información de precios los principales \acrshortpl{CCSP}, estos son \acrshort{AWS}, \gls{Microsoft Azure}, \gls{Google Cloud}.\bigskip
 
-\appName tiene soporte básico de administración para los recursos de tipo \emph{Compute} y \emph{Storage}, a la fecha de publicación de este documento el controlador para operaciones de \emph{Container} se encuentra en etapa experimental y su implementación no fue exitosa. Las dos operaciones listadas se aplicaron para el proveedor \acrshort{AWS}, el proyecto de \emph{Python} esta construido buenas prácticas de desarrollo y  los principios de la programación modular,es proyecto tiene la posibilidad de extender la implementación de mas controladores en el futuro teniendo en cuenta la disponibilidad de  de la librería\footnote{\url{https://libcloud.readthedocs.io/en/stable/supported_providers.html}} de \gls{LibCloud}. \bigskip
+\appName tiene soporte básico de administración para los recursos de tipo \emph{Compute} y \emph{Storage}, a la fecha de publicación de este documento el controlador para operaciones de \emph{Container} se encuentra en etapa experimental y su implementación no fue exitosa. Las dos operaciones listadas se aplicaron para el proveedor \acrshort{AWS}, el proyecto de \emph{Python} esta construido con los principios de la programación modular, este proyecto tiene la posibilidad de extender la implementación de mas controladores en el futuro teniendo en cuenta la disponibilidad de  de la librería\footnote{\url{https://libcloud.readthedocs.io/en/stable/supported_providers.html}} de \gls{LibCloud}. \bigskip
 
 La implementación de la interfaz web se construyó en el \emph{framework} \gls{NextJS} con la librería de \gls{React} y \gls{Material UI}\footnote{\url{https://mui.com/}}, el objetivo principal es servir como una fuente de información mas que proveer una visualización atractiva, el desarrollo estuvo soportado por la plantilla \emph{BloomUI}\footnote{\url{https://bloomui.com/}} y no tuvo un componente complementario de \acrshort{UI} y \acrshort{UX}.\bigskip
 
-La información recopilada es de uso libre y proporcionada por \emph{Infracost} a través de su \emph{Cloud Pricing API}\footnote{\url{https://www.infracost.io/docs/cloud_pricing_api/overview/}}. La información de precios es actualizada semanalmente y se almacena en una base de datos \emph{PostgreSQL}.\bigskip
+La información recopilada es de uso libre y proporcionada por \emph{Infracost} a través de su \emph{Cloud Pricing API}\footnote{\url{https://www.infracost.io/docs/cloud_pricing_api/overview/}}. La información de precios es actualizada semanalmente y se almacena en una base de datos \gls{PostgreSQL}.\bigskip
 
-La implementación de la aplicación con todos sus componentes no tiene aspectos técnicos adicionales referentes a su despliegue como pruebas de rendimiento, pentesting y mantenimiento.
+El servidor principal de la aplicación esta construido en \emph{NestJS} con \emph{TypeScript} y \emph{TypeORM}, el servidor esta desplegado en un contenedor de \gls{Docker} y se encuentra disponible en detrás de un proxy inverso de \gls{Nginx Proxy Manager} en \url{https://api.pricecloud.org}.\bigskip
+
+La aplicación está desplegada sobre un servidor \emph{on-premise} formato \emph{miniITX} Levono ThinkCentre M70q Gen2 configurado con Ubuntu Server 22.04 LTS, el servidor cuenta con 12 núcleos de procesamiento, 16GB de memoria RAM y 256GB de almacenamiento en una unidad de estado sólido.\bigskip
