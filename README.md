@@ -8,7 +8,7 @@ Prototype web aplication for cost evaluation and provisioning with Libcloud on A
 
 ## Network scheme
 
-![network scheme](https://github.com/sebastianaf/pricecloud/blob/master/latex/part-01/gfx/darkSketch.png?raw=true)
+![network scheme](https://github.com/sebastianaf/pricecloud/blob/master/latex/gfx/services.drawio.png?raw=true)
 
 ## Requirements
 
