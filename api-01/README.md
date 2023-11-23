@@ -36,7 +36,7 @@ $ npm run start:prod
 
 ## Notes
 
-### ERD | Simplified
+### ER | Simplified
 
 erDrawio
 
