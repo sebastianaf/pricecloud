@@ -73,18 +73,24 @@ This commands will wake up the services access it thought port specified as foll
 
 ```
 Server ports:
-9010: api-01
+<API_PORT>: api-01
 9010: api-02
-9020: db
-9030: ui
-9040: pgadmin
+<API03_PORT>: api-03
+5432: db-01
+5432: db-02
+<UI_PORT>: ui
 ```
 
-If you set the environment variable `API_CREATE_ADMIN` to `1` then the user credentials for first access are:
+After initialization please type `npm run migrations:run` to create database schema
 
+```shell
+cd api-01
 ```
-Username: admin
-Password: price22cloud
+Create database schema
+```shell
+npm run migrations:run
 ```
-
-After first start up make sure to set `API_CREATE_ADMIN` to `0`
+Run seeding data
+```shell
+npm run seed
+```
