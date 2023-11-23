@@ -1,0 +1,144 @@
+% Planteamiento del Problema
+
+\chapter{Resumen de actividades} % Chapter title
+
+\label{ch:metodologia} % For referencing the chapter elsewhere, use \autoref{ch:introduction} 
+
+A continuación se muestran los resultados de las actividades para cada actividad, se adjuntan los siguientes videos complementarios para ampliar el panorama del lector.
+
+\begin{itemize}
+
+    \item Pricecloud - Descripción de infraestructura
+    \newline
+    \url{https://youtu.be/j7gogj0c_uo}
+    
+    \item Pricecloud - Uso de Aplicación
+    \newline
+    \url{https://youtu.be/zE3znyRGrjY}
+\end{itemize}
+
+\section{1er Objetivo específico.}
+Las actividades de este objetivo específico tienen como propósito \emph{definir un modelo general de evaluación de costos para el análisis de los servicios en el \acrshort{CC} usando información recuperable y relevante de la Web de sus proveedores.} El resultado obtenido son las ecuaciones del modelo de evaluación de costos listas para implementación. A continuación el resumen de cada actividad.
+
+\subsection{Actividades 1 y 2.}
+\emph{Investigar acerca de las los modelos de precios en los \acrshortpl{CCSP} y comparar los criterios de cobro entre cada \acrshort{CCSP}:}
+\newline
+\newline
+Como resultado de esta actividad y teniendo en cuenta las \emph{variables de costo} de cada tipo de tipo de servicio en la \emph{sección 2.2.2} se formuló el siguiente criterio.
+\newline
+\newline
+Dado un servicio bajo demanda \(s\) que tienen en común una pareja $ccsp$ donde $ccsp_i$ es un \acrshort{CCSP} con $i \in [1,2]$ se define que:
+
+\subsubsection{\emph{Compute} o \emph{Container}}
+Si $s$ es del tipo \emph{Compute} o \emph{Container} la \emph{variable de costo} principal es la $demanda$ definida como el tiempo en que se usará el servicio. Si se conocen los \emph{rangos de costo} para las variables $cpu$ y $ram$ entonces la \emph{función de costo} del servicio es:
+
+\[ costo_i(s,ccsp_i, demanda, cpu, ram) = (costoCPU +costoRAM)*demanda \]
+
+Donde:
+\begin{itemize}
+    \item $ccsp_i:$ Se define como uno de los \acrfullpl{CCSP} comparados.
+    \item $demanda:$ Es el tiempo en horas que se requiere el servicio.
+    \item $cpu:$ Es la cantidad de núcleos de procesamiento requeridos.
+    \item $ram:$ Es la cantidad de memoria RAM requerida en unidades de $GB$.
+    \item $costoCPU(s,ccsp_i, cpu)$ Es el costo de la cantidad de $cpu$ según el \emph{rango de costo} del $ccsp_i$.
+    \item $costoRAM(s,ccsp_i, ram)$ Es el costo de la cantidad de $ram$ según el \emph{rango de costo} del $ccsp_i$.
+\end{itemize}
+
+El puntaje comparativo $score$ que tiene el $ccsp_1$ con respecto al $ccsp_2$ es:
+\[ score = \frac{costo_1(s,ccsp_1,demanda,cpu,ram)}{costo_2(s,ccsp_2,demanda,cpu,ram)} \]
+
+Finalmente, si $score < 1$ entonces se dice que el $ccsp_1$ tiene preferencia sobre $ccsp_2$ para el servicio $s$ según un requerimiento de $cpu$, $ram$ y $demanda$.
+
+\subsubsection{\emph{Storage} o \emph{SQL}}
+Si $s$ es del tipo \emph{Storage} o \emph{SQL} la \emph{variable de costo} principal es la $cuota$ de almacenamiento. Si se conocen los \emph{rangos de costo} para la variable de disponibilidad del recurso llamada $disp$ entonces la \emph{función de costo} del servicio es:
+
+\[ costo_i(s,ccsp_i, cuota, disp) = costoDisponibilidad*cuota \]
+
+Donde:
+\begin{itemize}
+    \item $ccsp_i:$ Se define como uno de los \acrfullpl{CCSP} comparados.
+    \item $cuota:$ Es el espacio en GB que se requiere.
+    \item $disp:$ Es el tipo de disponibilidad del recurso (Ej: Modo frio, alta velocidad).
+    \item $costoDisponibilidad(s,ccsp_i,cuota,disp)$ Es el costo del tamaño de la $cuota$ para una disponibilidad específica según el \emph{rango de costo} del $ccsp_i$.
+\end{itemize}
+
+\subsection{Actividad 3.}
+\emph{Identificar las variables principales que usan los \acrshortpl{CCSP} para el cobro de los servicios:}
+\newline\newline
+Como conclusión y resultado de esta actividad se definieron las variables principales que usan los \acrshortpl{CCSP} para el cobro de cada tipo de servicio. Cada variable depende del servicio en cuestión.
+\newline
+
+En el caso de el servicios tipo \emph{Compute} y \emph{Container} relacionados con máquinas virtuales y contenedores, la variable de costo principal es el \emph{demanda temporal} del recurso en producto con la \emph{cantidad de CPU's} y la \emph{cantidad de memoria RAM}.
+\newline
+
+Si se habla de un recurso tipo \emph{Storage} y \emph{SQL} la variable de costo principal es la \emph{cuota de almacenamiento} en producto con la \emph{disponibilidad}, este último se relaciona con lo que será almacenado y cómo será recuperado. (Ej: Archivos, objetos o bases de datos. Modo frio o alta velocidad).
+\newline
+
+\subsection{Actividad 4.}
+\emph{Efectuar pruebas de escritorio del modelo para 5 \acrshortpl{CCSP}}:
+\newline\newline
+Como resultado de esta actividad se implementó el comparador de costos desplegado en la aplicación web ubicado en la ruta \url{https://pricecloud.org/dashboard/compare}.
+
+\section{2do Objetivo específico.}
+Las actividades de este objetivo específico tienen como propósito \emph{diseñar e implementar un prototipo basado en microservicios que recopile periodicamente y almacene las tarifas de los principales \acrshortpl{CCSP}}. El resultado obtenido es un Web service que desempeña las tareas mencionadas. A continuación el resumen de cada actividad.
+
+\subsection{Actividad 5.}
+\emph{Diseñar el modelo de datos para almacenar la información de costos:}
+\newline\newline
+Como resultado de esta actividad se diseñó el esquema de la base de datos usando el \acrshort{ORM} \gls{TypeORM} sobre \gls{PostgreSQL}, Los archivos relacionados con cada Entidad de la base de datos se encuentran en \url{https://github.com/sebastianaf/pricecloud/tree/master/api-01/src/} dentro de las carpetas \emph{entities}.
+
+\subsection{Actividad 6.}
+\emph{Diseñar un microservicio que use técnicas de \emph{Crawling} y \emph{Scraping} para recuperar datos de precios de los \acrshortpl{CCSP}}:
+\newline\newline
+Esta actividad fue parcialmente modificada ya que la técnica de recopilación de los precios de los \acrshortpl{CCSP} cambio, estos fueron recuperados de la base de datos de \emph{Infracost}, el código fuente de este servicio fue adaptado a partir del proyecto   ubicado en \url{https://github.com/infracost/cloud-pricing-api}, en su momento era código público disponible bajo la licencia \emph{Apache 2.0}. el código del servicio implementado para esta actividad se encuentra en \url{https://github.com/sebastianaf/pricecloud/tree/master/api-02/} y tiene ligeros cambios en la lógica para ejecutar las operaciones de actualización de la base de datos de precios y demás operaciones de gestión mediante sockets de \emph{Socket.io}.
+
+\subsection{Actividad 7.}
+\emph{Implementar el modelo de evaluación de costos usando un microservicio:}\newline\newline
+Como resultado de esta actividad se hizo despliegue de la aplicación de manera pública en \url{https://pricecloud.org/dashboard/compare}. En esta y otras secciones de la aplicación los usuarios pueden operar entre diferentes servicios de los \acrshortpl{CCSP} y obtener un cociente comparativo entre ellos. El código fuente de este servicio se encuentra en \url{https://github.com/sebastianaf/pricecloud/tree/master/api-01/price}
+
+\subsection{Actividad 8.}
+\emph{Diseñar una configuración de microservicios en \gls{Docker Compose}:}
+\newline\newline
+Como resultado de esta actividad se creó el archivo \emph{docker-compose.yml} ubicado en \url{https://github.com/sebastianaf/pricecloud/blob/master/docker-compose.yml} donde están configurados todos los servicios de la aplicación.
+
+\subsection{Actividad 9.}
+\emph{Desplegar la configuración de microservicios en \gls{Docker Compose}:}
+\newline\newline
+Como resultado de esta actividad se desplegaron dos servicios sobre el dominio \url{https://pricecloud.org} usando \gls{Docker Compose} y \gls{Nginx Proxy Manager} como \emph{proxy inverso} para la encriptación en tránsito  y la gestión automática de certificados \emph{TLS/SSL}, toda la aplicación se encuentra administrada por un entrono de \emph{CI/CD} usando \emph{Jenkins} y para el despliegue automático de cada cambio en el repositorio.
+\newline\newline
+Los servicios se encuentran desplegados en las siguientes ubicaciones:
+\begin{itemize}
+    \item \url{https://pricecloud.org} -> \emph{ui}
+    \item \url{https://dev.pricecloud.org} -> \emph{ui} (Desarrollo)
+    \item \url{https://api.pricecloud.org} -> \emph{api-01}
+    \item \url{https://api.dev.pricecloud.org} -> \emph{api-01} (Desarrollo)
+
+          Los demás servicios no están disponibles solo son accedidos a través de \emph{api-01}.
+\end{itemize}
+
+
+\section{3er Objetivo específico.}
+Las actividades de este objetivo específico tienen como propósito \emph{Diseñar e implementar un prototipo de aplicación web basada en microservicios para acceder a la información de costos de los proveedores y administrar los recursos de un usuario usando tecnologías agnósticas del proveedor.}. El resultado obtenido es un Prototipo de aplicación web para administrar recursos de tipo \emph{Compute}, \emph{Storage} y \emph{Container} sobre \acrshort{AWS} y obtener información de costos de los principales \acrshortpl{CCSP}. A continuación el resumen de cada actividad.
+
+\subsubsection{Actividad 10.}
+\emph{Diseñar el modelo de datos para almacenar la información de la aplicación.} El resultado de esta actividad se menciona en la Actividad 5, el modelo de datos de toda la aplicación se encuentra ubicado de manera centralizada en \emph{db-01} y descrito en \url{https://api.dev.pricecloud.org/docs} su código fuente se encuentra implementado por entidades de \gls{TypeORM} en \url{https://github.com/sebastianaf/pricecloud/tree/master/api-01/src/} dentro de las carpetas \emph{entities}.
+\newline\newline
+
+\subsubsection{Actividad 11.}
+\emph{Diseñar un microservicio para la administración básica de recursos sobre \acrshort{AWS} usando \gls{LibCloud}.} El resultado de esta tarea es el microservicio \emph{api-03} ubicado, esta parte de la aplicación no es accesible de manera pública, solo es accedida por el microservicio \emph{api-01} y \emph{ui} para aprovisionar recursos sobre \acrshort{AWS} y obtener información de los mismos. El código fuente de este servicio se encuentra en \url{https://github.com/sebastianaf/pricecloud/tree/master/api-03/}
+\newline\newline
+
+\subsubsection{Actividad 12.}
+\emph{Diseñar a partir de un microservicio una aplicación web usando \emph{NodeJS} con \emph{ReactJS} para proveer una interfaz de usuario.} El resultado de esta actividad es el microservicio \emph{ui} ubicado que tiene la interfaz de usuario de la aplicación, este servicio es accesible desde \url{https://pricecloud.org} y \url{https://dev.pricecloud.org} para el entorno de desarrollo. El código fuente de este servicio se encuentra en \url{https://github.com/sebastianaf/pricecloud/tree/master/ui/}
+\newline\newline
+
+\subsubsection{Actividad 13.}
+\emph{Diseñar una configuración de microservicios en \gls{Docker Compose}.} El resultado de esta actividad es el archivo \emph{docker-compose.yml} ubicado en \url{https://github.com/sebastianaf/pricecloud/blob/master/docker-compose.yml} donde están configurados todos los servicios de la aplicación, este archivo es el mismo que se usa para el despliegue de la aplicación en \url{https://pricecloud.org} y \url{https://dev.pricecloud.org}.
+\newline\newline
+
+\subsubsection{Actividad 14.}
+\emph{Desplegar la configuración de microservicios en \gls{Docker Compose}.} El resultado de esta actividad es el despliegue de la aplicación en \url{https://pricecloud.org} y \url{https://dev.pricecloud.org} para el entorno de desarrollo usando \gls{Docker Compose} y \gls{Nginx Proxy Manager} como \emph{proxy inverso} de la misma manera como se menciona en la Actividad 9.
+\newline\newline
+
+
+%----------------------------------------------------------------------------------------

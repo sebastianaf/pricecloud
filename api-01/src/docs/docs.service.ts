@@ -81,7 +81,7 @@ export class DocsService {
         SwaggerModule.createDocument(
           app,
           new DocumentBuilder()
-            .setTitle('inkoms-atlas')
+            .setTitle('pricecloud')
             .setDescription(`${mainDocs}`)
             .setVersion('1.0.0')
             .build(),

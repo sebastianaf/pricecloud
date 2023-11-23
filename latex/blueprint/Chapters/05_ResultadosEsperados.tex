@@ -1,22 +1,23 @@
-\chapter{Resultados esperados} % Chapter title
+\chapter{Resultados del trabajo} % Chapter title
 
 \label{ch:resultados} % For referencing the chapter elsewhere, use \autoref{ch:introduction} 
 
-\graffito{El servicio principal de la aplicación también podrá ser desplegado en un stack de contenedores dispuesto en \gls{Docker Hub} solo si el usuario está interesado en recuperar por sus propios médios la información de los proveedores.\bigskip}
+\graffito{Todos los servicios de la aplicación están disponibles y listos para desplegar por cualquier interesado con un \emph{script} de \emph{docker-compose} publicados en el repositorio oficial del proyecto. el \emph{script} se encarga de desplegar cada parte en imágenes de \gls{Docker} con \emph{Dockerfile}s y sus instrucciones para el proceso de \emph{building}.\bigskip}
 
-\graffito{La comunicación de todos los web services estará encriptada usando el protocolo \acrshort{HTTPS} con certificados libres de \gls{Let's Encrypt}, los datos sensibles almacenados usarán el algoritmo de encriptación simétrica \acrshort{AES}. \bigskip}
+\graffito{La comunicación pública de todos los web services esta encriptada usando el protocolo \acrshort{HTTPS} con certificados SSL/TLS de \gls{Let's Encrypt}, los datos sensibles almacenados usan el algoritmo de cifrado simétrico de dos vías \acrshort{AES}. \bigskip}
 
-Cuando se culmine el proyecto propuesto en este escrito se espera cumplir los objetivos específicos mencionados anteriormente como se describe a continuación.
+El proyecto cumple los objetivos específicos mencionados anteriormente como se describe a continuación.
+
 
 \begin{enumerate}
-  \item El primer resultado esperado con respecto al primer objetivo específico es un modelo de evaluación de costos de los \acrshortpl{CCSP} que permite tener un punto de referencia para medir los proveedores equitativamente con la información que se pueda recuperar de manera pública, se espera poder incluir en todos los casos los costos para cada tipo de servicio, e información adicional como el tiempo en linea y la proximidad geográfica de cada provedor que permitan tener un criterio mas amplio para tomar una decisión. Este modelo se incorporará al servicio web principal del proyecto.
-  
-  \item El segundo resultado esperado con respecto al segundo objetivo específico es un prototipo de microservicio que permite manejar de manera centralizada, actualizada y con una trazabilidad la información relevante de los \acrshort{CCSP}, se pretende construir un servicio en linea que funcione sin interrupciones pues su responsabilidad es responder a las consultas hechas por las instancias de la interfaz web.
-  
-  \item El tercer resultado esperado con respecto al tercer objetivo específico es un prototipo de aplicación que puede ser desplegada a discreción de cualquier usuario sobre su propia infraestructura para poder usar la solución propuesta en una interfaz Web, se pretende que tenga disponibilidad en una imagen pública en \gls{Docker Hub} con su respectiva documentación y parámetros de configuración usando \gls{Docker Compose}.
-  
+  \item El primer resultado con respecto al primer objetivo específico es la desarrollo e implementación de un modelo comparativo de costos que se ejecuta sobre la aplicación web. Este modelo es un punto de referencia que mide los servicios agrupados por categoría, costo y ubicación geográfica.
+
+  \item El segundo resultado con respecto al segundo objetivo específico es el desarrollo e implementación de dos microservicios encargados de administrar la información relevante de los precios de los \acrshort{CCSP} y la lógica general de la aplicación. los microservicio se encuentran actualmente en línea, funcionan sin interrupciones 24/7 y su documentación está disponible en \url{https://api.dev.pricecloud.org/docs}.
+
+  \item El tercer resultado con respecto al tercer objetivo específico es un prototipo de aplicación web que está desplegada de manera pública en \url{https://pricecloud.org}, es una interfaz Web que puede ser desplegada por cualquier otro usuario sobre su propia infraestructura, su código fuente al igual que los microservicios mencionados están disponibles en el repositorio del proyecto \url{https://github.com/sebastianaf/pricecloud}.
+
 \end{enumerate}
 
 
-      
+
 %----------------------------------------------------------------------------------------
