@@ -81,7 +81,7 @@ Server ports:
 <UI_PORT>: ui
 ```
 
-After initialization please type `npm run migrations:run` to create database schema
+After initialization please type:
 
 ```shell
 cd api-01
@@ -94,3 +94,5 @@ Run seeding data
 ```shell
 npm run seed
 ```
+
+If you need environment to development please use `vagrant up` to create a dev box.
