@@ -95,4 +95,4 @@ Run seeding data
 npm run seed
 ```
 
-If you need environment to development please use `vagrant up` to create a dev box.
+If you need environment to development please use `vagrant up` to create a dev box, dbs hostnames are `org-postgresql-db-01` and `org-postgresql-db-02`
