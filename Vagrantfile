@@ -67,7 +67,7 @@ Vagrant.configure("2") do |config|
       echo "DB_PASSWORD=#{db_password}" >> .env
       echo "DB_NAME=#{db_name}" >> .env
       echo "DB_PORT=#{db_port}" >> .env
-      echo "DB2_USER=#{db2_user}" > .env
+      echo "DB2_USER=#{db2_user}" >> .env
       echo "DB2_PASSWORD=#{db2_password}" >> .env
       echo "DB2_NAME=#{db2_name}" >> .env
       echo "DB2_PORT=#{db2_port}" >> .env
