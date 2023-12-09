@@ -13,17 +13,13 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
 import { EmailService } from '../email/email.service';
 import { AuthService } from '../auth/auth.service';
-import { CommonService } from '../common/common.service';
 import { RoleInterface } from '../auth/interfaces/role.interface';
 import paths from '../common/paths';
 import { IpInfoInterface } from '../common/interfaces/ip-info.interface';
 import { UpdateSettingsDto } from './dto/update-settings.dto';
 import { userData } from './data/user.data';
 import { UpdateCredentialsDto } from './dto/update-credentials.dto';
-import {
-  CredentialsResponseInterface,
-  credentialsResponseDefault,
-} from './interfaces/credentials.interface';
+import { CredentialsResponseInterface } from './interfaces/credentials.interface';
 
 @Injectable()
 export class UserService {
@@ -263,16 +259,8 @@ export class UserService {
   async seed() {
     Logger.debug(`User seeding`, `UserModule`);
     for (let i = 0; i < userData.length; i++) {
-      const user = await this.userRepository.findOne({
-        where: { email: userData[i].email },
-      });
-      if (user) {
-        Logger.log(`User "${userData[i].email}" already created`, `UserModule`);
-      } else {
-        userData[i].password = bcrypt.hashSync(userData[i].password, 10);
-        await this.userRepository.save(userData[i]);
-        Logger.verbose(`User "${userData[0].email}" created`, `UserModule`);
-      }
+      userData[i].password = bcrypt.hashSync(userData[i].password, 10);
+      await this.userRepository.save(userData[i]);
     }
   }
 
@@ -300,5 +288,22 @@ export class UserService {
     return {
       message: `Credenciales actualizadas.`,
     };
+  }
+
+  async findAllUsers() {
+    const users = await this.userRepository.find({
+      select: [
+        `isEmailVerified`,
+        `active`,
+        `email`,
+        `firstName`,
+        `firstLastName`,
+        `secondName`,
+        `secondLastName`,
+        `loginCount`,
+        `createdAt`,
+      ],
+    });
+    return users;
   }
 }

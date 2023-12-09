@@ -1,7 +1,7 @@
 import { Typography } from '@mui/material';
 import { useEffect } from 'react';
-import { useAuth } from '../../../../contexts/AuthContext';
-import { protect } from '../../../../helper/protect';
+import { useAuth } from '../../src/contexts/AuthContext';
+import { protect } from '../../src/helper/protect';
 
 function PageHeader() {
   const { user, getUser } = useAuth();

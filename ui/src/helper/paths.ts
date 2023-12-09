@@ -12,7 +12,8 @@ const paths = {
       root: `/user`,
       profile: `/user/profile`,
       settings: `/user/settings`,
-      credentials: `/user/credentials`
+      credentials: `/user/credentials`,
+      management: `/user/management`
     },
     compute: {
       location: `/compute/location`,
@@ -39,7 +40,12 @@ const paths = {
       aws: `/deploy/aws`
     },
     recovery: `/recovery`,
-    profile: `/profile`
+    profile: `/profile`,
+    management: {
+      root: `/management`,
+      users: `/management/users`,
+      console: `/management/console`
+    }
   }
 };
 

@@ -11,9 +11,9 @@ import {
   Switch,
   CircularProgress
 } from '@mui/material';
-import { protect } from '../../../../helper/protect';
-import useSettings from '../../../../hooks/useSettings';
-import { NotificationSettingsType } from '../../../../types/settings.type';
+import { protect } from '../../src/helper/protect';
+import useSettings from '../../src/hooks/useSettings';
+import { NotificationSettingsType } from '../../src/types/settings.type';
 
 function NotificationsTab() {
   const { isLoading, setSettings, settings } = useSettings();

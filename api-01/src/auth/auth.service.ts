@@ -394,12 +394,9 @@ export class AuthService {
           view: { id: roleViewData[i].view.id },
         },
       });
-      const debugField = `"{${roleViewData[i].role.id},${roleViewData[i].view.id}}"`;
       if (item) {
-        Logger.log(`RoleView ${debugField} already created`, `AuthModule`);
       } else {
         await this.roleViewRepository.save(roleViewData[i]);
-        Logger.verbose(`RoleView ${debugField} created`, `AuthModule`);
       }
     }
   }

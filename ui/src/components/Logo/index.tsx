@@ -115,8 +115,8 @@ function Logo() {
         }}
       >
         <LogoTextWrapper>
-          <Tooltip title="Version 1.0" arrow placement="right">
-            <VersionBadge>1.0</VersionBadge>
+          <Tooltip title="Version 1.0.0" arrow placement="right">
+            <VersionBadge>1.0.0</VersionBadge>
           </Tooltip>
           <LogoText>Pricecloud</LogoText>
         </LogoTextWrapper>

@@ -11,6 +11,7 @@ import { useRef, useState } from 'react';
 import Link from 'src/components/Link';
 
 import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
+import paths from '../../../../helper/paths';
 
 const ListWrapper = styled(Box)(
   ({ theme }) => `
@@ -28,7 +29,7 @@ const ListWrapper = styled(Box)(
                     .MuiTypography-root {
                         &:before {
                             height: 4px;
-                            width: 22px;
+                            width: 48px;
                             opacity: 0;
                             visibility: hidden;
                             display: block;
@@ -45,7 +46,7 @@ const ListWrapper = styled(Box)(
                 &.active,
                 &:active,
                 &:hover {
-                
+                    text-decoration: none;
                     background: transparent;
                 
                     .MuiListItemText-root {
@@ -88,42 +89,23 @@ function HeaderMenu() {
         <List disablePadding component={Box} display="flex">
           <ListItem
             classes={{ root: 'MuiListItem-indicators' }}
-            button
             component={Link}
-            href="/components/buttons"
+            sx={{ textDecoration: 'none' }}
+            href={paths.web.management.users}
           >
             <ListItemText
               primaryTypographyProps={{ noWrap: true }}
-              primary="Buttons"
+              primary="Usuarios"
             />
           </ListItem>
           <ListItem
             classes={{ root: 'MuiListItem-indicators' }}
-            button
             component={Link}
-            href="/components/forms"
+            href={paths.web.management.console}
           >
             <ListItemText
               primaryTypographyProps={{ noWrap: true }}
-              primary="Forms"
-            />
-          </ListItem>
-          <ListItem
-            classes={{ root: 'MuiListItem-indicators' }}
-            button
-            ref={ref}
-            onClick={handleOpen}
-          >
-            <ListItemText
-              primaryTypographyProps={{ noWrap: true }}
-              primary={
-                <Box display="flex" alignItems="center">
-                  Others
-                  <Box display="flex" alignItems="center" pl={0.3}>
-                    <ExpandMoreTwoToneIcon fontSize="small" />
-                  </Box>
-                </Box>
-              }
+              primary="Consola"
             />
           </ListItem>
         </List>

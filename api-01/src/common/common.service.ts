@@ -70,10 +70,8 @@ export class CommonService {
     for (let i = 0; i < data.length; i++) {
       const item = await repository.findOne({ where: { id: data[i].id } });
       if (item) {
-        Logger.log(`${name} with id "${data[i].id}" already created`, module);
       } else {
         await repository.save({ ...data[i] });
-        Logger.verbose(`${name} with id "${data[i].id}" created`, module);
       }
     }
   }
