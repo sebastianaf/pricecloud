@@ -103,11 +103,11 @@ const UsersTable: FC<RecentOrdersTableProps> = ({ cryptoOrders }) => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    const getUsers = async () =>
-      await customAxios.get(paths.api.user.management);
-
-    const users = getUsers();
-    setUsers(users);
+    const getUsers = async () => {
+      const users = await customAxios.get(paths.api.user.management);
+      setUsers(users.data);
+    };
+    getUsers();
   }, []);
 
   const statusOptions = [
