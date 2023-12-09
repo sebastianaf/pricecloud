@@ -4,12 +4,14 @@ import {
   Box,
   Typography,
   TextField,
-  Button
+  Button,
+  CircularProgress
 } from '@mui/material';
 import { SendSharp } from '@mui/icons-material';
 import Head from 'next/head';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import NextLink from 'next/link';
+import io from 'socket.io-client';
 
 import SidebarLayout from '@/layouts/SidebarLayout';
 import PageTitleWrapper from '@/components/PageTitleWrapper';
@@ -18,13 +20,33 @@ import { useAuth } from '../../src/contexts/AuthContext';
 import { protect } from '../../src/helper/protect';
 
 function Console() {
+  const socket = io('ws://localhost:4000/cmd');
+
   const { user, getUser } = useAuth();
+  const [output, setOutput] = useState(``);
+
   useEffect(() => {
     if (!user) {
       const handleGetUser = async () => await getUser();
       handleGetUser();
     }
   }, []);
+
+  useEffect(() => {
+    socket.connect();
+
+    socket.send('ls');
+
+    socket.on('message', (message) => {
+      setOutput(`${output}\n${message}`);
+    });
+
+    return () => {
+      socket.off('message');
+      socket.disconnect();
+    };
+  }, []);
+
   return (
     <>
       <Head>
@@ -65,18 +87,14 @@ function Console() {
                   p: 1,
                   flexGrow: 1,
                   borderRadius: 1,
-                  minHeight: 'auto',
-                  maxHeight: 'auto',
                   bgcolor: 'black',
-                  overflow: 'auto',
-                  msWrapFlow: 'auto'
+                  overflow: 'auto'
                 }}
+                display={output.length === 0 && 'flex'}
+                justifyContent={output.length === 0 && 'center'}
+                alignItems={output.length === 0 && 'center'}
               >
-                {Array(1000)
-                  .fill(`lorem ipsum dolor sit amet `)
-                  .map(
-                    (item, index) => `${item.toString()}${index.toString()} `
-                  )}
+                {output.length > 0 ? output : <CircularProgress size={48} />}
               </Box>
             </Box>
             <Box

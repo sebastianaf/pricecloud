@@ -1,15 +1,9 @@
 import { FC, ChangeEvent, useState, useEffect } from 'react';
-import { format } from 'date-fns';
-import numeral from 'numeral';
 import PropTypes from 'prop-types';
 import {
   Tooltip,
-  Divider,
   Box,
-  FormControl,
-  InputLabel,
   Card,
-  Checkbox,
   IconButton,
   Table,
   TableBody,
@@ -18,23 +12,22 @@ import {
   TablePagination,
   TableRow,
   TableContainer,
-  Select,
-  MenuItem,
   Typography,
-  useTheme,
-  CardHeader
+  useTheme
 } from '@mui/material';
-
 import Label from 'src/components/Label';
-import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
-import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
-import BulkActions from './BulkActions';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+
 import {
   CryptoOrder,
   CryptoOrderStatus
 } from '../../../src/types/user-table.type';
 import { customAxios } from '../../../src/helper/customAxios';
 import paths from '../../../src/helper/paths';
+import { HttpStatusCode } from 'axios';
+import { useSnackbar } from '../../../src/contexts/SnackbarContext';
 
 interface RecentOrdersTableProps {
   className?: string;
@@ -45,23 +38,19 @@ interface Filters {
   status?: CryptoOrderStatus;
 }
 
-const getStatusLabel = (cryptoOrderStatus: CryptoOrderStatus): JSX.Element => {
+const getStatusLabel = (active: boolean): JSX.Element => {
   const map = {
     failed: {
-      text: 'Failed',
-      color: 'error'
+      text: 'Inactivo',
+      color: 'secondary'
     },
     completed: {
-      text: 'Completed',
+      text: 'Activo',
       color: 'success'
-    },
-    pending: {
-      text: 'Pending',
-      color: 'warning'
     }
   };
 
-  const { text, color }: any = map[cryptoOrderStatus];
+  const { text, color }: any = active ? map['completed'] : map['failed'];
 
   return <Label color={color}>{text}</Label>;
 };
@@ -99,13 +88,13 @@ const UsersTable: FC<RecentOrdersTableProps> = ({ cryptoOrders }) => {
   const [filters, setFilters] = useState<Filters>({
     status: null
   });
-
   const [users, setUsers] = useState([]);
+  const { showSnackbar } = useSnackbar();
 
   useEffect(() => {
     const getUsers = async () => {
       const users = await customAxios.get(paths.api.user.management);
-      setUsers(users.data);
+      if (users.status === HttpStatusCode.Ok) setUsers(users.data);
     };
     getUsers();
   }, []);
@@ -191,178 +180,147 @@ const UsersTable: FC<RecentOrdersTableProps> = ({ cryptoOrders }) => {
 
   return (
     <Card>
-      {selectedBulkActions && (
-        <Box flex={1} p={2}>
-          <BulkActions />
-        </Box>
-      )}
-      {!selectedBulkActions && (
-        <CardHeader
-          action={
-            <Box width={150}>
-              <FormControl fullWidth variant="outlined">
-                <InputLabel>Status</InputLabel>
-                <Select
-                  value={filters.status || 'all'}
-                  onChange={handleStatusChange}
-                  label="Status"
-                  autoWidth
-                >
-                  {statusOptions.map((statusOption) => (
-                    <MenuItem key={statusOption.id} value={statusOption.id}>
-                      {statusOption.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Box>
-          }
-          title="Recent Orders"
-        />
-      )}
-      <Divider />
       <TableContainer>
         <Table>
           <TableHead>
             <TableRow>
-              {/* <TableCell padding="checkbox">
-                <Checkbox
-                  color="primary"
-                  checked={selectedAllCryptoOrders}
-                  indeterminate={selectedSomeCryptoOrders}
-                  onChange={handleSelectAllCryptoOrders}
-                />
-              </TableCell> */}
               <TableCell>Usuario</TableCell>
+              <TableCell>Estado</TableCell>
+              <TableCell>Rol</TableCell>
+              <TableCell>Pais</TableCell>
               <TableCell>Inicios</TableCell>
-              <TableCell align="right">Ultimo inicio</TableCell>
-              <TableCell align="right">Estado</TableCell>
-              <TableCell align="right">Acciones</TableCell>
+              <TableCell>Creación</TableCell>
+              <TableCell>Acciones</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {paginatedCryptoOrders.map((cryptoOrder) => {
-              const isCryptoOrderSelected = selectedCryptoOrders.includes(
-                cryptoOrder.id
-              );
-              return (
-                <TableRow
-                  hover
-                  key={cryptoOrder.id}
-                  selected={isCryptoOrderSelected}
-                >
-                  {/* <TableCell padding="checkbox">
-                    <Checkbox
-                      color="primary"
-                      checked={isCryptoOrderSelected}
-                      onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                        handleSelectOneCryptoOrder(event, cryptoOrder.id)
-                      }
-                      value={isCryptoOrderSelected}
-                    />
-                  </TableCell> */}
-                  <TableCell>
-                    <Typography
-                      variant="body1"
-                      fontWeight="bold"
-                      color="text.primary"
-                      gutterBottom
-                      noWrap
-                    >
-                      {cryptoOrder.orderDetails}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" noWrap>
-                      {format(cryptoOrder.orderDate, 'MMMM dd yyyy')}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography
-                      variant="body1"
-                      fontWeight="bold"
-                      color="text.primary"
-                      gutterBottom
-                      noWrap
-                    >
-                      {cryptoOrder.orderID}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography
-                      variant="body1"
-                      fontWeight="bold"
-                      color="text.primary"
-                      gutterBottom
-                      noWrap
-                    >
-                      {cryptoOrder.sourceName}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" noWrap>
-                      {cryptoOrder.sourceDesc}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="right">
-                    <Typography
-                      variant="body1"
-                      fontWeight="bold"
-                      color="text.primary"
-                      gutterBottom
-                      noWrap
-                    >
-                      {cryptoOrder.amountCrypto}
-                      {cryptoOrder.cryptoCurrency}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" noWrap>
-                      {numeral(cryptoOrder.amount).format(
-                        `${cryptoOrder.currency}0,0.00`
-                      )}
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="right">
-                    {getStatusLabel(cryptoOrder.status)}
-                  </TableCell>
-                  <TableCell align="right">
-                    <Tooltip title="Edit Order" arrow>
-                      <IconButton
-                        sx={{
-                          '&:hover': {
-                            background: theme.colors.primary.lighter
-                          },
-                          color: theme.palette.primary.main
-                        }}
-                        color="inherit"
-                        size="small"
+            {users &&
+              users.map((user) => {
+                return (
+                  <TableRow hover key={user.id}>
+                    <TableCell>
+                      <Typography
+                        color="text.primary"
+                        fontSize={`${theme.typography.pxToRem(16)}`}
+                        fontWeight={600}
+                        gutterBottom
+                        noWrap
                       >
-                        <EditTwoToneIcon fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Delete Order" arrow>
-                      <IconButton
-                        sx={{
-                          '&:hover': { background: theme.colors.error.lighter },
-                          color: theme.palette.error.main
-                        }}
-                        color="inherit"
-                        size="small"
+                        {user.firstName} {user.secondName} {user.firstLastName}{' '}
+                        {user.secondLastName}
+                      </Typography>
+                      <Typography
+                        color="text.secondary"
+                        sx={{ fontWeight: 400 }}
+                        noWrap
                       >
-                        <DeleteTwoToneIcon fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+                        {user.id}
+                      </Typography>
+                      <Box
+                        sx={{
+                          gap: 1,
+                          display: `flex`,
+                          alignItems: `center`,
+                          my: 1
+                        }}
+                      >
+                        {user.isEmailVerified ? (
+                          <CheckCircleOutlineIcon
+                            fontSize="small"
+                            color="success"
+                          />
+                        ) : (
+                          <WarningAmberIcon fontSize="small" color="warning" />
+                        )}
+                        <Typography sx={{ fontWeight: 400 }} noWrap>
+                          {user.email}
+                        </Typography>
+                      </Box>
+                    </TableCell>
+                    <TableCell>{getStatusLabel(user.active)}</TableCell>
+                    <TableCell>
+                      <Typography
+                        variant="body1"
+                        fontWeight="bold"
+                        color="text.primary"
+                        gutterBottom
+                        noWrap
+                      >
+                        {user.role.label}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography
+                        variant="body1"
+                        fontWeight="bold"
+                        color="text.primary"
+                        gutterBottom
+                        noWrap
+                      >
+                        {user.country}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography
+                        variant="body1"
+                        fontWeight="bold"
+                        color="text.primary"
+                        gutterBottom
+                        noWrap
+                      >
+                        {user.loginCount}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography
+                        variant="body1"
+                        fontWeight="bold"
+                        color="text.primary"
+                        gutterBottom
+                        noWrap
+                      >
+                        {user.createdAt}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Tooltip title="Copiar información" arrow>
+                        <IconButton
+                          onClick={() => {
+                            navigator.clipboard.writeText(`${user.email}`);
+                            showSnackbar(
+                              `Información copiada al portapapeles`,
+                              `success`
+                            );
+                          }}
+                          sx={{
+                            '&:hover': {
+                              background: theme.colors.primary.lighter
+                            },
+                            color: theme.palette.primary.main
+                          }}
+                          color="inherit"
+                          size="small"
+                        >
+                          <ContentCopyIcon fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
           </TableBody>
         </Table>
       </TableContainer>
       <Box p={2}>
         <TablePagination
           component="div"
-          count={filteredCryptoOrders.length}
+          count={users ? users.length : 0}
+          page={page}
           onPageChange={handlePageChange}
           onRowsPerPageChange={handleLimitChange}
-          page={page}
           rowsPerPage={limit}
-          rowsPerPageOptions={[5, 10, 25, 30]}
+          labelRowsPerPage="Registros por página"
+          rowsPerPageOptions={[5, 10, 25, 50]}
         />
       </Box>
     </Card>

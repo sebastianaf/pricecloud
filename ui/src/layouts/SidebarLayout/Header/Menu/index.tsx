@@ -9,8 +9,6 @@ import {
 } from '@mui/material';
 import { useRef, useState } from 'react';
 import Link from 'src/components/Link';
-
-import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
 import paths from '../../../../helper/paths';
 
 const ListWrapper = styled(Box)(

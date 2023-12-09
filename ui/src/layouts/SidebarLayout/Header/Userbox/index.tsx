@@ -47,12 +47,13 @@ const UserBoxLabel = styled(Typography)(
         font-weight: ${theme.typography.fontWeightBold};
         color: ${theme.palette.secondary.main};
         display: block;
-`
+        `
 );
 
 const UserBoxDescription = styled(Typography)(
   ({ theme }) => `
-        color: ${lighten(theme.palette.secondary.main, 0.5)}
+          font-weight: ${theme.typography.fontWeightLight};
+          color: ${lighten(theme.palette.secondary.main, 0.5)}
 `
 );
 
@@ -86,11 +87,11 @@ function HeaderUserbox() {
         </Avatar>
         <Hidden mdDown>
           <UserBoxText>
-            <UserBoxLabel variant="body1">
-              {user ? user?.firstName : `N/D`}
+            <UserBoxLabel>
+              {user ? user?.firstName : `Sin usuario`}
             </UserBoxLabel>
-            <UserBoxDescription variant="body2">
-              {user?.role?.label || `N/D`}
+            <UserBoxDescription>
+              {user?.role?.label || `Sin rol`}
             </UserBoxDescription>
           </UserBoxText>
         </Hidden>
@@ -113,14 +114,12 @@ function HeaderUserbox() {
       >
         <MenuUserBox sx={{ minWidth: 210 }} display="flex">
           <Avatar variant="rounded">
-            {user ? user?.firstName.substring(0, 1).toUpperCase() : `N/D`}
+            {user ? user?.firstName.substring(0, 1).toUpperCase() : `?`}
           </Avatar>
           <UserBoxText>
-            <UserBoxLabel variant="body1">
-              {user ? user?.firstName : `N/D`}
-            </UserBoxLabel>
-            <UserBoxDescription variant="body2">
-              {user ? user?.role?.label : `N/D`}
+            <UserBoxLabel>{user ? user?.firstName : `Sin usuario`}</UserBoxLabel>
+            <UserBoxDescription>
+              {user ? user?.role?.label : `Sin rol`}
             </UserBoxDescription>
           </UserBoxText>
         </MenuUserBox>

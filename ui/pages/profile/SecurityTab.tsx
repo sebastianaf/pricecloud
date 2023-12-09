@@ -202,8 +202,8 @@ function SecurityTab() {
                 count={loginData ? loginData.length : 0}
                 page={page}
                 onPageChange={handleChangePage}
-                rowsPerPage={rowsPerPage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
+                rowsPerPage={rowsPerPage}
                 labelRowsPerPage="Registros por página"
                 rowsPerPageOptions={[5, 10, 25, 50]}
               />

@@ -8,6 +8,8 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import * as moment from 'moment';
+moment.locale('es');
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
@@ -293,17 +295,27 @@ export class UserService {
   async findAllUsers() {
     const users = await this.userRepository.find({
       select: [
+        `id`,
         `isEmailVerified`,
         `active`,
         `email`,
         `firstName`,
-        `firstLastName`,
         `secondName`,
+        `firstLastName`,
         `secondLastName`,
         `loginCount`,
         `createdAt`,
+        'country',
+        'role',
       ],
+      relations: ['role'],
     });
-    return users;
+
+    return users.map((user) => {
+      return {
+        ...user,
+        createdAt: moment(user?.createdAt).fromNow(),
+      };
+    });
   }
 }
