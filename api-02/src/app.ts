@@ -1,4 +1,4 @@
-import express, { Application, Request, Response, NextFunction } from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import { ApolloServer, ApolloServerExpressConfig } from 'apollo-server-express';
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
 import { makeExecutableSchema } from '@graphql-tools/schema';

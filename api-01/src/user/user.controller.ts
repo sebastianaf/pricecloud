@@ -101,4 +101,19 @@ export class UserController {
   ) {
     return this.userService.updateOneCredentials(user, updateCredentialsDto);
   }
+
+  @Get(`/management`)
+  @Protect([ViewInterface.managementUsers])
+  @ApiOperation({ summary: `Users data` })
+  @ApiResponse({
+    status: HttpStatusCode.Created,
+    schema: {
+      example: {
+        message: `Credenciales actualizadas.`,
+      },
+    },
+  })
+  findAllUsers() {
+    return this.userService.findAllUsers();
+  }
 }

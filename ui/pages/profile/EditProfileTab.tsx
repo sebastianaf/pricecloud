@@ -16,9 +16,9 @@ import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DoneTwoToneIcon from '@mui/icons-material/DoneTwoTone';
 import Text from '@/components/Text';
 import Label from '@/components/Label';
-import { useAuth } from '../../../../contexts/AuthContext';
+import { useAuth } from '../../src/contexts/AuthContext';
 import { InfoOutlined } from '@mui/icons-material';
-import { protect } from '../../../../helper/protect';
+import { protect } from '../../src/helper/protect';
 
 function EditProfileTab() {
   const { user, getUser } = useAuth();

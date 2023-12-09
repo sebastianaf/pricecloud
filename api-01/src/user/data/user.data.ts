@@ -4,10 +4,9 @@ import { User } from '../entities/user.entity';
 
 export const userData: Partial<User>[] = [
   {
-    id: undefined,
+    id: `e0b6f07c-5329-4f21-b893-e3fb83a5da9a`,
     email: 'admin@pricecloud.org',
     firstName: 'Admin',
-    secondName: undefined,
     firstLastName: 'Pricecloud',
     secondLastName: 'User',
     password: 'Teardrop7777',
@@ -15,8 +14,8 @@ export const userData: Partial<User>[] = [
     role: { id: RoleInterface.admin } as Role,
     company: `Pricecloud`,
     isEmailVerified: true,
-    createdAt: undefined,
-    updatedAt: undefined,
+    createdAt: new Date(),
+    updatedAt: new Date(),
     active: true,
     country: 'CO',
     timezone: 'America/Bogota',

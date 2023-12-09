@@ -11,8 +11,22 @@ const initializeSocket = (io: SocketIO.Server) => {
   cmd = io.of('/cmd');
 
   cmd.on('connection', (socket) => {
-    socket.emit('log', 'Bienvenido a la consola de comandos de Pricecloud');
+    socket.emit('cmd', 'Bienvenido a la consola de comandos de Pricecloud');
+
+    socket.on('mensaje', (msg) => {
+      if (msg === 'palabra clave') {
+        socket.emit(
+          '/cmd',
+          'Bienvenido a la consola de comandos de Pricecloud'
+        );
+        procedure();
+      }
+    });
   });
+};
+
+const procedure = async () => {
+  console.log('Flag para procedimiento llamado');
 };
 
 export { cmd, initializeSocket, io };

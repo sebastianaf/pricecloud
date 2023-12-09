@@ -21,25 +21,14 @@ import {
   styled
 } from '@mui/material';
 
-import { useAuth } from '../../../../contexts/AuthContext';
-import { protect } from '../../../../helper/protect';
-import paths from '../../../../helper/paths';
-import ChangePasswordModal from '../../../../components/ChangePasswordModal';
+import { useAuth } from '../../src/contexts/AuthContext';
+import { protect } from '../../src/helper/protect';
+import paths from '../../src/helper/paths';
+import ChangePasswordModal from '../../src/components/ChangePasswordModal';
 import { useRouter } from 'next/router';
-import useSettings from '../../../../hooks/useSettings';
-import { AuthSettingsType } from '../../../../types/settings.type';
+import useSettings from '../../src/hooks/useSettings';
+import { AuthSettingsType } from '../../src/types/settings.type';
 
-const MainContent = styled(Box)(
-  () => `
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 100px;
-    flex: 1;
-    flex-direction: column;
-`
-);
 
 function SecurityTab() {
   const [showPasswordChangeModal, setShowPasswordChangeModal] = useState(false);
@@ -213,8 +202,8 @@ function SecurityTab() {
                 count={loginData ? loginData.length : 0}
                 page={page}
                 onPageChange={handleChangePage}
-                rowsPerPage={rowsPerPage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
+                rowsPerPage={rowsPerPage}
                 labelRowsPerPage="Registros por página"
                 rowsPerPageOptions={[5, 10, 25, 50]}
               />
