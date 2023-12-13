@@ -22,7 +22,7 @@ const initializeSocket = (io: SocketIO.Server) => {
     welcomeCommand(SocketEvent.consoleEvent, socket);
 
     socket.on(SocketEvent.consoleEvent, (msg) => {
-      socket.emit(SocketEvent.consoleEvent, `pricecloud-cli: ${msg}`);
+      socket.emit(SocketEvent.consoleEvent, `\npricecloud-cli: ${msg}`);
       runConsoleCommand(socket, SocketEvent.consoleEvent, msg);
     });
   });

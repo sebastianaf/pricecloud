@@ -79,7 +79,6 @@ function HeaderMenu() {
       <ListWrapper
         sx={{
           display: {
-            xs: 'none',
             md: 'block'
           }
         }}

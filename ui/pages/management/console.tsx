@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import { SendSharp } from '@mui/icons-material';
 import Head from 'next/head';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import io from 'socket.io-client';
 
 import SidebarLayout from '@/layouts/SidebarLayout';
@@ -25,6 +25,7 @@ function Console() {
   const { user, getUser } = useAuth();
   const [output, setOutput] = useState(``);
   const [inputValue, setInputValue] = useState('');
+  const outputEndRef = useRef(null);
 
   useEffect(() => {
     if (!user) {
@@ -46,6 +47,12 @@ function Console() {
     };
   }, []);
 
+  useEffect(() => {
+    if (outputEndRef.current) {
+      outputEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [output]);
+
   const handleSendCommand = () => {
     socket.emit(SocketEventType.console, inputValue);
     setInputValue('');
@@ -65,25 +72,23 @@ function Console() {
           base de datos de precios.
         </Typography>
       </PageTitleWrapper>
-      <Container maxWidth="lg">
-        <Grid
-          container
-          direction="row"
-          justifyContent="center"
-          alignItems="stretch"
-          spacing={3}
-        >
+      <Container
+        maxWidth="lg"
+        sx={{ display: 'flex', flexDirection: 'column', height: 'auto' }}
+      >
+        <Grid container spacing={1} sx={{ flexGrow: 1 }}>
           <Grid item xs={12}>
             <Box
               sx={{
                 display: 'flex',
-                minHeight: '300px',
-                maxHeight: '300px ',
+                flexDirection: 'column',
+                flexGrow: 1,
+                maxHeight: '40vh',
                 bgcolor: 'background.paper',
                 boxShadow: 1,
                 borderRadius: 1,
-                p: 2,
-                mt: 3
+                p: 1,
+                mt: 1
               }}
             >
               <Box
@@ -93,14 +98,20 @@ function Console() {
                   borderRadius: 1,
                   bgcolor: 'black',
                   overflow: 'auto',
-                  fontFamily: 'monospace'
+                  overflowWrap: 'anywhere',
+                  fontFamily: 'monospace',
+                  whiteSpace: 'pre-wrap', // Asegura que el texto se ajuste dentro del Box
+                  wordBreak: 'break-word' // Permite la ruptura de palabras para evitar overflow horizontal
                 }}
                 display={output.length === 0 && 'flex'}
                 justifyContent={output.length === 0 && 'center'}
                 alignItems={output.length === 0 && 'center'}
               >
                 {output.length > 0 ? (
-                  <pre>{output}</pre>
+                  <>
+                    <pre>{output}</pre>
+                    <div ref={outputEndRef} />{' '}
+                  </>
                 ) : (
                   <CircularProgress size={48} />
                 )}

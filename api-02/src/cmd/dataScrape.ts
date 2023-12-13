@@ -33,7 +33,7 @@ export async function run(socket: Socket, event: SocketEvent): Promise<void> {
   config.logAndEmit(
     socket,
     event,
-    'Iniciando: scraping de precios desde CCSPS'
+    'Iniciando: scraping de precios desde CCSPs'
   );
   const argv = await yargs
     .usage(
@@ -87,6 +87,6 @@ export async function run(socket: Socket, event: SocketEvent): Promise<void> {
   config.logAndEmit(
     socket,
     event,
-    'Completado: scraping de precios desde CCSPS'
+    'Completado: scraping de precios desde CCSPs'
   );
 }

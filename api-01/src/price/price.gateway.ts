@@ -17,7 +17,7 @@ export class PriceGateway {
 
   afterInit(server: Server) {
     this.api02 = io(
-      `http://${process.env.API02_HOST}:${process.env.API02_PORT}/price`,
+      `ws://${process.env.API02_HOST}:${process.env.API02_PORT}/price`,
     );
 
     this.api02.on(SocketEventInterface.consoleEvent, (data: string) => {
