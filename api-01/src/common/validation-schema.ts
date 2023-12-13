@@ -31,6 +31,8 @@ export default Joi.object({
   EMAIL_PASSWORD: Joi.string().required().min(8).max(32),
   COMMON_SECRET: Joi.string().length(32).required(),
   COMMON_IV: Joi.string().length(16).required(),
+  API02_HOST: Joi.string().hostname().required(),
+  API02_PORT: Joi.number().min(100).max(65535).required(),
   API03_HOST: Joi.string().hostname().required(),
   API03_PORT: Joi.number().min(100).max(65535).required(),
 });

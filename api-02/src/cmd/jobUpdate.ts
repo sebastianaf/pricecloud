@@ -1,45 +1,31 @@
-import { execSync } from 'child_process';
 import glob from 'glob';
 import config from '../config';
 import { fetchLastSuccessfullyUpdatedAt } from '../stats/stats';
+import { Socket } from 'socket.io';
+import { SocketEvent } from '../socket/event';
+import { run as dataDownload } from './dataDownload';
+import { run as dataLoad } from './dataLoad';
 
-async function run(): Promise<void> {
-  // Check if ./data/products exists and has files
+export async function run(socket: Socket, event: SocketEvent): Promise<void> {
+  config.logAndEmit(socket, event, 'Iniciando: Actualizacion de DB');
   const dumpFiles = glob.sync(`./data/products/*.csv.gz`);
   const dumpFileExists = dumpFiles.length !== 0;
 
-  // Check if the last update was less than 24 hours ago
   const lastUpdatedAt = await fetchLastSuccessfullyUpdatedAt();
   const upToDate =
     lastUpdatedAt && lastUpdatedAt.getTime() > Date.now() - 24 * 60 * 60 * 1000;
 
   if (dumpFileExists && lastUpdatedAt && upToDate) {
-    config.logger.info(
-      `Skipping update as the pricing database was already updated in the last 24 hours (${lastUpdatedAt.toISOString()}).`
+    config.logAndEmit(
+      socket,
+      event,
+      `Omitiendo la actualización porque la base de datos de precios ya se actualizó en las últimas 24 horas (${lastUpdatedAt.toISOString()}).`
     );
-    process.exit(0);
+    return;
   }
 
-  const isTypeScript = __filename.endsWith('ts');
+  await dataDownload(socket, event);
+  await dataLoad(socket, event);
 
-  // Run the data download
-  execSync(`npm run data:download${isTypeScript ? ':dev' : ''}`, {
-    stdio: 'inherit',
-  });
-
-  // Run the data load
-  execSync(`npm run data:load${isTypeScript ? ':dev' : ''}`, {
-    stdio: 'inherit',
-  });
+  config.logAndEmit(socket, event, 'Completado: Actualizacion de DB');
 }
-
-config.logger.info('Starting: updating the DB');
-run()
-  .then(() => {
-    config.logger.info('Completed: updating the DB');
-    process.exit(0);
-  })
-  .catch((err) => {
-    config.logger.error(err);
-    process.exit(1);
-  });

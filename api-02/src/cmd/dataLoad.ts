@@ -8,7 +8,6 @@ import { from as copyFrom } from 'pg-copy-streams';
 import { PoolClient } from 'pg';
 import format from 'pg-format';
 import yargs from 'yargs';
-import ProgressBar from 'progress';
 import config from '../config';
 import {
   createProductsTable,
@@ -16,8 +15,11 @@ import {
   renameProductsTable,
 } from '../db/setup';
 import { setPriceUpdateFailed, setPriceUpdateSuccessful } from '../stats/stats';
+import { Socket } from 'socket.io';
+import { SocketEvent } from '../socket/event';
 
-async function run(): Promise<void> {
+export async function run(socket: Socket, event: SocketEvent): Promise<void> {
+  config.logAndEmit(socket, event, 'Iniciando: Cargando data a la BD');
   const pool = await config.pg();
 
   const argv = await yargs
@@ -36,7 +38,7 @@ async function run(): Promise<void> {
 
     await createProductsTable(client, 'ProductLoad');
 
-    await loadFiles(argv.path, client);
+    await loadFiles(socket, event, argv.path, client);
 
     await createProductsTableIndex(client, 'ProductLoad');
 
@@ -45,6 +47,7 @@ async function run(): Promise<void> {
     await setPriceUpdateSuccessful(client);
 
     await client.query('COMMIT');
+    config.logAndEmit(socket, event, 'Completado: carga de data a la BD');
   } catch (e) {
     await client.query('ROLLBACK');
 
@@ -64,35 +67,51 @@ async function replaceProductTable(client: PoolClient) {
   await renameProductsTable(client, 'ProductLoad', config.productTableName);
 }
 
-async function loadFiles(path: string, client: PoolClient): Promise<void> {
+async function loadFiles(
+  socket: Socket,
+  event: SocketEvent,
+  path: string,
+  client: PoolClient
+): Promise<void> {
   const filenames = glob.sync(`${path}/*.csv.gz`);
   if (filenames.length === 0) {
-    config.logger.error(
-      `Could not load prices: There are no data files at '${path}/*.csv.gz'`
+    config.logAndEmit(
+      socket,
+      event,
+      `No se pueden cargar los precios: datos no disponibles en '${path}/*.csv.gz'`
     );
-    config.logger.error(
-      `The latest data files can be downloaded with "npm run-scripts data:download"`
-    );
-    process.exit(1);
   }
+  config.logAndEmit(
+    socket,
+    event,
+    `Descargue la ultima version con "data:download"`
+  );
 
   for (const filename of filenames) {
-    config.logger.info(`Loading file: ${filename}`);
-    await loadFile(client, filename);
+    config.logAndEmit(socket, event, `Cargando desde archivo: ${filename}`);
+    await loadFile(socket, event, client, filename);
   }
 }
 
-async function loadFile(client: PoolClient, filename: string): Promise<void> {
+async function loadFile(
+  socket: Socket,
+  event: SocketEvent,
+  client: PoolClient,
+  filename: string
+): Promise<void> {
   const promisifiedPipeline = promisify(pipeline);
 
   const gunzip = zlib.createGunzip().on('error', (e) => {
-    config.logger.error(
-      `There was an error decompressing the file: ${e.message}`
+    config.logAndEmit(
+      socket,
+      event,
+      `Hubo un error al descomprimir el archivo: ${e.message}`
     );
-    config.logger.error(
-      `The latest data files can be downloaded with "npm run-scripts data:download"`
+    config.logAndEmit(
+      socket,
+      event,
+      `Descargue la ultima version con "data:download"`
     );
-    process.exit(1);
   });
 
   const pgCopy = client.query(
@@ -102,34 +121,30 @@ async function loadFile(client: PoolClient, filename: string): Promise<void> {
       HEADER true,
       DELIMITER ',',
       FORCE_NOT_NULL ("productFamily")
-    )`)
+      )`)
   );
 
   const { size } = fs.statSync(filename);
-  const progressBar = new ProgressBar(
-    '-> loading [:bar] :percent (:etas remaining)',
-    {
-      width: 40,
-      complete: '=',
-      incomplete: ' ',
-      renderThrottle: 500,
-      total: size,
-    }
-  );
+
+  const progressUpdateInterval = 1000;
+  let lastUpdateTime = Date.now();
+  let totalBytesRead = 0;
 
   const readStream = fs.createReadStream(filename);
-  readStream.on('data', (buffer) => progressBar.tick(buffer.length));
+  readStream.on('data', (buffer) => {
+    const now = Date.now();
+    totalBytesRead += buffer.length;
+
+    if (now - lastUpdateTime >= progressUpdateInterval) {
+      lastUpdateTime = now;
+      const progress = `Cargando archivo: ${(totalBytesRead !== 0
+        ? (totalBytesRead / size) * 100
+        : 0
+      ).toFixed(2)}%`;
+
+      config.logAndEmit(socket, event, progress);
+    }
+  });
 
   return promisifiedPipeline(readStream, gunzip, pgCopy);
 }
-
-config.logger.info('Starting: loading data into DB');
-run()
-  .then(() => {
-    config.logger.info('Completed: loading data into DB');
-    process.exit(0);
-  })
-  .catch((err) => {
-    config.logger.error(err);
-    process.exit(1);
-  });

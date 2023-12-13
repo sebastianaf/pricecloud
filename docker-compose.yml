@@ -29,6 +29,8 @@ services:
       LIB_CLOUD_HOST: ${LIB_CLOUD_HOST}
       API03_HOST: ${API03_HOST}
       API03_PORT: ${API03_PORT}
+      API02_HOST: ${API02_HOST}
+      API02_PORT: ${API02_PORT}
     build:
       context: ./api-01
       dockerfile: Dockerfile

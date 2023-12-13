@@ -1,11 +1,12 @@
 import fetch, { Response } from 'node-fetch';
-import ProgressBar from 'progress';
 import fs from 'fs';
 import yargs from 'yargs';
 import config from '../config';
+import { Socket } from 'socket.io';
+import { SocketEvent } from '../socket/event';
 
-export async function run() {
-  config.logger.info('Starting: downloading DB data');
+export async function run(socket: Socket, event: SocketEvent) {
+  config.logAndEmit(socket, event, 'Iniciando: Descargando datos');
   const argv = await yargs
     .usage(
       'Usage: $0 --out=[output file, default: ./data/products/products.csv.gz ]'
@@ -17,11 +18,17 @@ export async function run() {
   let latestResp: Response;
 
   if (!config.infracostAPIKey) {
-    config.logger.error('Please set INFRACOST_API_KEY.');
-    config.logger.error(
-      'A new key can be obtained by installing the infracost CLI and running "infracost auth login".  The key is usually saved in ~/.config/infracost/credentials.yml'
+    config.logAndEmit(
+      socket,
+      event,
+      'Error de conexión a Infracost, KEY incorrecta'
     );
-    process.exit(1);
+    config.logAndEmit(
+      socket,
+      event,
+      'Una nueva llave puede ser obtenida en  el CLI de infracost CLI con "infracost auth login" en  ~/.config/infracost/credentials.yml'
+    );
+    return;
   }
 
   try {
@@ -37,58 +44,69 @@ export async function run() {
     if (!latestResp.ok) {
       const body = latestResp.body.read().toString();
 
-      config.logger.error(
-        `There was an error downloading data: HTTP ${latestResp.status}: ${body}`
+      config.logAndEmit(
+        socket,
+        event,
+        `Hubo un error descargando la data: HTTP ${latestResp.status}: ${body}`
       );
 
       try {
         const errorData = (await JSON.parse(body)) as { error: string };
         if (
           latestResp.status === 403 &&
-          errorData.error === 'Invalid API key'
+          errorData.error === 'API key invalida'
         ) {
-          config.logger.error(
-            'You do not have permission to download data. Please set a valid INFRACOST_API_KEY.'
+          config.logAndEmit(
+            socket,
+            event,
+            'No tiene permiso para descargar la data. Por favor configure una clave INFRACOST_API_KEY valida.'
           );
-          config.logger.error(
-            'A new key can be obtained by installing the infracost CLI and running "infracost auth login".  The key is usually saved in ~/.config/infracost/credentials.yml'
+          config.logAndEmit(
+            socket,
+            event,
+            'Una nueva llave puede ser obtenida en  el CLI de infracost CLI con "infracost auth login" en  ~/.config/infracost/credentials.yml'
           );
         }
       } catch (e) {
         // eslint-disable no-empty
-        // We don't care if the body is not valid JSON since we log it above anyway
       }
 
-      process.exit(1);
+      return;
     }
   } catch (e) {
-    config.logger.error(`There was an error downloading data: ${e}`);
-    process.exit(1);
+    config.logAndEmit(socket, event, `hubo un error descargando la data: ${e}`);
+    return;
   }
 
   const { downloadUrl } = (await latestResp.json()) as { downloadUrl: string };
-  config.logger.debug(`Downloading dump from ${downloadUrl}`);
+  config.logAndEmit(socket, event, `Iniciando descarga desde infracost`);
 
   const writer = fs.createWriteStream(argv.out);
 
   await new Promise((resolve, reject) => {
+    let size = 0;
     fetch(downloadUrl, {
       method: 'get',
     }).then((resp) => {
-      const progressBar = new ProgressBar(
-        `-> downloading ${argv.out} [:bar] :percent (:etas remaining)`,
-        {
-          width: 40,
-          complete: '=',
-          incomplete: ' ',
-          renderThrottle: 500,
-          total: parseInt(resp.headers.get('content-length') || '0', 10),
-        }
-      );
+      size = parseInt(resp.headers.get('content-length') || '0', 10);
+      const progressUpdateInterval = 1000;
+      let lastUpdateTime = Date.now();
+      let totalBytesRead = 0;
 
-      resp.body.on('data', (chunk: { length: number }) =>
-        progressBar.tick(chunk.length)
-      );
+      resp.body.on('data', (chunk: { length: number }) => {
+        const now = Date.now();
+        totalBytesRead += chunk.length;
+
+        if (now - lastUpdateTime >= progressUpdateInterval) {
+          lastUpdateTime = now;
+          const progress = `Descargando archivo: ${(totalBytesRead !== 0
+            ? (totalBytesRead / size) * 100
+            : 0
+          ).toFixed(2)}%`;
+
+          config.logAndEmit(socket, event, progress);
+        }
+      });
 
       resp.body.pipe(writer);
 
@@ -106,5 +124,5 @@ export async function run() {
       });
     });
   });
-  config.logger.info('Completed: downloading DB data');
+  config.logAndEmit(socket, event, 'Completado: descarga de datos de precios');
 }

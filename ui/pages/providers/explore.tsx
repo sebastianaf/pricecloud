@@ -7,7 +7,6 @@ import { Container, Tabs, Tab, Grid } from '@mui/material';
 import Footer from '@/components/Footer';
 import { styled } from '@mui/material/styles';
 
-//import ActivityTab from '@/content/Management/Users/settings/ActivityTab';
 import EditProfileTab from 'pages/profile/EditProfileTab';
 import NotificationsTab from 'pages/profile/NotificationsTab';
 import SecurityTab from 'pages/profile/SecurityTab';
