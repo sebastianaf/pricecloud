@@ -65,10 +65,10 @@ services:
     environment:
       INFRACOST_API_KEY: ${INFRACOST_API_KEY}
       SELF_HOSTED_INFRACOST_API_KEY: ${SELF_HOSTED_INFRACOST_API_KEY}
-      POSTGRES_HOST: ${DB02_HOST}
-      POSTGRES_USER: ${DB02_USER}
-      POSTGRES_PASSWORD: ${DB02_PASSWORD}
-      POSTGRES_DB: ${DB02_NAME}
+      DB02_HOST: ${DB02_HOST}
+      DB02_USER: ${DB02_USER}
+      DB02_PASSWORD: ${DB02_PASSWORD}
+      DB02_NAME: ${DB02_NAME}
       TZ: ${TZ}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:4000/health"]
