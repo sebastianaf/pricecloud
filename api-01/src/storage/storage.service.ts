@@ -77,8 +77,6 @@ export class StorageService {
         request,
       );
     } catch (error) {
-      console.log(error);
-
       Logger.error(error?.response?.data.error);
       throw new ConflictException(error?.response?.data.error);
     }
