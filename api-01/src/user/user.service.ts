@@ -207,6 +207,7 @@ export class UserService {
         message: `Se ha enviado un correo de verificación a tu email.`,
       };
     } catch (error) {
+      Logger.error(error);
       throw new GoneException(
         `Hubo un error al crear el usuario, por favor intente de nuevo (USC-002)`,
       );

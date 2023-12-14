@@ -31,10 +31,7 @@ export class User {
   id: string;
 
   @ApiProperty({ description: `User's logs from events` })
-  @OneToMany(
-    () => Log,
-    (log) => log.user,
-  )
+  @OneToMany(() => Log, (log) => log.user)
   logs: Log[];
 
   @ApiProperty({ description: `User's verification codes` })
@@ -116,6 +113,7 @@ export class User {
     type: 'text',
     default: credentialsDefault,
     transformer: ObjectEncryptionTransformer,
+    nullable: true,
   })
   credentials: CredentialsInterface;
 
