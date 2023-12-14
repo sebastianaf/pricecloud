@@ -36,4 +36,4 @@ def list_s3_buckets(access_id, secret_key):
             serialized_buckets.append(serialized_bucket)
         return jsonify(serialized_buckets)
     except Exception as e:
-        return jsonify({"error": f"Error al listar los buckets: {e}"}), 500
+        return jsonify({"error": f"Error al listar los buckets"}), 500

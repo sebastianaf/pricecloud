@@ -75,7 +75,7 @@ def list_nodes(access_id, secret_key):
             serialized_nodes.append(serialized_node)
         return jsonify(serialized_nodes)
     except Exception as e:
-        return jsonify({"error": f"Error al listar los nodos: {e}"}), 500
+        return jsonify({"error": f"Error al listar los nodos"}), 500
 
 
 def deploy_node(access_id, secret_key, node_name, image_id, size_id):

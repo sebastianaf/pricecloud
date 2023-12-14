@@ -22,7 +22,10 @@ import { IpInfoInterface } from '../common/interfaces/ip-info.interface';
 import { UpdateSettingsDto } from './dto/update-settings.dto';
 import { userData } from './data/user.data';
 import { UpdateCredentialsDto } from './dto/update-credentials.dto';
-import { CredentialsResponseInterface } from './interfaces/credentials.interface';
+import {
+  CredentialsResponseInterface,
+  credentialsResponseDefault,
+} from './interfaces/credentials.interface';
 import { EnvironmentInterface } from '../common/interfaces/environment.interface';
 
 @Injectable()
@@ -95,6 +98,13 @@ export class UserService {
         where: { id: user.id },
       });
 
+      if (!user2.credentials) {
+        await this.updateOneCredentials(user, {
+          awsAccessId: null,
+          awsSecretKey: null,
+        });
+        return credentialsResponseDefault;
+      }
       const credentalsResponse: CredentialsResponseInterface = {
         aws: {
           accessId: user2.credentials.aws.accessId !== null,
