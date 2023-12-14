@@ -4,6 +4,7 @@ import {
   Inject,
   forwardRef,
   Logger,
+  GoneException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -166,44 +167,50 @@ export class UserService {
   }
 
   async createUser(createUserDto: CreateUserDto, ipInfo: IpInfoInterface) {
-    const {
-      password,
-      email,
-      firstLastName,
-      firstName,
-      secondLastName,
-      secondName,
-    } = createUserDto;
-    const { country, timezone } = ipInfo;
+    try {
+      const {
+        password,
+        email,
+        firstLastName,
+        firstName,
+        secondLastName,
+        secondName,
+      } = createUserDto;
+      const { country, timezone } = ipInfo;
 
-    const user = await this.userRepository.findOne({
-      where: { email },
-    });
+      const user = await this.userRepository.findOne({
+        where: { email },
+      });
 
-    if (user)
-      throw new ConflictException(
-        `Por favor intente con un email diferente (USC-001)`,
+      if (user)
+        throw new ConflictException(
+          `Por favor intente con un email diferente (USC-001)`,
+        );
+
+      const newUser = await this.userRepository.save({
+        firstName,
+        secondName,
+        firstLastName,
+        secondLastName,
+        email,
+        password: bcrypt.hashSync(password, 10),
+        role: <any>{ id: RoleInterface.user },
+        country: country || null,
+        timezone: timezone || null,
+      });
+
+      await this.sendVerificationEmail(newUser);
+
+      return {
+        id: newUser.id,
+        title: `Usuario creado exitosamente`,
+        message: `Se ha enviado un correo de verificación a tu email.`,
+      };
+    } catch (error) {
+      throw new GoneException(
+        `Hubo un error al crear el usuario, por favor intente de nuevo (USC-002)`,
       );
-
-    const newUser = await this.userRepository.save({
-      firstName,
-      secondName,
-      firstLastName,
-      secondLastName,
-      email,
-      password: bcrypt.hashSync(password, 10),
-      role: <any>{ id: RoleInterface.user },
-      country: country || null,
-      timezone: timezone || null,
-    });
-
-    await this.sendVerificationEmail(newUser);
-
-    return {
-      id: newUser.id,
-      title: `Usuario creado exitosamente`,
-      message: `Se ha enviado un correo de verificación a tu email.`,
-    };
+    }
   }
 
   async addLoginCount(user: User) {
