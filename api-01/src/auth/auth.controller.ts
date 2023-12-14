@@ -56,7 +56,7 @@ export class AuthController {
   }
 
   @Post()
-  @ApiOperation({ summary: `Create user's token from user password auth` })
+  @ApiOperation({ summary: `Authenticate user's from user and password` })
   async validateUser(
     @Body() validateUser: ValidateUserDto,
     @Res() response: Response,
