@@ -23,6 +23,7 @@ import { UpdateSettingsDto } from './dto/update-settings.dto';
 import { userData } from './data/user.data';
 import { UpdateCredentialsDto } from './dto/update-credentials.dto';
 import { CredentialsResponseInterface } from './interfaces/credentials.interface';
+import { EnvironmentInterface } from '../common/interfaces/environment.interface';
 
 @Injectable()
 export class UserService {
@@ -268,9 +269,11 @@ export class UserService {
 
   async seed() {
     Logger.debug(`User seeding`, `UserModule`);
-    for (let i = 0; i < userData.length; i++) {
-      userData[i].password = bcrypt.hashSync(userData[i].password, 10);
-      await this.userRepository.save(userData[i]);
+    if (process.env.ENV !== EnvironmentInterface.production) {
+      for (let i = 0; i < userData.length; i++) {
+        userData[i].password = bcrypt.hashSync(userData[i].password, 10);
+        await this.userRepository.save(userData[i]);
+      }
     }
   }
 
