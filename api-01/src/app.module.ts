@@ -15,6 +15,7 @@ import { ComputeModule } from './compute/compute.module';
 import { StorageModule } from './storage/storage.module';
 import { LogModule } from './log/log.module';
 import { DocsModule } from './docs/docs.module';
+import { PriceModule } from './price/price.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { DocsModule } from './docs/docs.module';
     StorageModule,
     LogModule,
     DocsModule,
+    PriceModule,
   ],
   controllers: [],
   providers: [],

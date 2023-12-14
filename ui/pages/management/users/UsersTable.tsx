@@ -13,7 +13,8 @@ import {
   TableRow,
   TableContainer,
   Typography,
-  useTheme
+  useTheme,
+  CircularProgress
 } from '@mui/material';
 import Label from 'src/components/Label';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
@@ -90,11 +91,15 @@ const UsersTable: FC<RecentOrdersTableProps> = ({ cryptoOrders }) => {
   });
   const [users, setUsers] = useState([]);
   const { showSnackbar } = useSnackbar();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const getUsers = async () => {
       const users = await customAxios.get(paths.api.user.management);
-      if (users.status === HttpStatusCode.Ok) setUsers(users.data);
+      if (users.status === HttpStatusCode.Ok) {
+        setUsers(users.data);
+        setIsLoading(false);
+      }
     };
     getUsers();
   }, []);
@@ -194,7 +199,15 @@ const UsersTable: FC<RecentOrdersTableProps> = ({ cryptoOrders }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {users &&
+            {isLoading ? (
+              <TableRow>
+                <TableCell colSpan={7} align="center">
+                  <Box sx={{ my: 4 }}>
+                    <CircularProgress size={48} />
+                  </Box>
+                </TableCell>
+              </TableRow>
+            ) : (
               users.map((user) => {
                 return (
                   <TableRow hover key={user.id}>
@@ -307,7 +320,8 @@ const UsersTable: FC<RecentOrdersTableProps> = ({ cryptoOrders }) => {
                     </TableCell>
                   </TableRow>
                 );
-              })}
+              })
+            )}
           </TableBody>
         </Table>
       </TableContainer>

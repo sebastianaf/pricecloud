@@ -5,7 +5,8 @@ import { Pool, PoolConfig } from 'pg';
 import tmp from 'tmp';
 import fs from 'fs';
 import path from 'path';
-import { Writable } from 'stream';
+import { Socket } from 'socket.io';
+import { SocketEvent } from './socket/event';
 
 dotenv.config({ path: '.env.local' });
 dotenv.config();
@@ -25,12 +26,11 @@ let pgPool: Pool;
 async function pg(): Promise<Pool> {
   if (!pgPool) {
     let poolConfig: PoolConfig = {
-      user: process.env.POSTGRES_USER || 'postgres',
-      database: process.env.POSTGRES_DB || 'cloud_pricing',
-      password: process.env.POSTGRES_PASSWORD || '',
-      port: Number(process.env.POSTGRES_PORT) || 5432,
-      host: process.env.POSTGRES_HOST || 'localhost',
-      max: Number(process.env.POSTGRES_MAX_CLIENTS) || 10,
+      user: process.env.DB02_USER || 'postgres',
+      database: process.env.DB02_NAME || 'cloud_pricing',
+      password: process.env.DB02_PASSWORD || '',
+      port: Number(process.env.DB02_PORT) || 5432,
+      host: process.env.DB02_HOST || 'localhost',
     };
 
     if (process.env.POSTGRES_URI) {
@@ -58,17 +58,14 @@ function generateGcpKeyFile(): string {
   return tmpFile.name;
 }
 
-/* class SocketStream extends Writable {
-  _write(chunk, enc, next) {
-    cmd.emit('logs', chunk.toString());
-    next();
-  }
-} */
-
-/* const logStream = new SocketStream(); */
-
 const loggerOpts: pino.LoggerOptions = {
   level: process.env.LOG_LEVEL || 'info',
+};
+
+const logAndEmit = (socket: Socket, event: SocketEvent, message: string) => {
+  logger.info(message);
+  socket.emit(event, message);
+  socket.broadcast.except(socket.id).emit(event, message);
 };
 
 if (process.env.NODE_ENV !== 'production') {
@@ -77,7 +74,7 @@ if (process.env.NODE_ENV !== 'production') {
   };
 }
 
-const logger = pino(loggerOpts /* logStream */);
+const logger = pino(loggerOpts);
 
 const cache = new NodeCache();
 
@@ -103,6 +100,7 @@ const config = {
   gcpApiKey: process.env.GCP_API_KEY,
   gcpKeyFile: generateGcpKeyFile(),
   gcpProject: process.env.GCP_PROJECT,
+  logAndEmit,
 };
 
 export default config;

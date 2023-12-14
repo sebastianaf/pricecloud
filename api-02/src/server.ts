@@ -1,6 +1,6 @@
 import createApp from './app';
 import config from './config';
-import { initializeSocket } from './socket';
+import { initializeSocket } from './socket/socket';
 
 createApp().then((servers) => {
   initializeSocket(servers.io);

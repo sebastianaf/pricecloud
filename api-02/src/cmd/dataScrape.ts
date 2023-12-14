@@ -6,6 +6,8 @@ import azureRetail from '../scrapers/azureRetail';
 import gcpCatalog from '../scrapers/gcpCatalog';
 import gcpMachineTypes from '../scrapers/gcpMachineTypes';
 import { setPriceUpdateFailed, setPriceUpdateSuccessful } from '../stats/stats';
+import { SocketEvent } from '../socket/event';
+import { Socket } from 'socket.io';
 
 interface ScraperConfig {
   vendor: string;
@@ -27,7 +29,12 @@ const Scrapers = {
   },
 };
 
-async function run(): Promise<void> {
+export async function run(socket: Socket, event: SocketEvent): Promise<void> {
+  config.logAndEmit(
+    socket,
+    event,
+    'Iniciando: scraping de precios desde CCSPs'
+  );
   const argv = await yargs
     .usage(
       'Usage: $0 --only=[aws:bulk,aws:spot,azure:retail,gcp:catalog,gcp:machineTypes]'
@@ -59,13 +66,15 @@ async function run(): Promise<void> {
   let success = true;
 
   for (const scraperConfig of scraperConfigs) {
-    config.logger.info(
-      `Running update function for ${scraperConfig.vendor}:${scraperConfig.source}`
+    config.logAndEmit(
+      socket,
+      event,
+      `Ejecutando actualizacion de funcion para ${scraperConfig.vendor}:${scraperConfig.source}`
     );
     try {
       await scraperConfig.scraperFunc();
     } catch (err) {
-      config.logger.error(err);
+      config.logAndEmit(socket, event, (err as Error).message.toString());
       success = false;
     }
   }
@@ -75,15 +84,9 @@ async function run(): Promise<void> {
   } else {
     await setPriceUpdateFailed();
   }
+  config.logAndEmit(
+    socket,
+    event,
+    'Completado: scraping de precios desde CCSPs'
+  );
 }
-
-config.logger.info('Starting: scraping data from cloud vendors');
-run()
-  .then(() => {
-    config.logger.info('Completed: scraping data from cloud vendors');
-    process.exit(0);
-  })
-  .catch((err) => {
-    config.logger.error(err);
-    process.exit(1);
-  });

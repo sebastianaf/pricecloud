@@ -1,18 +1,11 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as Express from 'express';
 import * as cookieParser from 'cookie-parser';
 import * as moment from 'moment';
+import { ExpressAdapter } from '@nestjs/platform-express';
 
 import { AppModule } from './app.module';
-import { mainDocs } from './docs';
-import { ExpressAdapter } from '@nestjs/platform-express';
-import { UserModule } from './user/user.module';
-import { userDocs } from './user/docs';
-import { AuthModule } from './auth/auth.module';
-import { authDocs } from './auth/docs';
-import { EnvironmentInterface } from './common/interfaces/environment.interface';
 import { DocsService } from './docs/docs.service';
 
 const server = Express();
