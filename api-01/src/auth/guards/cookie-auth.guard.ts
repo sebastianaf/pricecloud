@@ -44,10 +44,10 @@ export class CookieAuthGuard extends AuthGuard('cookie') {
     }
 
     const hasAccess = requiredViews.some((view) =>
-      user.role.roleViews.map((roleView) => roleView.view.id).includes(view),
+      user?.role?.roleViews.map((roleView) => roleView.view.id).includes(view),
     );
 
-    if (!(hasAccess || user.role.id === RoleInterface.admin))
+    if (!(hasAccess || user?.role.id === RoleInterface.admin))
       throw new ForbiddenException(`No tiene acceso a este recurso (AVT-002)`);
 
     return true;

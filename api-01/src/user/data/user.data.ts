@@ -6,7 +6,7 @@ export const userData: Partial<User>[] = [
   {
     id: `e0b6f07c-5329-4f21-b893-e3fb83a5da9a`,
     email: 'admin@pricecloud.org',
-    firstName: 'Admin',
+    firstName: 'Testing Admin',
     firstLastName: 'Pricecloud',
     secondLastName: 'User',
     password: 'Teardrop7777',

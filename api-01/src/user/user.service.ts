@@ -90,18 +90,24 @@ export class UserService {
   }
 
   async findOneCredentialsResponse(user: User) {
-    const user2 = await this.userRepository.findOne({
-      where: { id: user.id },
-    });
+    try {
+      const user2 = await this.userRepository.findOne({
+        where: { id: user.id },
+      });
 
-    const credentalsResponse: CredentialsResponseInterface = {
-      aws: {
-        accessId: user2.credentials.aws.accessId !== null,
-        secretKey: user2.credentials.aws.secretKey !== null,
-      },
-    };
+      const credentalsResponse: CredentialsResponseInterface = {
+        aws: {
+          accessId: user2.credentials.aws.accessId !== null,
+          secretKey: user2.credentials.aws.secretKey !== null,
+        },
+      };
 
-    return credentalsResponse;
+      return credentalsResponse;
+    } catch (error) {
+      throw new ConflictException(
+        `Hubo un error al obtener las credenciales, por favor intente de nuevo (USFCR-001)`,
+      );
+    }
   }
 
   async findOneCredentials(user: User) {
