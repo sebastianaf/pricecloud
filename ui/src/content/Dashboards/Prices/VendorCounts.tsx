@@ -79,7 +79,7 @@ function VendorCounts() {
                     {numeral(
                       Number(data2[`${VendorNameType.aws}`]?.length || 0)
                     )
-                      .format('0.0a')
+                      .format('0')
                       .toUpperCase()}{' '}
                     categorias de productos
                   </>
@@ -123,7 +123,7 @@ function VendorCounts() {
                 precios
               </Typography>
               <Typography variant="subtitle1" color={`lightsteelblue`} noWrap>
-                {data2 && Array.isArray(data2) ? (
+                {data2 ? (
                   numeral(
                     Number(
                       data2.find(
@@ -131,7 +131,7 @@ function VendorCounts() {
                       )?.productCount || 0
                     )
                   )
-                    .format('0.0a')
+                    .format('0')
                     .toUpperCase()
                 ) : (
                   <LinearProgress variant="query" />
@@ -154,7 +154,7 @@ function VendorCounts() {
                 Microsoft Azure
               </Typography>
               <Typography variant="h1" color={`primary`} noWrap>
-                {data && Array.isArray(data) ? (
+                {data ? (
                   numeral(
                     Number(
                       data.find(
@@ -162,7 +162,7 @@ function VendorCounts() {
                       )?.productCount || 0
                     )
                   )
-                    .format('0.0a')
+                    .format('0')
                     .toUpperCase()
                 ) : (
                   <CircularProgress size={32} />
