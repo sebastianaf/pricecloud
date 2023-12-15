@@ -54,7 +54,7 @@ const LinearProgressWrapper = styled(LinearProgress)(
 `
 );
 
-function Projects() {
+function Categories() {
   const theme = useTheme();
 
   return (
@@ -472,4 +472,4 @@ function Projects() {
   );
 }
 
-export default Projects;
+export default Categories;

@@ -43,12 +43,12 @@ function VendorCounts() {
                 Amazon Web Services
               </Typography>
               <Typography variant="h1" color={`primary`} noWrap>
-                {data ? (
+                {data && Array.isArray(data) ? (
                   numeral(
                     Number(
                       data.find(
                         (item) => item.vendorName === VendorNameType.aws
-                      )?.productCount
+                      )?.productCount || 0
                     )
                   )
                     .format('0.0a')
@@ -78,12 +78,12 @@ function VendorCounts() {
                 Google Cloud Platform
               </Typography>
               <Typography variant="h1" color={`primary`} noWrap>
-                {data ? (
+                {data && Array.isArray(data) ? (
                   numeral(
                     Number(
                       data.find(
                         (item) => item.vendorName === VendorNameType.gcp
-                      )?.productCount
+                      )?.productCount || 0
                     )
                   )
                     .format('0.0a')
@@ -112,12 +112,12 @@ function VendorCounts() {
                 Microsoft Azure
               </Typography>
               <Typography variant="h1" color={`primary`} noWrap>
-                {data ? (
+                {data && Array.isArray(data) ? (
                   numeral(
                     Number(
                       data.find(
                         (item) => item.vendorName === VendorNameType.azure
-                      )?.productCount
+                      )?.productCount || 0
                     )
                   )
                     .format('0.0a')

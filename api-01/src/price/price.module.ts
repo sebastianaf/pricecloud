@@ -6,14 +6,12 @@ import { AuthModule } from '../auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Installs } from './entities/installs.db-02.entity';
 import { Products } from './entities/products.db-02.entity';
-import { Stats } from './entities/stats.entity.db-02';
+import { Stats } from './entities/stats.db-02.entity';
 import { DatabaseModule } from '../database/database.module';
-import { PriceCount } from './entities/price-count.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Installs, Products, Stats], `db-02`),
-    TypeOrmModule.forFeature([PriceCount]),
     AuthModule,
     DatabaseModule,
   ],

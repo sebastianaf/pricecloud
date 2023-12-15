@@ -14,4 +14,11 @@ export class PriceController {
   countVendorProducts() {
     return this.priceService.countVendorProducts();
   }
+
+  @Get(`count-product-families`)
+  @ApiOperation({ summary: `Get CCSPs product families count` })
+  @Protect([ViewInterface.dashboard])
+  countProductFamilies() {
+    return this.priceService.countProductFamilies();
+  }
 }
