@@ -16,8 +16,8 @@ import {
 } from '@mui/material';
 import PageTitleWrapper from '@/components/PageTitleWrapper';
 import TeamOverview from '@/content/Dashboards/Prices/VendorCounts';
-import TasksAnalytics from '@/content/Dashboards/Prices/TasksAnalytics';
-import Performance from '@/content/Dashboards/Prices/Performance';
+import TasksAnalytics from '@/content/Dashboards/Prices/Geography';
+import Performance from '@/content/Dashboards/Prices/Locations';
 import Categories from '@/content/Dashboards/Prices/Categories';
 import { protect } from '../../src/helper/protect';
 
@@ -170,12 +170,12 @@ function DashboardTasks() {
                   </Box>
                   <Divider />
                 </Grid>
-                <Grid item xs={12}>
+                {/* <Grid item xs={12}>
                   <Box p={4}>
                     <Categories />
                   </Box>
                   <Divider />
-                </Grid>
+                </Grid> */}
               </>
             )}
           </Grid>

@@ -16,8 +16,8 @@ import {
 } from '@mui/material';
 import PageTitleWrapper from '@/components/PageTitleWrapper';
 import TeamOverview from '@/content/Dashboards/Prices/VendorCounts';
-import TasksAnalytics from '@/content/Dashboards/Prices/TasksAnalytics';
-import Performance from '@/content/Dashboards/Prices/Performance';
+import TasksAnalytics from '@/content/Dashboards/Prices/Geography';
+import Performance from '@/content/Dashboards/Prices/Locations';
 import Projects from '@/content/Dashboards/Prices/Categories';
 import TaskSearch from '@/content/Dashboards/Prices/TaskSearch';
 import { protect } from '../../src/helper/protect';

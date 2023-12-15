@@ -35,13 +35,13 @@ const DotPrimary = styled('span')(
 `
 );
 
-function TasksAnalytics() {
+function Geography() {
   const theme = useTheme();
 
   const chartOptions: ApexOptions = {
     chart: {
       background: 'transparent',
-      type: 'bar',
+      type: 'rangeBar',
       toolbar: {
         show: false
       },
@@ -137,37 +137,33 @@ function TasksAnalytics() {
 
   const chartData = [
     {
-      name: 'Income',
+      name: 'Productos',
       data: [28, 47, 41, 34, 69, 91, 49, 82, 52, 72, 32, 99]
     },
-    {
+    /* {
       name: 'Expenses',
       data: [38, 85, 64, 40, 97, 82, 58, 42, 55, 46, 57, 70]
-    }
+    } */
   ];
 
   const periods = [
     {
-      value: 'today',
-      text: 'Today'
+      value: 'aws',
+      text: 'Amazon Web Services'
     },
     {
-      value: 'yesterday',
-      text: 'Yesterday'
+      value: 'gcp',
+      text: 'Google Cloud Platform'
     },
     {
-      value: 'last_month',
-      text: 'Last month'
-    },
-    {
-      value: 'last_year',
-      text: 'Last year'
+      value: 'azure',
+      text: 'Microsoft Azure'
     }
   ];
 
   const actionRef1 = useRef<any>(null);
   const [openPeriod, setOpenMenuPeriod] = useState<boolean>(false);
-  const [period, setPeriod] = useState<string>(periods[3].text);
+  const [period, setPeriod] = useState<string>(periods[0].text);
 
   return (
     <Box>
@@ -177,7 +173,7 @@ function TasksAnalytics() {
         alignItems="center"
         justifyContent="space-between"
       >
-        <Typography variant="h4">Tasks Analytics</Typography>
+        <Typography variant="h4">Distribución por regiones y zonas</Typography>
         <Button
           size="small"
           variant="contained"
@@ -226,18 +222,7 @@ function TasksAnalytics() {
           }}
         >
           <DotPrimary />
-          tasks created
-        </Typography>
-        <Typography
-          variant="body2"
-          color="text.secondary"
-          sx={{
-            display: 'flex',
-            alignItems: 'center'
-          }}
-        >
-          <DotPrimaryLight />
-          tasks completed
+          Productos
         </Typography>
       </Box>
       <Chart
@@ -250,4 +235,4 @@ function TasksAnalytics() {
   );
 }
 
-export default TasksAnalytics;
+export default Geography;
