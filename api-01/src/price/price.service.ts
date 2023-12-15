@@ -14,8 +14,6 @@ export class PriceService {
     private readonly installsRepository: Repository<Installs>,
     @InjectRepository(Products, `db-02`)
     private readonly productsRepository: Repository<Products>,
-    @InjectRepository(Stats, `db-02`)
-    private readonly statsRepository: Repository<Stats>,
   ) {}
 
   async countVendorProducts() {
@@ -85,6 +83,21 @@ export class PriceService {
       throw new GoneException(
         `Error recuperando las regiones del CCSP (CPF-001)`,
       );
+    }
+  }
+
+  async countRegions() {
+    try {
+      const data = await this.installsRepository.query(
+        `SELECT region, count(*) as "regionCount"
+        FROM products
+        GROUP BY "region"`,
+      );
+
+      return data;
+    } catch (error) {
+      Logger.error(error);
+      throw new GoneException(`Error contando las regiones (CPF-001)`);
     }
   }
 }

@@ -60,20 +60,7 @@ function Geography() {
         }`
       );
 
-      /* console.log(`+++++++++++++++++++++++++++++++++`);
-      console.log(
-        `${paths.api.price.resumeRegionsByVendor}?vendorName=${
-          periods.find((item) => item.text === period)?.value
-        }`
-      );
-      console.log(`+++++++++++++++++++++++++++++++++`); */
-
       if (request.status === HttpStatusCode.Ok) {
-        /* console.log(`----------------`);
-        const data = request?.data;
-        console.log(request);
-        console.log(`----------------`); */
-
         const data = request?.data;
         const labelsPre = data?.map((item: any) => item?.region || `Global`);
         setLabels(labelsPre);
@@ -86,7 +73,6 @@ function Geography() {
             color: `${theme.colors.primary.main}`
           }
         ];
-        console.log(chartDataPre);
         setChartData(chartDataPre);
       }
     };
