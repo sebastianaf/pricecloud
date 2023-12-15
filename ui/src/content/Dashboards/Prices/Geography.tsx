@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   Button,
   Box,
@@ -7,22 +7,15 @@ import {
   MenuItem,
   Typography,
   styled,
-  useTheme
+  useTheme,
+  CircularProgress
 } from '@mui/material';
 import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
 import { Chart } from 'src/components/Chart';
 import type { ApexOptions } from 'apexcharts';
-
-const DotPrimaryLight = styled('span')(
-  ({ theme }) => `
-    border-radius: 22px;
-    background: ${theme.colors.primary.lighter};
-    width: ${theme.spacing(1.5)};
-    height: ${theme.spacing(1.5)};
-    display: inline-block;
-    margin-right: ${theme.spacing(0.5)};
-`
-);
+import { customAxios } from '../../../helper/customAxios';
+import paths from '../../../helper/paths';
+import { HttpStatusCode } from 'axios';
 
 const DotPrimary = styled('span')(
   ({ theme }) => `
@@ -35,8 +28,70 @@ const DotPrimary = styled('span')(
 `
 );
 
+const periods = [
+  {
+    value: 'aws',
+    text: 'Amazon Web Services'
+  },
+  {
+    value: 'gcp',
+    text: 'Google Cloud Platform'
+  },
+  {
+    value: 'azure',
+    text: 'Microsoft Azure'
+  }
+];
+
 function Geography() {
   const theme = useTheme();
+  const [labels, setLabels] = useState<any>(null);
+  const [chartData, setChartData] = useState<any>(null);
+  const actionRef1 = useRef<any>(null);
+  const [openPeriod, setOpenMenuPeriod] = useState<boolean>(false);
+  const [period, setPeriod] = useState<string>(periods[0].text);
+
+  useEffect(() => {
+    const handleRequest = async () => {
+      setChartData(null);
+      const request = await customAxios.get(
+        `${paths.api.price.resumeRegionsByVendor}?vendorName=${
+          periods.find((item) => item.text === period)?.value
+        }`
+      );
+
+      /* console.log(`+++++++++++++++++++++++++++++++++`);
+      console.log(
+        `${paths.api.price.resumeRegionsByVendor}?vendorName=${
+          periods.find((item) => item.text === period)?.value
+        }`
+      );
+      console.log(`+++++++++++++++++++++++++++++++++`); */
+
+      if (request.status === HttpStatusCode.Ok) {
+        /* console.log(`----------------`);
+        const data = request?.data;
+        console.log(request);
+        console.log(`----------------`); */
+
+        const data = request?.data;
+        const labelsPre = data?.map((item: any) => item?.region || `Global`);
+        setLabels(labelsPre);
+
+        const Productos = data?.map((item: any) => Number(item?.regionCount));
+        const chartDataPre = [
+          {
+            name: `Productos`,
+            data: Productos,
+            color: `${theme.colors.primary.main}`
+          }
+        ];
+        console.log(chartDataPre);
+        setChartData(chartDataPre);
+      }
+    };
+    handleRequest();
+  }, [period]);
 
   const chartOptions: ApexOptions = {
     chart: {
@@ -74,20 +129,7 @@ function Geography() {
     legend: {
       show: false
     },
-    labels: [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec'
-    ],
+    labels,
     grid: {
       strokeDashArray: 5,
       borderColor: theme.palette.divider
@@ -135,37 +177,18 @@ function Geography() {
     }
   };
 
-  const chartData = [
-    {
-      name: 'Productos',
-      data: [28, 47, 41, 34, 69, 91, 49, 82, 52, 72, 32, 99]
-    },
-    /* {
-      name: 'Expenses',
-      data: [38, 85, 64, 40, 97, 82, 58, 42, 55, 46, 57, 70]
-    } */
-  ];
-
-  const periods = [
-    {
-      value: 'aws',
-      text: 'Amazon Web Services'
-    },
-    {
-      value: 'gcp',
-      text: 'Google Cloud Platform'
-    },
-    {
-      value: 'azure',
-      text: 'Microsoft Azure'
-    }
-  ];
-
-  const actionRef1 = useRef<any>(null);
-  const [openPeriod, setOpenMenuPeriod] = useState<boolean>(false);
-  const [period, setPeriod] = useState<string>(periods[0].text);
-
-  return (
+  return !chartData ? (
+    <Box
+      sx={{
+        p: 10,
+        display: `flex`,
+        justifyContent: `center`,
+        minHeight: 'auto'
+      }}
+    >
+      <CircularProgress size={48} />
+    </Box>
+  ) : (
     <Box>
       <Box
         mb={2}
