@@ -37,7 +37,6 @@ function Console() {
   useEffect(() => {
     socket.connect();
     socket.on(SocketEventType.console, (message) => {
-      console.log(message);
       setOutput((prevString) => `${prevString}\n${message}`);
     });
 
