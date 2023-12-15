@@ -13,7 +13,7 @@ import CancelPresentationTwoToneIcon from '@mui/icons-material/CancelPresentatio
 
 const RootWrapper = styled(Card)(
   ({ theme }) => `
-    background: ${theme.colors.gradients.green1};
+    background: ${theme.colors.gradients.green2};
     color: ${theme.colors.alpha.white[100]};
 `
 );
@@ -129,7 +129,7 @@ function Performance() {
         </Box>
         <Box pt={3}>
           <LinearProgressWrapper
-            value={73}
+            value={76}
             color="primary"
             variant="determinate"
           />

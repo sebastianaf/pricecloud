@@ -19,8 +19,6 @@ import TeamOverview from '@/content/Dashboards/Prices/TeamOverview';
 import TasksAnalytics from '@/content/Dashboards/Prices/TasksAnalytics';
 import Performance from '@/content/Dashboards/Prices/Performance';
 import Projects from '@/content/Dashboards/Prices/Projects';
-import Checklist from '@/content/Dashboards/Prices/Checklist';
-import Profile from '@/content/Dashboards/Prices/Profile';
 import TaskSearch from '@/content/Dashboards/Prices/TaskSearch';
 import { protect } from '../../src/helper/protect';
 
@@ -110,10 +108,7 @@ function DashboardTasks() {
   const theme = useTheme();
   const [currentTab, setCurrentTab] = useState<string>('analytics');
 
-  const tabs = [
-    { value: 'analytics', label: 'Indicadores' },
-    /* { value: 'newsSearch', label: 'Novedades' } */
-  ];
+  const tabs = [{ value: 'analytics', label: 'Indicadores' }];
 
   const handleTabsChange = (_event: ChangeEvent<{}>, value: string): void => {
     setCurrentTab(value);
@@ -182,39 +177,7 @@ function DashboardTasks() {
                   </Box>
                   <Divider />
                 </Grid>
-                <Grid item xs={12}>
-                  <Box
-                    sx={{
-                      background: `${theme.colors.alpha.black[5]}`
-                    }}
-                  >
-                    <Grid container spacing={0}>
-                      <Grid item xs={12} md={6}>
-                        <Box
-                          p={4}
-                          sx={{
-                            background: `${theme.colors.alpha.white[70]}`
-                          }}
-                        >
-                          <Checklist />
-                        </Box>
-                      </Grid>
-                      <Grid item xs={12} md={6}>
-                        <Box p={4}>
-                          <Profile />
-                        </Box>
-                      </Grid>
-                    </Grid>
-                  </Box>
-                </Grid>
               </>
-            )}
-            {currentTab === 'newsSearch' && (
-              <Grid item xs={12}>
-                <Box p={4}>
-                  <TaskSearch />
-                </Box>
-              </Grid>
             )}
           </Grid>
         </Card>

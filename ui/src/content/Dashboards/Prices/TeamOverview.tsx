@@ -11,6 +11,9 @@ import {
 } from '@mui/material';
 import { formatDistance, subDays, subMinutes, subHours } from 'date-fns';
 import Text from 'src/components/Text';
+import { FaAws } from 'react-icons/fa';
+import { SiMicrosoftazure } from 'react-icons/si';
+import { SiGooglecloud } from 'react-icons/si';
 
 const DotLegend = styled('span')(
   ({ theme }) => `
@@ -52,170 +55,69 @@ function TeamOverview() {
     <Grid container spacing={4}>
       <Grid item xs={12} md={4}>
         <Box>
-          <Box display="flex" alignItems="center" pb={3}>
-            <Badge
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right'
-              }}
-              overlap="circular"
-              badgeContent={
-                <Tooltip
-                  arrow
-                  placement="top"
-                  title={
-                    'Offline since ' +
-                    formatDistance(subDays(new Date(), 14), new Date(), {
-                      addSuffix: true
-                    })
-                  }
-                >
-                  <DotLegend
-                    style={{ background: `${theme.colors.error.main}` }}
-                  />
-                </Tooltip>
-              }
-            >
-              <AvatarWrapper
-                alt="Remy Sharp"
-                src="/static/images/avatars/4.jpg"
-              />
-            </Badge>
+          <Box display="flex" alignItems="center" justifyItems="center">
+            <FaAws color={`info`} size={72} />
             <Box
               sx={{
                 ml: 1.5
               }}
             >
               <Typography variant="h4" noWrap gutterBottom>
-                Hanna Siphron
+                Amazon Web Services
               </Typography>
-              <Typography variant="subtitle2" noWrap>
-                Web Dev Support Team
+              <Typography variant="h1" color={`primary`} noWrap>
+                1.37M
+              </Typography>
+              <Typography variant="caption" color={`info`} noWrap>
+                precios
               </Typography>
             </Box>
           </Box>
-
-          <Typography variant="subtitle2" gutterBottom>
-            <Text color="black">4</Text> out of <Text color="black">6</Text>{' '}
-            tasks completed
-          </Typography>
-          <LinearProgressWrapper
-            value={65}
-            color="primary"
-            variant="determinate"
-          />
         </Box>
       </Grid>
       <Grid item xs={12} md={4}>
         <Box>
           <Box display="flex" alignItems="center" pb={3}>
-            <Badge
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right'
-              }}
-              overlap="circular"
-              badgeContent={
-                <Tooltip
-                  arrow
-                  placement="top"
-                  title={
-                    'Online since ' +
-                    formatDistance(subMinutes(new Date(), 6), new Date(), {
-                      addSuffix: true
-                    })
-                  }
-                >
-                  <DotLegend
-                    style={{ background: `${theme.colors.success.main}` }}
-                  />
-                </Tooltip>
-              }
-            >
-              <AvatarWrapper
-                alt="Ann Saris"
-                src="/static/images/avatars/3.jpg"
-              />
-            </Badge>
+            <SiGooglecloud size={72} />
+
             <Box
               sx={{
                 ml: 1.5
               }}
             >
               <Typography variant="h4" noWrap gutterBottom>
-                Ann Saris
+                Google Cloud Platform
               </Typography>
-              <Typography variant="subtitle2" noWrap>
-                Senior Book Keeper
+              <Typography variant="h1" color={`primary`} noWrap>
+                432K
+              </Typography>
+              <Typography variant="caption" color={`info`} noWrap>
+                precios
               </Typography>
             </Box>
           </Box>
-
-          <Typography variant="subtitle2" gutterBottom>
-            <Text color="black">2</Text> out of <Text color="black">8</Text>{' '}
-            tasks completed
-          </Typography>
-          <LinearProgressWrapper
-            value={25}
-            color="primary"
-            variant="determinate"
-          />
         </Box>
       </Grid>
       <Grid item xs={12} md={4}>
         <Box>
           <Box display="flex" alignItems="center" pb={3}>
-            <Badge
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right'
-              }}
-              overlap="circular"
-              badgeContent={
-                <Tooltip
-                  arrow
-                  placement="top"
-                  title={
-                    'Offline since ' +
-                    formatDistance(subHours(new Date(), 7), new Date(), {
-                      addSuffix: true
-                    })
-                  }
-                >
-                  <DotLegend
-                    style={{ background: `${theme.colors.error.main}` }}
-                  />
-                </Tooltip>
-              }
-            >
-              <AvatarWrapper
-                alt="James Stanton"
-                src="/static/images/avatars/5.jpg"
-              />
-            </Badge>
+            <SiMicrosoftazure size={72} />
             <Box
               sx={{
                 ml: 1.5
               }}
             >
               <Typography variant="h4" noWrap gutterBottom>
-                James Stanton
+                Microsoft Azure
               </Typography>
-              <Typography variant="subtitle2" noWrap>
-                Phone Pre-Sales Assistant
+              <Typography variant="h1" color={`primary`} noWrap>
+                70K
+              </Typography>
+              <Typography variant="caption" color={`info`} noWrap>
+                precios
               </Typography>
             </Box>
           </Box>
-
-          <Typography variant="subtitle2" gutterBottom>
-            <Text color="black">10</Text> out of <Text color="black">20</Text>{' '}
-            tasks completed
-          </Typography>
-          <LinearProgressWrapper
-            value={50}
-            color="primary"
-            variant="determinate"
-          />
         </Box>
       </Grid>
     </Grid>

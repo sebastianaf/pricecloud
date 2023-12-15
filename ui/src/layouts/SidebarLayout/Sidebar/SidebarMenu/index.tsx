@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import {
   ListSubheader,
@@ -22,6 +22,7 @@ import { FaAws } from 'react-icons/fa';
 
 import { SidebarContext } from 'src/contexts/SidebarContext';
 import paths from '../../../../helper/paths';
+import { customAxios } from '../../../../helper/customAxios';
 
 const MenuWrapper = styled(Box)(
   ({ theme }) => `
@@ -169,6 +170,16 @@ function SidebarMenu() {
   const { closeSidebar } = useContext(SidebarContext);
   const router = useRouter();
   const currentRoute = router.pathname;
+
+  useEffect(() => {
+    const handlerRequest = async () => {
+      const response = await customAxios.get(
+        paths.api.price.countVendorProducts
+      );
+      console.log(response);
+    };
+    handlerRequest();
+  }, []);
 
   return (
     <>
