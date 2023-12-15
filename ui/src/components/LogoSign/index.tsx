@@ -28,7 +28,7 @@ function Logo() {
         }}
         overlap="circular"
         color="success"
-        badgeContent="v1.0"
+        badgeContent="v1.0.0"
       >
         <img
           width="64px"
