@@ -58,6 +58,7 @@ const Modal = () => {
             href={link || null}
             onClick={handleClose}
             color={notificationType}
+            sx={{ hover: { background: 'rgba(0, 0, 0, 0.04)' } }}
           >
             {buttonText}
           </Button>
