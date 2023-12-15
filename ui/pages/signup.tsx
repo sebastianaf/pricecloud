@@ -85,7 +85,7 @@ function Signup() {
               <Badge
                 overlap="circular"
                 color="success"
-                badgeContent="v1.0"
+                badgeContent="v1.0.0"
                 sx={{ cursor: 'pointer' }}
               >
                 <NextLink href="/">
