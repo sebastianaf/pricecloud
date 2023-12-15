@@ -5,11 +5,13 @@ import {
   Typography,
   Avatar,
   useTheme,
-  LinearProgress,
   styled
 } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { BiWorld } from 'react-icons/bi';
 import { BiMap } from 'react-icons/bi';
+import { customAxios } from '../../../helper/customAxios';
+import paths from '../../../helper/paths';
 
 const RootWrapper = styled(Card)(
   ({ theme }) => `
@@ -44,23 +46,18 @@ const TypographySecondary = styled(Typography)(
 `
 );
 
-const LinearProgressWrapper = styled(LinearProgress)(
-  ({ theme }) => `
-        flex-grow: 1;
-        margin-right: ${theme.spacing(1)};
-        height: 10px;
-        background-color: ${theme.colors.error.main};
-
-        .MuiLinearProgress-barColorPrimary {
-          background-color: ${theme.colors.alpha.white[100]};
-          border-top-right-radius: ${theme.general.borderRadius};
-          border-bottom-right-radius: ${theme.general.borderRadius};
-        }
-`
-);
-
 function Locations() {
   const theme = useTheme();
+  const [data, setData] = useState<any>(null);
+  useEffect(() => {
+    const handlerRequest = async () => {
+      const response = await customAxios.get(
+        paths.api.price.countVendorProducts
+      );
+      setData(response?.data);
+    };
+    handlerRequest();
+  }, []);
 
   return (
     <RootWrapper
@@ -75,7 +72,7 @@ function Locations() {
           pb: 1,
           pt: 2,
           fontSize: `${theme.typography.pxToRem(23)}`,
-          color: `${theme.colors.alpha.white}`
+          color: `${theme.colors.alpha.white[40]}`
         }}
       >
         Ubicaciones
@@ -98,14 +95,15 @@ function Locations() {
             <BiMap size={96} />
           </AvatarSuccess>
           <Box>
-            <Typography variant="h1">23</Typography>
-            <TypographySecondary
+            <Typography
+              variant="h1"
               sx={{
-                color: `${theme.colors.alpha.white}`
+                color: `${theme.colors.alpha.trueWhite[100]}`
               }}
-              variant="subtitle2"
-              noWrap
             >
+              23
+            </Typography>
+            <TypographySecondary variant="subtitle2" noWrap>
               Regiones
             </TypographySecondary>
           </Box>
@@ -127,7 +125,14 @@ function Locations() {
             <BiWorld size={96} />
           </AvatarError>
           <Box>
-            <Typography variant="h1">5</Typography>
+            <Typography
+              variant="h1"
+              sx={{
+                color: `${theme.colors.alpha.trueWhite[100]}`
+              }}
+            >
+              5
+            </Typography>
             <TypographySecondary variant="subtitle2" noWrap>
               Continentes
             </TypographySecondary>

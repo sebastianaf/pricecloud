@@ -1,4 +1,4 @@
-import { ConflictException, Controller, Get } from '@nestjs/common';
+import { ConflictException, Controller, Get, Query } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -32,5 +32,12 @@ export class PriceController {
   @Protect([ViewInterface.dashboard])
   countProductFamilies() {
     return this.priceService.countProductFamilies();
+  }
+
+  @Get(`resume-regions-by-vendor`)
+  @ApiOperation({ summary: `Get regions by vendor` })
+  @Protect([ViewInterface.dashboard])
+  resumeRegionsByVendor(@Query('vendorName') vendorName: string) {
+    return this.priceService.resumeRegionsByVendor(vendorName);
   }
 }
