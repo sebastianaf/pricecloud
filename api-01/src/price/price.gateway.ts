@@ -8,6 +8,7 @@ import {
 import { Server } from 'socket.io';
 import { io, Socket } from 'socket.io-client';
 import { SocketEventInterface } from './interfaces/socket-event.interface';
+import { welcomeData } from './data/welcome.data';
 
 @WebSocketGateway({ namespace: '/price', cors: '*' })
 export class PriceGateway {
@@ -26,10 +27,7 @@ export class PriceGateway {
   }
 
   handleConnection(client: Socket, ...args: any[]) {
-    client.emit(
-      SocketEventInterface.consoleEvent,
-      `Conexión establecida con el servidor de precios`,
-    );
+    client.emit(SocketEventInterface.consoleEvent, welcomeData);
   }
 
   handleDisconnect(client: Socket) {}
