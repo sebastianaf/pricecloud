@@ -2,6 +2,7 @@ import {
   Box,
   CircularProgress,
   Grid,
+  LinearProgress,
   Typography,
   useTheme
 } from '@mui/material';
@@ -18,25 +19,36 @@ import { VendorNameType } from '../../../types/vendor-name.type';
 function VendorCounts() {
   const theme = useTheme();
   const [data, setData] = useState<any>(null);
+  const [data2, setData2] = useState<any>(null);
   useEffect(() => {
     const handlerRequest = async () => {
       const response = await customAxios.get(
         paths.api.price.countVendorProducts
       );
       setData(response?.data);
+
+      const response2 = await customAxios.get(paths.api.price.productFamilies);
+      setData2(response2?.data);
     };
     handlerRequest();
   }, []);
 
   return (
-    <Grid container spacing={4}>
+    <Grid
+      display="flex"
+      flexDirection="row"
+      alignItems="flex-start  "
+      justifyItems="center"
+      container
+      spacing={4}
+    >
       <Grid item xs={12} md={4}>
         <Box>
-          <Box display="flex" alignItems="center" justifyItems="center">
+          <Box display="flex" alignItems="flex-start" justifyItems="center">
             <FaAws color={`info`} size={72} />
             <Box
               sx={{
-                ml: 1.5
+                ml: 2.5
               }}
             >
               <Typography variant="h4" noWrap gutterBottom>
@@ -60,6 +72,21 @@ function VendorCounts() {
               <Typography variant="caption" color={`info`} noWrap>
                 precios
               </Typography>
+
+              <Typography variant="subtitle1" color={`lightsteelblue`} noWrap>
+                {data2 ? (
+                  <>
+                    {numeral(
+                      Number(data2[`${VendorNameType.aws}`]?.length || 0)
+                    )
+                      .format('0.0a')
+                      .toUpperCase()}{' '}
+                    categorias de productos
+                  </>
+                ) : (
+                  <LinearProgress variant="query" />
+                )}
+              </Typography>
             </Box>
           </Box>
         </Box>
@@ -71,7 +98,7 @@ function VendorCounts() {
 
             <Box
               sx={{
-                ml: 1.5
+                ml: 2.5
               }}
             >
               <Typography variant="h4" noWrap gutterBottom>
@@ -95,6 +122,21 @@ function VendorCounts() {
               <Typography variant="caption" color={`info`} noWrap>
                 precios
               </Typography>
+              <Typography variant="subtitle1" color={`lightsteelblue`} noWrap>
+                {data2 && Array.isArray(data2) ? (
+                  numeral(
+                    Number(
+                      data2.find(
+                        (item) => item.vendorName === VendorNameType.gcp
+                      )?.productCount || 0
+                    )
+                  )
+                    .format('0.0a')
+                    .toUpperCase()
+                ) : (
+                  <LinearProgress variant="query" />
+                )}
+              </Typography>
             </Box>
           </Box>
         </Box>
@@ -105,7 +147,7 @@ function VendorCounts() {
             <SiMicrosoftazure size={72} />
             <Box
               sx={{
-                ml: 1.5
+                ml: 2.5
               }}
             >
               <Typography variant="h4" noWrap gutterBottom>
@@ -128,6 +170,26 @@ function VendorCounts() {
               </Typography>
               <Typography variant="caption" color={`info`} noWrap>
                 precios
+              </Typography>
+              <Typography
+                variant="subtitle1"
+                color={`lightsteelblue`}
+                noWrap
+                sx={{ mt: 1 }}
+              >
+                {data2 && Array.isArray(data2) ? (
+                  numeral(
+                    Number(
+                      data2.find(
+                        (item) => item.vendorName === VendorNameType.azure
+                      )?.productCount || 0
+                    )
+                  )
+                    .format('0.0a')
+                    .toUpperCase()
+                ) : (
+                  <LinearProgress variant="query" />
+                )}
               </Typography>
             </Box>
           </Box>
