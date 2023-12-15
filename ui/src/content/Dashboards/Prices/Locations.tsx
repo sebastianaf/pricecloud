@@ -22,21 +22,17 @@ const RootWrapper = styled(Card)(
 
 const AvatarSuccess = styled(Avatar)(
   ({ theme }) => `
-      background-color: ${theme.palette.error.main};
-      color: ${theme.palette.success.contrastText};
-      width: ${theme.spacing(8)};
-      height: ${theme.spacing(8)};
-      box-shadow: ${theme.colors.shadows.success};
+      color: ${theme.palette.text.primary};
+      width: ${theme.spacing(7)};
+      height: ${theme.spacing(7)};
 `
 );
 
 const AvatarError = styled(Avatar)(
   ({ theme }) => `
-      background-color: ${theme.colors.success.main};
-      color: ${theme.palette.success.contrastText};
-      width: ${theme.spacing(8)};
-      height: ${theme.spacing(8)};
-      box-shadow: ${theme.colors.shadows.success};
+      color: ${theme.palette.text.primary};
+      width: ${theme.spacing(7)};
+      height: ${theme.spacing(7)};
 `
 );
 
@@ -69,8 +65,7 @@ function Locations() {
         variant="h3"
         sx={{
           px: 2,
-          pb: 1,
-          pt: 2,
+          py: 2,
           fontSize: `${theme.typography.pxToRem(23)}`,
           color: `${theme.colors.alpha.white[40]}`
         }}
@@ -98,12 +93,16 @@ function Locations() {
             <Typography
               variant="h1"
               sx={{
-                color: `${theme.colors.alpha.trueWhite[100]}`
+                color: `${theme.colors.primary.main}`
               }}
             >
               23
             </Typography>
-            <TypographySecondary variant="subtitle2" noWrap>
+            <TypographySecondary
+              color={`lightsteelblue`}
+              variant="caption"
+              noWrap
+            >
               Regiones
             </TypographySecondary>
           </Box>
@@ -128,23 +127,20 @@ function Locations() {
             <Typography
               variant="h1"
               sx={{
-                color: `${theme.colors.alpha.trueWhite[100]}`
+                color: `${theme.colors.primary.main}`
               }}
             >
               5
             </Typography>
-            <TypographySecondary variant="subtitle2" noWrap>
+            <TypographySecondary
+              variant="caption"
+              color={`lightsteelblue`}
+              noWrap
+            >
               Continentes
             </TypographySecondary>
           </Box>
         </Box>
-        {/* <Box pt={3}>
-          <LinearProgressWrapper
-            value={76}
-            color="primary"
-            variant="determinate"
-          />
-        </Box> */}
       </CardContent>
     </RootWrapper>
   );
