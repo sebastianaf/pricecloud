@@ -67,7 +67,7 @@ function Projects() {
           pb: 3
         }}
       >
-        <Typography variant="h3">Projects</Typography>
+        <Typography variant="h3">Categorías</Typography>
         <Box>
           <Button size="small" variant="outlined">
             View all projects
