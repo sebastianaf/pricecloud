@@ -60,9 +60,9 @@ const runConsoleCommand = async (
     case CommandInterface.dataLoad:
       await dataLoad(socket, socketEvent);
       break;
-    case CommandInterface.dataScrape:
+    /* case CommandInterface.dataScrape:
       await dataScrape(socket, socketEvent);
-      break;
+      break; */
     case CommandInterface.jobUpdate:
       await jobUpdate(socket, socketEvent);
       break;

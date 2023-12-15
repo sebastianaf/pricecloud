@@ -99,8 +99,8 @@ function Console() {
                   bgcolor: 'black',
                   overflow: 'auto',
                   fontFamily: 'monospace',
-                  whiteSpace: 'pre-wrap', // Asegura que el texto se ajuste dentro del Box
-                  wordBreak: 'break-word' // Permite la ruptura de palabras para evitar overflow horizontal
+                  whiteSpace: 'pre-wrap',
+                  wordBreak: 'break-word'
                 }}
                 display={output.length === 0 && 'flex'}
                 justifyContent={output.length === 0 && 'center'}

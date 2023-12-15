@@ -7,7 +7,7 @@ import { run as dataDownload } from './dataDownload';
 import { run as dataLoad } from './dataLoad';
 
 export async function run(socket: Socket, event: SocketEvent): Promise<void> {
-  config.logAndEmit(socket, event, 'Iniciando: Actualizacion de DB');
+  config.logAndEmit(socket, event, 'Iniciando: Actualización de BD');
   const dumpFiles = glob.sync(`./data/products/*.csv.gz`);
   const dumpFileExists = dumpFiles.length !== 0;
 
@@ -27,5 +27,5 @@ export async function run(socket: Socket, event: SocketEvent): Promise<void> {
   await dataDownload(socket, event);
   await dataLoad(socket, event);
 
-  config.logAndEmit(socket, event, 'Completado: Actualizacion de DB');
+  config.logAndEmit(socket, event, 'Completado: Actualización de BD');
 }
