@@ -69,7 +69,7 @@ export async function run(socket: Socket, event: SocketEvent): Promise<void> {
     config.logAndEmit(
       socket,
       event,
-      `Ejecutando actualizacion de funcion para ${scraperConfig.vendor}:${scraperConfig.source}`
+      `Ejecutando actualización de función para ${scraperConfig.vendor}:${scraperConfig.source}`
     );
     try {
       await scraperConfig.scraperFunc();
