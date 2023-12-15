@@ -27,7 +27,8 @@ const paths = {
       root: `/price`,
       countVendorProducts: `/price/count-vendor-products`,
       productFamilies: `/price/product-families`,
-      resumeRegionsByVendor: `/price/resume-regions-by-vendor`
+      resumeRegionsByVendor: `/price/resume-regions-by-vendor`,
+      countRegions: `/price/count-regions`
     }
   },
   web: {

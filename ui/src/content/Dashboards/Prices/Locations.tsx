@@ -5,13 +5,15 @@ import {
   Typography,
   Avatar,
   useTheme,
-  styled
+  styled,
+  CircularProgress
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { BiWorld } from 'react-icons/bi';
 import { BiMap } from 'react-icons/bi';
 import { customAxios } from '../../../helper/customAxios';
 import paths from '../../../helper/paths';
+import { HttpStatusCode } from 'axios';
 
 const RootWrapper = styled(Card)(
   ({ theme }) => `
@@ -44,18 +46,30 @@ const TypographySecondary = styled(Typography)(
 
 function Locations() {
   const theme = useTheme();
-  const [data, setData] = useState<any>(null);
+  const [countRegions, setCountRegions] = useState<any>(null);
+
   useEffect(() => {
     const handlerRequest = async () => {
-      const response = await customAxios.get(
-        paths.api.price.countVendorProducts
-      );
-      setData(response?.data);
+      const response = await customAxios.get(paths.api.price.countRegions);
+      if (response.status === HttpStatusCode.Ok) {
+        setCountRegions(response?.data?.length);
+      }
     };
     handlerRequest();
   }, []);
 
-  return (
+  return !countRegions ? (
+    <Box
+      sx={{
+        p: 10,
+        display: `flex`,
+        justifyContent: `center`,
+        minHeight: 'auto'
+      }}
+    >
+      <CircularProgress size={32} />
+    </Box>
+  ) : (
     <RootWrapper
       sx={{
         p: 2
@@ -96,7 +110,7 @@ function Locations() {
                 color: `${theme.colors.primary.main}`
               }}
             >
-              23
+              {countRegions}
             </Typography>
             <TypographySecondary
               color={`lightsteelblue`}

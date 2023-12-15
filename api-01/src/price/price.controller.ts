@@ -40,4 +40,11 @@ export class PriceController {
   resumeRegionsByVendor(@Query('vendorName') vendorName: string) {
     return this.priceService.resumeRegionsByVendor(vendorName);
   }
+
+  @Get(`count-regions`)
+  @ApiOperation({ summary: `Get regions count` })
+  @Protect([ViewInterface.dashboard])
+  countRegions() {
+    return this.priceService.countRegions();
+  }
 }
