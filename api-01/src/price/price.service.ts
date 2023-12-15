@@ -70,19 +70,20 @@ export class PriceService {
     }
   }
 
-  async countRegions(){
+  async resumeRegionsByVendor(vendorName: string) {
     try {
       const data = await this.installsRepository.query(
-        `SELECT "region", count(*) as "regionCount"
-        FROM installs
-        GROUP BY "region"`,
+        `SELECT "region", "vendorName", count(*) as "regionCount"
+        FROM products
+        WHERE "vendorName" = '${vendorName}'
+        GROUP BY "region", "vendorName"`,
       );
 
       return data;
     } catch (error) {
       Logger.error(error);
       throw new GoneException(
-        `Error recuperando las regiones (CPF-001)`,
+        `Error recuperando las regiones del CCSP (CPF-001)`,
       );
     }
   }
