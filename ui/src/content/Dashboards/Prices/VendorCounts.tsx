@@ -44,7 +44,7 @@ function VendorCounts() {
     >
       <Grid item xs={12} md={4}>
         <Box>
-          <Box display="flex" alignItems="flex-start" justifyItems="center">
+          <Box display="flex" alignItems="center" justifyItems="center">
             <FaAws color={`info`} size={72} />
             <Box
               sx={{
@@ -170,7 +170,7 @@ function VendorCounts() {
                       )?.productCount || 0
                     )
                   )
-                    .format('0')
+                    .format('0.0a')
                     .toUpperCase()
                 ) : (
                   <CircularProgress size={32} />
