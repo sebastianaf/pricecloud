@@ -19,12 +19,17 @@ export class PriceService {
 
   async countVendorProducts() {
     try {
-      return this.productsRepository
+
+
+
+      const data = await this.productsRepository
         .createQueryBuilder('product')
         .select('product."vendorName"', 'vendorName')
         .addSelect('COUNT(*)', 'productCount')
         .groupBy('product."vendorName"')
         .getRawMany();
+
+      return data;
     } catch (error) {
       Logger.error(error);
       throw error;
