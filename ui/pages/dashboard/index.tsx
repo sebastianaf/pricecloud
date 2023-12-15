@@ -108,10 +108,7 @@ function DashboardTasks() {
   const theme = useTheme();
   const [currentTab, setCurrentTab] = useState<string>('analytics');
 
-  const tabs = [
-    { value: 'analytics', label: 'Indicadores' }
-    /* { value: 'newsSearch', label: 'Novedades' } */
-  ];
+  const tabs = [{ value: 'analytics', label: 'Indicadores' }];
 
   const handleTabsChange = (_event: ChangeEvent<{}>, value: string): void => {
     setCurrentTab(value);
@@ -181,13 +178,6 @@ function DashboardTasks() {
                   <Divider />
                 </Grid>
               </>
-            )}
-            {currentTab === 'newsSearch' && (
-              <Grid item xs={12}>
-                <Box p={4}>
-                  <TaskSearch />
-                </Box>
-              </Grid>
             )}
           </Grid>
         </Card>

@@ -17,12 +17,14 @@ export class PriceService {
     private readonly statsRepository: Repository<Stats>,
   ) {}
 
-  async findAll() {
+  async countVendorProducts() {
     try {
-      return await this.productsRepository.find({
-        where: { vendorName: 'aws' },
-        take: 10,
-      });
+      return this.productsRepository
+        .createQueryBuilder('product')
+        .select('product."vendorName"', 'vendorName')
+        .addSelect('COUNT(*)', 'productCount')
+        .groupBy('product."vendorName"')
+        .getRawMany();
     } catch (error) {
       Logger.error(error);
       throw error;

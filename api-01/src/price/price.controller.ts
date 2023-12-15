@@ -8,10 +8,10 @@ import { PriceService } from './price.service';
 export class PriceController {
   constructor(private readonly priceService: PriceService) {}
 
-  @Get()
+  @Get(`count-vendor-products`)
   @ApiOperation({ summary: `Get CCSPs product count` })
   @Protect([ViewInterface.dashboard])
-  findAll() {
-    return this.priceService.findAll();
+  countVendorProducts() {
+    return this.priceService.countVendorProducts();
   }
 }

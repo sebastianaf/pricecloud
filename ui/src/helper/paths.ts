@@ -22,6 +22,10 @@ const paths = {
     },
     storage: {
       root: `/storage`
+    },
+    price: {
+      root: `/price`,
+      countVendorProducts: `/price/count-vendor-products`
     }
   },
   web: {
