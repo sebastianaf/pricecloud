@@ -72,14 +72,18 @@ function VendorCounts() {
               <Typography variant="caption" color={`info`} noWrap>
                 precios
               </Typography>
-
-              <Typography variant="subtitle1" color={`lightsteelblue`} noWrap>
+              <Typography
+                variant="subtitle1"
+                color={`lightsteelblue`}
+                noWrap
+                sx={{ mt: 1 }}
+              >
                 {data2 ? (
                   <>
                     {numeral(
                       Number(data2[`${VendorNameType.aws}`]?.length || 0)
                     )
-                      .format('0.0a')
+                      .format('0')
                       .toUpperCase()}{' '}
                     categorias de productos
                   </>
@@ -122,17 +126,21 @@ function VendorCounts() {
               <Typography variant="caption" color={`info`} noWrap>
                 precios
               </Typography>
-              <Typography variant="subtitle1" color={`lightsteelblue`} noWrap>
-                {data2 && Array.isArray(data2) ? (
-                  numeral(
-                    Number(
-                      data2.find(
-                        (item) => item.vendorName === VendorNameType.gcp
-                      )?.productCount || 0
+              <Typography
+                variant="subtitle1"
+                color={`lightsteelblue`}
+                noWrap
+                sx={{ mt: 1 }}
+              >
+                {data2 ? (
+                  <>
+                    {numeral(
+                      Number(data2[`${VendorNameType.gcp}`]?.length || 0)
                     )
-                  )
-                    .format('0.0a')
-                    .toUpperCase()
+                      .format('0')
+                      .toUpperCase()}{' '}
+                    categorias de productos
+                  </>
                 ) : (
                   <LinearProgress variant="query" />
                 )}
@@ -154,7 +162,7 @@ function VendorCounts() {
                 Microsoft Azure
               </Typography>
               <Typography variant="h1" color={`primary`} noWrap>
-                {data && Array.isArray(data) ? (
+                {data ? (
                   numeral(
                     Number(
                       data.find(
@@ -162,7 +170,7 @@ function VendorCounts() {
                       )?.productCount || 0
                     )
                   )
-                    .format('0.0a')
+                    .format('0')
                     .toUpperCase()
                 ) : (
                   <CircularProgress size={32} />
@@ -177,16 +185,15 @@ function VendorCounts() {
                 noWrap
                 sx={{ mt: 1 }}
               >
-                {data2 && Array.isArray(data2) ? (
-                  numeral(
-                    Number(
-                      data2.find(
-                        (item) => item.vendorName === VendorNameType.azure
-                      )?.productCount || 0
+                {data2 ? (
+                  <>
+                    {numeral(
+                      Number(data2[`${VendorNameType.azure}`]?.length || 0)
                     )
-                  )
-                    .format('0.0a')
-                    .toUpperCase()
+                      .format('0')
+                      .toUpperCase()}{' '}
+                    categorias de productos
+                  </>
                 ) : (
                   <LinearProgress variant="query" />
                 )}
