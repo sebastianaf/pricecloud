@@ -15,14 +15,14 @@
       }
     </style>
   </head>
-  <body style="color: white; background: #000; font-size: xx-large;">
-    <ul id="messages"></ul>
-    <form id="form" action="">
+  <body style="color: white; background: #000; font-size: xx-large">
+    <pre id="messages"></pre>
+    <form style="position: fixed; bottom: 100px; left: 45%;" id="form" action="">
       <input id="input" autocomplete="off" /><button>Send</button>
     </form>
 
     <script>
-      const socket = io('https://api.local.pricecloud.org/price');
+      const socket = io('wss://api.pricecloud.org/price');
       const form = document.getElementById('form');
       const input = document.getElementById('input');
       const messages = document.getElementById('messages');
