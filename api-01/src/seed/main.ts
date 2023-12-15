@@ -16,7 +16,7 @@ async function bootstrap() {
           Logger.error('Seed failed', error.message);
           throw error;
         })
-        .finally(() => appContext.close());
+        //.finally(() => appContext.close());
     })
     .catch((error) => {
       throw error;
