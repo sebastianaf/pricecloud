@@ -5,14 +5,10 @@ import {
   Card,
   Box,
   Divider,
-  Button,
-  CircularProgress,
-  Skeleton,
-  LinearProgress
+  CircularProgress
 } from '@mui/material';
 import { useEffect } from 'react';
 
-import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DoneTwoToneIcon from '@mui/icons-material/DoneTwoTone';
 import Text from '@/components/Text';
 import Label from '@/components/Label';
@@ -47,9 +43,6 @@ function EditProfileTab() {
                 Administre la información personal de su cuenta.
               </Typography>
             </Box>
-            {/* <Button variant="text" startIcon={<EditTwoToneIcon />}>
-              Editar
-            </Button> */}
           </Box>
           <Divider />
           <CardContent sx={{ p: 4 }}>
@@ -130,9 +123,6 @@ function EditProfileTab() {
                 Administre los detalles relacionados con su cuenta.
               </Typography>
             </Box>
-            {/* <Button variant="text" startIcon={<EditTwoToneIcon />}>
-              Editar
-            </Button> */}
           </Box>
           <Divider />
           <CardContent sx={{ p: 4 }}>
@@ -194,9 +184,6 @@ function EditProfileTab() {
                 electrónicos.
               </Typography>
             </Box>
-            {/* <Button variant="text" startIcon={<EditTwoToneIcon />}>
-              Editar
-            </Button> */}
           </Box>
           <Divider />
           <CardContent sx={{ p: 4 }}>

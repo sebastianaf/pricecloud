@@ -45,8 +45,14 @@ export function AuthProvider({ children }: Props) {
 
   const getUser = async (): Promise<void> => {
     const response = await customAxios.get<UserType>(paths.api.user.root);
-    if (response.status === HttpStatusCode.Ok) {
-      response.data && setUser(response.data);
+    switch (response.status) {
+      case HttpStatusCode.Ok:
+        response.data && setUser(response.data);
+        break;
+      case HttpStatusCode.Unauthorized:
+        setIsAuth(false);
+        router.push(paths.web.login);
+        break;
     }
   };
 

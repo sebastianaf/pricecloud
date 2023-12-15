@@ -2,7 +2,6 @@ import { AxiosResponse, HttpStatusCode } from 'axios';
 import { ModalContextReference } from '../contexts/ModalContext';
 import { NotificationType } from '../types/notification.type';
 import { SnackbarContextReference } from '../contexts/SnackbarContext';
-import paths from './paths';
 
 const processSuccess = (response: AxiosResponse) => {
   if (response.status === 200 || response.status === 201) {
