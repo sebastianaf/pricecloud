@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Installs } from './entities/installs.db-02.entity';
 import { Products } from './entities/products.db-02.entity';
 import { Stats } from './entities/stats.db-02.entity';
+import { VendorInterface } from '../compute/interfaces/vendor.interface';
 
 @Injectable()
 export class PriceService {
@@ -37,13 +38,12 @@ export class PriceService {
 
   async findProductFamilybyVendorName(vendorName: string) {
     try {
-      const data = await this.productsRepository
-        .createQueryBuilder('product')
-        .select('product."productFamily"', 'productFamily')
-        .addSelect('COUNT(*)', 'productFamily')
-        .where(`product."vendorName" = :vendorName`, { vendorName })
-        .groupBy('product."productFamily"')
-        .getCount();
+      const data = await this.productsRepository.query(
+        `SELECT "productFamily", count(*) as "productFamilyCount"
+        FROM products
+        WHERE "vendorName" = '${vendorName}'
+        GROUP BY "productFamily"`,
+      );
 
       return data;
     } catch (error) {
@@ -56,14 +56,12 @@ export class PriceService {
 
   async countProductFamilies() {
     try {
-      const data = await this.productsRepository
-        .createQueryBuilder('product')
-        .select('product."productFamily"', 'productFamily')
-        .addSelect('COUNT(*)', 'productFamily')
-        .groupBy('product."productFamily"')
-        .getRawMany();
-
-      return data;
+      const aws = await this.findProductFamilybyVendorName(VendorInterface.aws);
+      const azure = await this.findProductFamilybyVendorName(
+        VendorInterface.azure,
+      );
+      const gcp = await this.findProductFamilybyVendorName(VendorInterface.gcp);
+      return { aws, azure, gcp };
     } catch (error) {
       Logger.error(error);
       throw new GoneException(

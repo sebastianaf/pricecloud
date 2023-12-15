@@ -1,9 +1,21 @@
-import { Controller, Get } from '@nestjs/common';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ConflictException, Controller, Get } from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Protect } from '../auth/decorators/protect.decorator';
 import { ViewInterface } from '../auth/interfaces/view.interface';
 import { PriceService } from './price.service';
+import { HttpStatusCode } from 'axios';
 
+@ApiResponse({
+  status: HttpStatusCode.Conflict,
+  schema: { example: new ConflictException() },
+})
+@ApiBearerAuth()
+@ApiTags('price')
 @Controller('price')
 export class PriceController {
   constructor(private readonly priceService: PriceService) {}
@@ -15,7 +27,7 @@ export class PriceController {
     return this.priceService.countVendorProducts();
   }
 
-  @Get(`count-product-families`)
+  @Get(`product-families`)
   @ApiOperation({ summary: `Get CCSPs product families count` })
   @Protect([ViewInterface.dashboard])
   countProductFamilies() {
