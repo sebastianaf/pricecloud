@@ -8,19 +8,19 @@ import {
   LinearProgress,
   styled
 } from '@mui/material';
-import AssignmentTurnedInTwoToneIcon from '@mui/icons-material/AssignmentTurnedInTwoTone';
-import CancelPresentationTwoToneIcon from '@mui/icons-material/CancelPresentationTwoTone';
+import { BiWorld } from 'react-icons/bi';
+import { BiMap } from 'react-icons/bi';
 
 const RootWrapper = styled(Card)(
   ({ theme }) => `
-    background: ${theme.colors.gradients.green2};
+    background: ${theme.colors.gradients.black2};
     color: ${theme.colors.alpha.white[100]};
 `
 );
 
 const AvatarSuccess = styled(Avatar)(
   ({ theme }) => `
-      background-color: ${theme.colors.alpha.white[100]};
+      background-color: ${theme.palette.error.main};
       color: ${theme.palette.success.contrastText};
       width: ${theme.spacing(8)};
       height: ${theme.spacing(8)};
@@ -30,17 +30,17 @@ const AvatarSuccess = styled(Avatar)(
 
 const AvatarError = styled(Avatar)(
   ({ theme }) => `
-      background-color: ${theme.colors.error.main};
-      color: ${theme.palette.error.contrastText};
+      background-color: ${theme.colors.success.main};
+      color: ${theme.palette.success.contrastText};
       width: ${theme.spacing(8)};
       height: ${theme.spacing(8)};
-      box-shadow: ${theme.colors.shadows.error};
+      box-shadow: ${theme.colors.shadows.success};
 `
 );
 
 const TypographySecondary = styled(Typography)(
   ({ theme }) => `
-      color: ${theme.colors.alpha.white[70]};
+      color: ${theme.colors.alpha.white};
 `
 );
 
@@ -59,7 +59,7 @@ const LinearProgressWrapper = styled(LinearProgress)(
 `
 );
 
-function Performance() {
+function Locations() {
   const theme = useTheme();
 
   return (
@@ -75,10 +75,10 @@ function Performance() {
           pb: 1,
           pt: 2,
           fontSize: `${theme.typography.pxToRem(23)}`,
-          color: `${theme.colors.alpha.white[100]}`
+          color: `${theme.colors.alpha.white}`
         }}
       >
-        Performance
+        Ubicaciones
       </Typography>
       <CardContent>
         <Box
@@ -95,12 +95,18 @@ function Performance() {
             }}
             variant="rounded"
           >
-            <AssignmentTurnedInTwoToneIcon fontSize="large" />
+            <BiMap size={96} />
           </AvatarSuccess>
           <Box>
             <Typography variant="h1">23</Typography>
-            <TypographySecondary variant="subtitle2" noWrap>
-              tasks created
+            <TypographySecondary
+              sx={{
+                color: `${theme.colors.alpha.white}`
+              }}
+              variant="subtitle2"
+              noWrap
+            >
+              Regiones
             </TypographySecondary>
           </Box>
         </Box>
@@ -118,25 +124,25 @@ function Performance() {
             }}
             variant="rounded"
           >
-            <CancelPresentationTwoToneIcon fontSize="large" />
+            <BiWorld size={96} />
           </AvatarError>
           <Box>
             <Typography variant="h1">5</Typography>
             <TypographySecondary variant="subtitle2" noWrap>
-              tasks closed
+              Continentes
             </TypographySecondary>
           </Box>
         </Box>
-        <Box pt={3}>
+        {/* <Box pt={3}>
           <LinearProgressWrapper
             value={76}
             color="primary"
             variant="determinate"
           />
-        </Box>
+        </Box> */}
       </CardContent>
     </RootWrapper>
   );
 }
 
-export default Performance;
+export default Locations;

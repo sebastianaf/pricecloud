@@ -69,4 +69,21 @@ export class PriceService {
       );
     }
   }
+
+  async countRegions(){
+    try {
+      const data = await this.installsRepository.query(
+        `SELECT "region", count(*) as "regionCount"
+        FROM installs
+        GROUP BY "region"`,
+      );
+
+      return data;
+    } catch (error) {
+      Logger.error(error);
+      throw new GoneException(
+        `Error recuperando las regiones (CPF-001)`,
+      );
+    }
+  }
 }
