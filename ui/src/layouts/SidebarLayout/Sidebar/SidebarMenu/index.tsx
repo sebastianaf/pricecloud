@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import {
   ListSubheader,
@@ -170,16 +170,6 @@ function SidebarMenu() {
   const { closeSidebar } = useContext(SidebarContext);
   const router = useRouter();
   const currentRoute = router.pathname;
-
-  useEffect(() => {
-    const handlerRequest = async () => {
-      const response = await customAxios.get(
-        paths.api.price.countVendorProducts
-      );
-      console.log(response);
-    };
-    handlerRequest();
-  }, []);
 
   return (
     <>

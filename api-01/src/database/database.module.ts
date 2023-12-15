@@ -39,7 +39,7 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
           entities: [__dirname + '/**/*.entity.db-02{.ts,.js}'],
           autoLoadEntities: true,
           synchronize: false,
-          //namingStrategy: new SnakeNamingStrategy(),
+          migrationsRun: false,
         };
       },
     }),
