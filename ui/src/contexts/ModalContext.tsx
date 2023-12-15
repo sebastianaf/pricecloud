@@ -5,15 +5,17 @@ import { NotificationType } from '../types/notification.type';
 interface ModalData {
   title?: string;
   buttonText?: string;
+  link?: string;
   message?: string;
   notificationType?: NotificationType;
 }
 
 const defaultModalData: ModalData = {
+  notificationType: `info`,
   title: `Notificación`,
-  buttonText: `Cerrar`,
   message: `Al parecer esta notificación no tiene contenido`,
-  notificationType: `info`
+  link: null,
+  buttonText: `Cerrar`
 };
 
 interface ModalContextProps {

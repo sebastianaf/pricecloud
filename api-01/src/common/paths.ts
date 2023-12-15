@@ -1,5 +1,6 @@
 export const paths = {
   web: {
+    login: `/login`,
     verify: `/verify`,
     passwordReset: `/password-reset`,
   },

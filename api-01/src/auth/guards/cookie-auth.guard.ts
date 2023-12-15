@@ -9,6 +9,7 @@ import { Reflector } from '@nestjs/core';
 
 import { AuthService } from '../auth.service';
 import { RoleInterface } from '../interfaces/role.interface';
+import paths from '../../common/paths';
 
 @Injectable()
 export class CookieAuthGuard extends AuthGuard('cookie') {
@@ -24,7 +25,12 @@ export class CookieAuthGuard extends AuthGuard('cookie') {
     const token = request.cookies?.token;
 
     if (!token)
-      throw new UnauthorizedException(`Por favor inicie sesión (AVT-001)`);
+      throw new UnauthorizedException({
+        title: 'No autorizado',
+        message: `Por favor inicie sesión (AVT-001)`,
+        buttonText: 'Iniciar sesión',
+        link: paths.web.login,
+      });
 
     const user = await this.authService.validateToken(token);
 
@@ -43,8 +49,11 @@ export class CookieAuthGuard extends AuthGuard('cookie') {
       if (requiredViews.length === 0) return true;
     }
 
-    const hasAccess = requiredViews.some((view) =>
-      user?.role?.roleViews.map((roleView) => roleView.view.id).includes(view),
+    const hasAccess = requiredViews.some(
+      (view) =>
+        user?.role?.roleViews
+          .map((roleView) => roleView.view.id)
+          .includes(view),
     );
 
     if (!(hasAccess || user?.role.id === RoleInterface.admin))

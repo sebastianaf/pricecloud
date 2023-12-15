@@ -27,14 +27,9 @@ const handleIcon = (type: NotificationType) => {
 const Modal = () => {
   const {
     isModalOpen,
-    openModal,
     closeModal,
-    modalData: { title, message, buttonText, notificationType }
+    modalData: { title, message, buttonText, notificationType, link }
   } = useModal();
-
-  const handleOpen = () => {
-    openModal();
-  };
 
   const handleClose = () => {
     closeModal();
@@ -59,7 +54,11 @@ const Modal = () => {
           <DialogContentText>{message}</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color={notificationType}>
+          <Button
+            href={link || null}
+            onClick={handleClose}
+            color={notificationType}
+          >
             {buttonText}
           </Button>
         </DialogActions>
