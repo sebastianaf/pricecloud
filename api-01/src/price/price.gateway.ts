@@ -28,7 +28,7 @@ export class PriceGateway {
   handleConnection(client: Socket, ...args: any[]) {
     client.emit(
       SocketEventInterface.consoleEvent,
-      `Conectando con el servidor de precios...`,
+      `Conexión establecida con el servidor de precios`,
     );
   }
 

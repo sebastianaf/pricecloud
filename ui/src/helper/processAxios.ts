@@ -20,7 +20,7 @@ const processError = (error: any) => {
       'info'
     );
 
-  const status = error?.response?.data?.statusCode;
+  const status = error?.response?.status;
   const data = error?.response?.data;
 
   switch (status) {
@@ -49,17 +49,24 @@ const processError = (error: any) => {
 };
 
 const showNotification = (
-  data: { title?: string; message?: string },
+  data: {
+    title?: string;
+    message?: string;
+    buttonText?: string;
+    link?: string;
+  },
   notificationType: NotificationType
 ) => {
   try {
-    if (data?.message) {
-      if (data?.title) {
+    const { message, title, buttonText, link } = data;
+    if (message) {
+      if (title) {
         ModalContextReference.setModalData({
-          ...ModalContextReference.modalData,
-          title: data.title,
-          message: data.message,
-          notificationType
+          notificationType,
+          title,
+          message,
+          buttonText: buttonText || ModalContextReference.modalData.buttonText,
+          link: link || ModalContextReference.modalData.link
         });
         ModalContextReference.openModal();
       } else {

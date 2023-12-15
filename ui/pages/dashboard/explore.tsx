@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import SidebarLayout from '@/layouts/SidebarLayout';
 import { ChangeEvent, useEffect, useState } from 'react';
-import PageHeader from '@/content/Dashboards/Tasks/PageHeader';
+import PageHeader from '@/content/Dashboards/Prices/PageHeader';
 import Footer from '@/components/Footer';
 import {
   Grid,
@@ -15,13 +15,13 @@ import {
   styled
 } from '@mui/material';
 import PageTitleWrapper from '@/components/PageTitleWrapper';
-import TeamOverview from '@/content/Dashboards/Tasks/TeamOverview';
-import TasksAnalytics from '@/content/Dashboards/Tasks/TasksAnalytics';
-import Performance from '@/content/Dashboards/Tasks/Performance';
-import Projects from '@/content/Dashboards/Tasks/Projects';
-import Checklist from '@/content/Dashboards/Tasks/Checklist';
-import Profile from '@/content/Dashboards/Tasks/Profile';
-import TaskSearch from '@/content/Dashboards/Tasks/TaskSearch';
+import TeamOverview from '@/content/Dashboards/Prices/TeamOverview';
+import TasksAnalytics from '@/content/Dashboards/Prices/TasksAnalytics';
+import Performance from '@/content/Dashboards/Prices/Performance';
+import Projects from '@/content/Dashboards/Prices/Projects';
+import Checklist from '@/content/Dashboards/Prices/Checklist';
+import Profile from '@/content/Dashboards/Prices/Profile';
+import TaskSearch from '@/content/Dashboards/Prices/TaskSearch';
 import { protect } from '../../src/helper/protect';
 
 const TabsContainerWrapper = styled(Box)(
