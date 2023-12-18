@@ -18,7 +18,6 @@ import {
   TableRow,
   TableContainer,
   CircularProgress,
-  styled
 } from '@mui/material';
 
 import { useAuth } from '../../src/contexts/AuthContext';

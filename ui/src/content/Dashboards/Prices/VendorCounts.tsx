@@ -3,8 +3,7 @@ import {
   CircularProgress,
   Grid,
   LinearProgress,
-  Typography,
-  useTheme
+  Typography
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import numeral from 'numeral';
@@ -17,7 +16,6 @@ import paths from '../../../helper/paths';
 import { VendorNameType } from '../../../types/vendor-name.type';
 
 function VendorCounts() {
-  const theme = useTheme();
   const [data, setData] = useState<any>(null);
   const [data2, setData2] = useState<any>(null);
   useEffect(() => {
@@ -70,7 +68,7 @@ function VendorCounts() {
                 )}
               </Typography>
               <Typography variant="caption" color={`info`} noWrap>
-                precios
+                productos
               </Typography>
               <Typography
                 variant="subtitle1"
@@ -124,7 +122,7 @@ function VendorCounts() {
                 )}
               </Typography>
               <Typography variant="caption" color={`info`} noWrap>
-                precios
+                productos
               </Typography>
               <Typography
                 variant="subtitle1"
@@ -177,7 +175,7 @@ function VendorCounts() {
                 )}
               </Typography>
               <Typography variant="caption" color={`info`} noWrap>
-                precios
+                productos
               </Typography>
               <Typography
                 variant="subtitle1"

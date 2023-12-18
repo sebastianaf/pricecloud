@@ -19,7 +19,7 @@ import TeamOverview from '@/content/Dashboards/Prices/VendorCounts';
 import TasksAnalytics from '@/content/Dashboards/Prices/Geography';
 import Performance from '@/content/Dashboards/Prices/Locations';
 import Projects from '@/content/Dashboards/Prices/Categories';
-import TaskSearch from '@/content/Dashboards/Prices/TaskSearch';
+import PriceCards from '@/content/Dashboards/Prices/PriceCards';
 import { protect } from '../../src/helper/protect';
 
 const TabsContainerWrapper = styled(Box)(
@@ -185,7 +185,7 @@ function DashboardTasks() {
             {currentTab === 'newsSearch' && (
               <Grid item xs={12}>
                 <Box p={4}>
-                  <TaskSearch />
+                  <PriceCards />
                 </Box>
               </Grid>
             )}

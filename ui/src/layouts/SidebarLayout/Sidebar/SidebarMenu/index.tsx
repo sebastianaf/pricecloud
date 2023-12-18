@@ -11,18 +11,11 @@ import {
 } from '@mui/material';
 import NextLink from 'next/link';
 import Dashboard from '@mui/icons-material/Dashboard';
-import {
-  ManageSearch,
-  ManageAccounts,
-  Settings,
-  CloudQueue,
-  CompareArrows
-} from '@mui/icons-material';
+import { ManageSearch, ManageAccounts, Settings } from '@mui/icons-material';
 import { FaAws } from 'react-icons/fa';
 
 import { SidebarContext } from 'src/contexts/SidebarContext';
 import paths from '../../../../helper/paths';
-import { customAxios } from '../../../../helper/customAxios';
 
 const MenuWrapper = styled(Box)(
   ({ theme }) => `
@@ -221,7 +214,7 @@ function SidebarMenu() {
             </List>
           </SubMenuWrapper>
         </List>
-        {/*<List
+        <List
           component="div"
           subheader={
             <ListSubheader component="div" disableSticky>
@@ -248,7 +241,7 @@ function SidebarMenu() {
                   </Button>
                 </NextLink>
               </ListItem>
-               <ListItem component="div">
+              {/* <ListItem component="div">
                 <NextLink href={paths.web.dashboard.compare} passHref>
                   <Button
                     className={
@@ -264,10 +257,10 @@ function SidebarMenu() {
                     Comparar servicios
                   </Button>
                 </NextLink>
-              </ListItem> 
+              </ListItem> */}
             </List>
           </SubMenuWrapper>
-        </List>*/}
+        </List>
         <List
           component="div"
           subheader={
