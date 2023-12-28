@@ -4,7 +4,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { Installs } from './entities/installs.db-02.entity';
 import { Products } from './entities/products.db-02.entity';
-import { Stats } from './entities/stats.db-02.entity';
 import { VendorInterface } from '../compute/interfaces/vendor.interface';
 import { FindProductPriceDto } from './dto/find-product-price.dto';
 import { OrderEnum } from './dto/order.dto';

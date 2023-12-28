@@ -124,12 +124,7 @@ function PriceCards() {
           }
         />
       </FormControl>
-      <Box
-        py={3}
-        display="flex"
-        alignItems="center"
-        justifyContent="space-between"
-      >
+      <Box py={3} display="flex" alignItems="center" justifyContent="stretch">
         <Box>
           <Typography variant="subtitle2">
             <Text color="black">
@@ -226,7 +221,8 @@ function PriceCards() {
       <Grid
         container
         spacing={3}
-        sx={{ display: `flex`, alignItems: `center`, justifyContent: `center` }}
+        alignItems={`center`}
+        justifyContent={`center`}
       >
         {loading || !priceData ? (
           <Box
@@ -253,9 +249,9 @@ function PriceCards() {
                 <Box>
                   <GetIcon tag={item.vendorName} />
                 </Box>
-                <Box>
+                {/* <Box>
                   <Rating value={4} defaultValue={5} precision={1} readOnly />
-                </Box>
+                </Box> */}
                 <Typography variant="h3" sx={{ my: 2, minHeight: 80 }}>
                   {item.service}
                 </Typography>
@@ -281,14 +277,19 @@ function PriceCards() {
                     }}
                     color="text.secondary"
                   >
-                    {item.prices &&
+                    {/* {item.prices &&
                       Object.keys(item.prices).map((key) => (
                         <ul>
                           <li>
-                            {key}: {JSON.stringify(item.prices[key])}
+                            {key}:{' '}
+                            {item.prices[key] &&
+                              item.prices[key].map((price2) => (
+                                {}
+                              )  
+                              )}
                           </li>
                         </ul>
-                      ))}
+                      ))} */}
                   </Typography>
                 }
                 {

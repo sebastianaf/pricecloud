@@ -214,7 +214,7 @@ function SidebarMenu() {
             </List>
           </SubMenuWrapper>
         </List>
-        <List
+        {/*   <List
           component="div"
           subheader={
             <ListSubheader component="div" disableSticky>
@@ -240,8 +240,8 @@ function SidebarMenu() {
                     Explorar servicios
                   </Button>
                 </NextLink>
-              </ListItem>
-              {/* <ListItem component="div">
+              </ListItem> */}
+        {/* <ListItem component="div">
                 <NextLink href={paths.web.dashboard.compare} passHref>
                   <Button
                     className={
@@ -258,9 +258,9 @@ function SidebarMenu() {
                   </Button>
                 </NextLink>
               </ListItem> */}
-            </List>
+        {/*     </List>
           </SubMenuWrapper>
-        </List>
+        </List> */}
         <List
           component="div"
           subheader={

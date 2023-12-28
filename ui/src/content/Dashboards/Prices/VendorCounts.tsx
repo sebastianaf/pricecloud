@@ -32,171 +32,139 @@ function VendorCounts() {
   }, []);
 
   return (
-    <Grid
-      display="flex"
-      flexDirection="row"
-      alignItems="flex-start  "
-      justifyItems="center"
-      container
-      spacing={4}
-    >
-      <Grid item xs={12} md={4}>
-        <Box>
-          <Box display="flex" alignItems="center" justifyItems="center">
-            <FaAws color={`info`} size={72} />
-            <Box
-              sx={{
-                ml: 2.5
-              }}
-            >
-              <Typography variant="h4" noWrap gutterBottom>
-                Amazon Web Services
-              </Typography>
-              <Typography variant="h1" color={`primary`} noWrap>
-                {data && Array.isArray(data) ? (
-                  numeral(
-                    Number(
-                      data.find(
-                        (item) => item.vendorName === VendorNameType.aws
-                      )?.productCount || 0
-                    )
+    <Grid container display="flex" flexDirection="row" spacing={4}>
+      <Grid item xs={12} md={4} maxWidth={`auto`}>
+        <Box display="flex" alignItems="center" gap={4}>
+          <FaAws color={`info`} size={72} />
+          <Box>
+            <Typography variant="h4" noWrap gutterBottom>
+              Amazon Web Services
+            </Typography>
+            <Typography variant="h1" color={`primary`} noWrap>
+              {data && Array.isArray(data) ? (
+                numeral(
+                  Number(
+                    data.find((item) => item.vendorName === VendorNameType.aws)
+                      ?.productCount || 0
                   )
-                    .format('0.0a')
-                    .toUpperCase()
-                ) : (
-                  <CircularProgress size={32} />
-                )}
-              </Typography>
-              <Typography variant="caption" color={`info`} noWrap>
-                productos
-              </Typography>
-              <Typography
-                variant="subtitle1"
-                color={`lightsteelblue`}
-                noWrap
-                sx={{ mt: 1 }}
-              >
-                {data2 ? (
-                  <>
-                    {numeral(
-                      Number(data2[`${VendorNameType.aws}`]?.length || 0)
-                    )
-                      .format('0')
-                      .toUpperCase()}{' '}
-                    categorias de productos
-                  </>
-                ) : (
-                  <LinearProgress variant="query" />
-                )}
-              </Typography>
-            </Box>
+                )
+                  .format('0.0a')
+                  .toUpperCase()
+              ) : (
+                <CircularProgress size={32} />
+              )}
+            </Typography>
+            <Typography variant="caption" color={`info`} noWrap>
+              productos
+            </Typography>
+            <Typography
+              variant="subtitle1"
+              color={`lightsteelblue`}
+              noWrap
+              sx={{ mt: 1 }}
+            >
+              {data2 ? (
+                <>
+                  {numeral(Number(data2[`${VendorNameType.aws}`]?.length || 0))
+                    .format('0')
+                    .toUpperCase()}{' '}
+                  categorias de productos
+                </>
+              ) : (
+                <LinearProgress variant="query" />
+              )}
+            </Typography>
           </Box>
         </Box>
       </Grid>
       <Grid item xs={12} md={4}>
-        <Box>
-          <Box display="flex" alignItems="center" pb={3}>
-            <SiGooglecloud size={72} />
-
-            <Box
-              sx={{
-                ml: 2.5
-              }}
-            >
-              <Typography variant="h4" noWrap gutterBottom>
-                Google Cloud Platform
-              </Typography>
-              <Typography variant="h1" color={`primary`} noWrap>
-                {data && Array.isArray(data) ? (
-                  numeral(
-                    Number(
-                      data.find(
-                        (item) => item.vendorName === VendorNameType.gcp
-                      )?.productCount || 0
-                    )
+        <Box display="flex" alignItems="center" gap={4}>
+          <SiGooglecloud size={72} />
+          <Box>
+            <Typography variant="h4" noWrap gutterBottom>
+              Google Cloud Platform
+            </Typography>
+            <Typography variant="h1" color={`primary`} noWrap>
+              {data && Array.isArray(data) ? (
+                numeral(
+                  Number(
+                    data.find((item) => item.vendorName === VendorNameType.gcp)
+                      ?.productCount || 0
                   )
-                    .format('0.0a')
-                    .toUpperCase()
-                ) : (
-                  <CircularProgress size={32} />
-                )}
-              </Typography>
-              <Typography variant="caption" color={`info`} noWrap>
-                productos
-              </Typography>
-              <Typography
-                variant="subtitle1"
-                color={`lightsteelblue`}
-                noWrap
-                sx={{ mt: 1 }}
-              >
-                {data2 ? (
-                  <>
-                    {numeral(
-                      Number(data2[`${VendorNameType.gcp}`]?.length || 0)
-                    )
-                      .format('0')
-                      .toUpperCase()}{' '}
-                    categorias de productos
-                  </>
-                ) : (
-                  <LinearProgress variant="query" />
-                )}
-              </Typography>
-            </Box>
+                )
+                  .format('0.0a')
+                  .toUpperCase()
+              ) : (
+                <CircularProgress size={32} />
+              )}
+            </Typography>
+            <Typography variant="caption" color={`info`} noWrap>
+              productos
+            </Typography>
+            <Typography
+              variant="subtitle1"
+              color={`lightsteelblue`}
+              noWrap
+              sx={{ mt: 1 }}
+            >
+              {data2 ? (
+                <>
+                  {numeral(Number(data2[`${VendorNameType.gcp}`]?.length || 0))
+                    .format('0')
+                    .toUpperCase()}{' '}
+                  categorias de productos
+                </>
+              ) : (
+                <LinearProgress variant="query" />
+              )}
+            </Typography>
           </Box>
         </Box>
       </Grid>
       <Grid item xs={12} md={4}>
-        <Box>
-          <Box display="flex" alignItems="center" pb={3}>
-            <SiMicrosoftazure size={72} />
-            <Box
-              sx={{
-                ml: 2.5
-              }}
-            >
-              <Typography variant="h4" noWrap gutterBottom>
-                Microsoft Azure
-              </Typography>
-              <Typography variant="h1" color={`primary`} noWrap>
-                {data ? (
-                  numeral(
-                    Number(
-                      data.find(
-                        (item) => item.vendorName === VendorNameType.azure
-                      )?.productCount || 0
-                    )
+        <Box display="flex" alignItems="center" justifyItems="center" gap={4}>
+          <SiMicrosoftazure size={72} />
+          <Box>
+            <Typography variant="h4" noWrap gutterBottom>
+              Microsoft Azure
+            </Typography>
+            <Typography variant="h1" color={`primary`} noWrap>
+              {data ? (
+                numeral(
+                  Number(
+                    data.find(
+                      (item) => item.vendorName === VendorNameType.azure
+                    )?.productCount || 0
                   )
-                    .format('0.0a')
-                    .toUpperCase()
-                ) : (
-                  <CircularProgress size={32} />
-                )}
-              </Typography>
-              <Typography variant="caption" color={`info`} noWrap>
-                productos
-              </Typography>
-              <Typography
-                variant="subtitle1"
-                color={`lightsteelblue`}
-                noWrap
-                sx={{ mt: 1 }}
-              >
-                {data2 ? (
-                  <>
-                    {numeral(
-                      Number(data2[`${VendorNameType.azure}`]?.length || 0)
-                    )
-                      .format('0')
-                      .toUpperCase()}{' '}
-                    categorias de productos
-                  </>
-                ) : (
-                  <LinearProgress variant="query" />
-                )}
-              </Typography>
-            </Box>
+                )
+                  .format('0.0a')
+                  .toUpperCase()
+              ) : (
+                <CircularProgress size={32} />
+              )}
+            </Typography>
+            <Typography variant="caption" color={`info`} noWrap>
+              productos
+            </Typography>
+            <Typography
+              variant="subtitle1"
+              color={`lightsteelblue`}
+              noWrap
+              sx={{ mt: 1 }}
+            >
+              {data2 ? (
+                <>
+                  {numeral(
+                    Number(data2[`${VendorNameType.azure}`]?.length || 0)
+                  )
+                    .format('0')
+                    .toUpperCase()}{' '}
+                  categorias de productos
+                </>
+              ) : (
+                <LinearProgress variant="query" />
+              )}
+            </Typography>
           </Box>
         </Box>
       </Grid>

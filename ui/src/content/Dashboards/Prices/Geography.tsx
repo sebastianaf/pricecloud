@@ -177,7 +177,7 @@ function Geography() {
   ) : (
     <Box>
       <Box
-        mb={2}
+        mb={0}
         display="flex"
         alignItems="center"
         justifyContent="space-between"
@@ -220,7 +220,7 @@ function Geography() {
           ))}
         </Menu>
       </Box>
-      <Box display="flex" alignItems="center" pb={2}>
+      <Box display="flex" alignItems="center" pb={0}>
         <Typography
           variant="body2"
           color="text.secondary"
@@ -238,7 +238,7 @@ function Geography() {
         options={chartOptions}
         series={chartData}
         type="bar"
-        height={270}
+        height={240}
       />
     </Box>
   );
