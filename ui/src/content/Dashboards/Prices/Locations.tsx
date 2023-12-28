@@ -6,7 +6,8 @@ import {
   Avatar,
   useTheme,
   styled,
-  CircularProgress
+  CircularProgress,
+  Grid
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { BiWorld } from 'react-icons/bi';
@@ -19,6 +20,7 @@ const RootWrapper = styled(Card)(
   ({ theme }) => `
     background: ${theme.colors.gradients.black2};
     color: ${theme.colors.alpha.white[100]};
+    padding: ${theme.spacing(2)};
 `
 );
 
@@ -61,7 +63,7 @@ function Locations() {
   return !countRegions ? (
     <Box
       sx={{
-        p: 10,
+        p: 4,
         display: `flex`,
         justifyContent: `center`,
         minHeight: 'auto'
@@ -70,31 +72,20 @@ function Locations() {
       <CircularProgress size={32} />
     </Box>
   ) : (
-    <RootWrapper
-      sx={{
-        p: 2
-      }}
-    >
-      <Typography
-        variant="h3"
-        sx={{
-          px: 2,
-          py: 2,
-          fontSize: `${theme.typography.pxToRem(23)}`,
-          color: `${theme.colors.alpha.white[40]}`
-        }}
-      >
-        Ubicaciones
-      </Typography>
-      <CardContent>
-        <Box
-          display="flex"
-          sx={{
-            px: 2,
-            pb: 3
-          }}
-          alignItems="center"
-        >
+    <RootWrapper>
+      <Grid container display="flex" flexDirection="row" spacing={2} pb={4}>
+        <Grid item xs={12} paddingBottom={2}>
+          <Typography
+            variant="h3"
+            sx={{
+              fontSize: `${theme.typography.pxToRem(23)}`,
+              color: `${theme.colors.alpha.white[40]}`
+            }}
+          >
+            Ubicaciones
+          </Typography>
+        </Grid>
+        <Grid item xs={12} sm={6} md={12} display="flex">
           <AvatarSuccess
             sx={{
               mr: 2
@@ -120,15 +111,8 @@ function Locations() {
               Regiones
             </TypographySecondary>
           </Box>
-        </Box>
-        <Box
-          display="flex"
-          sx={{
-            px: 2,
-            pb: 3
-          }}
-          alignItems="center"
-        >
+        </Grid>
+        <Grid item xs={12} sm={6} md={12} display="flex">
           <AvatarError
             sx={{
               mr: 2
@@ -154,8 +138,8 @@ function Locations() {
               Continentes
             </TypographySecondary>
           </Box>
-        </Box>
-      </CardContent>
+        </Grid>
+      </Grid>
     </RootWrapper>
   );
 }

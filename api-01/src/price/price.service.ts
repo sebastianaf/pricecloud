@@ -4,8 +4,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { Installs } from './entities/installs.db-02.entity';
 import { Products } from './entities/products.db-02.entity';
-import { Stats } from './entities/stats.db-02.entity';
 import { VendorInterface } from '../compute/interfaces/vendor.interface';
+import { FindProductPriceDto } from './dto/find-product-price.dto';
+import { OrderEnum } from './dto/order.dto';
+import { OrderByProductPriceEnum } from './interfaces/order-by-product-price.interface';
+import { FilterByProductPriceEnum } from './interfaces/filter-by-product-price.interface';
 
 @Injectable()
 export class PriceService {
@@ -98,6 +101,45 @@ export class PriceService {
     } catch (error) {
       Logger.error(error);
       throw new GoneException(`Error contando las regiones (CPF-001)`);
+    }
+  }
+
+  async findProductPrice(findProductPriceDto: FindProductPriceDto) {
+    const {
+      sortOrder = OrderEnum.ASC,
+      sortBy = OrderByProductPriceEnum.service,
+      filter,
+      filterBy = FilterByProductPriceEnum.product,
+      limit = 6,
+      offset = 0,
+    } = findProductPriceDto;
+    Logger.debug(findProductPriceDto);
+
+    try {
+      const query = this.productsRepository.createQueryBuilder('product');
+
+      if (filter !== undefined && filterBy !== '') {
+        Logger.debug(`filter: ${filter}`);
+        query.where(`product."${filterBy}" ILIKE :filter`, {
+          filter: `%${filter}%`,
+        });
+      }
+
+      query.orderBy(`product."${sortBy}"`, sortOrder, 'NULLS LAST');
+      query.offset(offset);
+      query.limit(limit);
+
+      const data = await query.getManyAndCount();
+
+      Logger.verbose(data[1]);
+      Logger.debug(data[0].length);
+
+      if (filter !== undefined && filterBy !== '')
+        return [data.slice(offset, limit + offset), data[1]];
+      return data;
+    } catch (error) {
+      Logger.error(error);
+      throw new GoneException(`Error recuperando los precios (CPF-001)`);
     }
   }
 }

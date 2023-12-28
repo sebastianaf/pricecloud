@@ -9,6 +9,7 @@ import { Protect } from '../auth/decorators/protect.decorator';
 import { ViewInterface } from '../auth/interfaces/view.interface';
 import { PriceService } from './price.service';
 import { HttpStatusCode } from 'axios';
+import { FindProductPriceDto } from './dto/find-product-price.dto';
 
 @ApiResponse({
   status: HttpStatusCode.Conflict,
@@ -46,5 +47,12 @@ export class PriceController {
   @Protect([ViewInterface.dashboard])
   countRegions() {
     return this.priceService.countRegions();
+  }
+
+  @Get(`find-product-price`)
+  @ApiOperation({ summary: `Get regions count` })
+  @Protect([ViewInterface.dashboard])
+  findProductPrice(@Query() findProductPriceDto: FindProductPriceDto) {
+    return this.priceService.findProductPrice(findProductPriceDto);
   }
 }

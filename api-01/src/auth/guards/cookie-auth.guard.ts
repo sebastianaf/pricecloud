@@ -26,7 +26,7 @@ export class CookieAuthGuard extends AuthGuard('cookie') {
 
     if (!token)
       throw new UnauthorizedException({
-        title: 'No autorizado',
+        title: 'Sesión expirada',
         message: `Por favor inicie sesión (AVT-001)`,
         buttonText: 'Iniciar sesión',
         link: paths.web.login,
