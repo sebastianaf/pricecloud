@@ -113,13 +113,13 @@ export class PriceService {
       limit = 6,
       offset = 0,
     } = findProductPriceDto;
-    /* Logger.debug(findProductPriceDto); */
+    Logger.debug(findProductPriceDto);
 
     try {
       const query = this.productsRepository.createQueryBuilder('product');
 
       if (filter !== undefined && filterBy !== '') {
-        /* Logger.debug(`filter: ${filter}`); */
+        Logger.debug(`filter: ${filter}`);
         query.where(`product."${filterBy}" ILIKE :filter`, {
           filter: `%${filter}%`,
         });
@@ -131,8 +131,8 @@ export class PriceService {
 
       const data = await query.getManyAndCount();
 
-      /* Logger.verbose(data[1]);
-      Logger.debug(data[0].length); */
+      Logger.verbose(data[1]);
+      Logger.debug(data[0].length);
 
       if (filter !== undefined && filterBy !== '')
         return [data.slice(offset, limit + offset), data[1]];
