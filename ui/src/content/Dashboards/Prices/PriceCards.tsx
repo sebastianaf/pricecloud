@@ -18,12 +18,13 @@ import {
   useTheme,
   CircularProgress,
   TablePagination,
-  CardContent
+  CardContent,
+  CardHeader
 } from '@mui/material';
-import { formatDistance, subDays } from 'date-fns';
-import TodayTwoToneIcon from '@mui/icons-material/TodayTwoTone';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import { BiWorld } from 'react-icons/bi';
+import { BiShowAlt } from 'react-icons/bi';
+import { IoIosArrowDown } from 'react-icons/io';
 
 import Text from 'src/components/Text';
 import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
@@ -34,6 +35,7 @@ import numeral from 'numeral';
 import { GetIcon } from '../../../helper/GetIcon';
 import Modal from '../../../components/Modal';
 import { useModal } from '../../../contexts/ModalContext';
+import { generateColor } from '../../../helper/generateColor';
 
 const OutlinedInputWrapper = styled(OutlinedInput)(
   ({ theme }) => `
@@ -62,7 +64,9 @@ interface PriceListInterface {
   service: string;
   productFamily: string;
   attributes: {
+    productName?: string;
     description?: string;
+    servicename?: string;
   };
   prices: Object;
 }
@@ -200,11 +204,13 @@ function PriceCards() {
                 <b>Detalles:</b>
                 <ul>
                   {item.attributes &&
-                    Object.keys(item.attributes).map((key, index) => (
-                      <li>
-                        {key}: {item.attributes[key]}
-                      </li>
-                    ))}
+                    Object.keys(item.attributes).map((key, index) => {
+                      return (
+                        <li>
+                          {key}: {item.attributes[key]}
+                        </li>
+                      );
+                    })}{' '}
                 </ul>
               </Text>
             </Typography>
@@ -373,52 +379,11 @@ function PriceCards() {
               >
                 <CardContent
                   sx={{
-                    display: `flex`,
-                    flexDirection: `column`,
-                    justifyContent: `space-between`,
-                    padding: 0,
-                    flex: 1,
-                    overflow: 'auto'
-                  }}
-                >
-                  <Box
-                    display="flex"
-                    flexDirection="row"
-                    alignItems="center"
-                    gap={2}
-                  >
-                    <Box minWidth={48}>
-                      <GetIcon tag={item.vendorName} />
-                    </Box>
-                    <Typography fontSize={22}>{item.service}</Typography>
-                  </Box>
-
-                  {/* <Rating value={4} defaultValue={5} precision={1} readOnly /> */}
-                  <Box>
-                    <Chip
-                      size="small"
-                      label={item.productFamily}
-                      color="info"
-                      variant="outlined"
-                    />
-                  </Box>
-
-                  {item?.attributes?.description ?? 'Sin descripción'}
-
-                  <Button
-                    variant="contained"
-                    size="small"
-                    onClick={() => handleDetails(item)}
-                  >
-                    Ver más
-                  </Button>
-                </CardContent>
-                <Divider sx={{ mt: 4 }} />
-                <CardActions
-                  sx={{
                     display: 'flex',
-                    alignContent: 'baseline',
-                    justifyContent: 'space-between'
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    flexWrap: 'wrap',
+                    gap: 1
                   }}
                 >
                   <Typography
@@ -429,17 +394,74 @@ function PriceCards() {
                     alignItems="center"
                     gap={1}
                   >
-                    <BiWorld size={20} />
+                    <GetIcon tag={item.vendorName} size={24} />
                     {item.region}
                   </Typography>
+                  <Chip
+                    size="small"
+                    label={item.productFamily}
+                    variant="outlined"
+                    sx={{
+                      color: generateColor(item.productFamily),
+                      borderColor: generateColor(item.productFamily)
+                    }}
+                  />
+                </CardContent>
+                <Divider sx={{ my: 2 }} />
+                <CardContent
+                  sx={{
+                    display: `flex`,
+                    flexDirection: `column`,
+                    justifyContent: `space-between`,
+                    padding: 0,
+                    flex: 1,
+                    overflow: 'auto'
+                  }}
+                >
+                  <Box display="flex" flexDirection="row" alignItems="center">
+                    <Typography fontWeight={400} fontSize={20}>
+                      {item.service}
+                    </Typography>
+                  </Box>
+
+                  {/* <Rating value={4} defaultValue={5} precision={1} readOnly /> */}
+
+                  <Typography variant="subtitle1">
+                    {item?.attributes?.description ??
+                      item?.attributes?.productName ??
+                      item?.attributes?.servicename ??
+                      'Sin descripción'}
+                  </Typography>
+
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    sx={{ gap: 1 }}
+                    onClick={() => handleDetails(item)}
+                  >
+                    Ver más
+                    <IoIosArrowDown size={24} />
+                  </Button>
+                </CardContent>
+                <Divider sx={{ my: 2 }} />
+                <CardActions
+                  sx={{
+                    display: 'flex',
+                    alignContent: 'baseline',
+                    justifyContent: 'flex-end'
+                  }}
+                >
                   <Button
                     size="small"
                     variant="text"
+                    sx={{ gap: 1 }}
                     onClick={() => {
                       handlePrice(item);
                     }}
                   >
-                    Ver precios
+                    <BiShowAlt size={24} />
+                    {` `}
+                    Ver información de precios
                   </Button>
                 </CardActions>
               </Card>
