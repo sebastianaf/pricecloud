@@ -17,11 +17,14 @@ import {
   styled,
   useTheme,
   CircularProgress,
-  TablePagination
+  TablePagination,
+  CardContent
 } from '@mui/material';
 import { formatDistance, subDays } from 'date-fns';
 import TodayTwoToneIcon from '@mui/icons-material/TodayTwoTone';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
+import { BiWorld } from 'react-icons/bi';
+
 import Text from 'src/components/Text';
 import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
 import { customAxios } from '../../../helper/customAxios';
@@ -29,6 +32,8 @@ import paths from '../../../helper/paths';
 import { HttpStatusCode } from 'axios';
 import numeral from 'numeral';
 import { GetIcon } from '../../../helper/GetIcon';
+import Modal from '../../../components/Modal';
+import { useModal } from '../../../contexts/ModalContext';
 
 const OutlinedInputWrapper = styled(OutlinedInput)(
   ({ theme }) => `
@@ -56,7 +61,9 @@ interface PriceListInterface {
   region: string;
   service: string;
   productFamily: string;
-  attributes: Object;
+  attributes: {
+    description?: string;
+  };
   prices: Object;
 }
 
@@ -74,6 +81,7 @@ function PriceCards() {
     useState<[PriceListInterface[], number]>(null);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(3);
+  const { isModalOpen, openModal, closeModal, setModalData } = useModal();
 
   useEffect(() => {
     const handleRequest = async () => {
@@ -104,6 +112,109 @@ function PriceCards() {
     setPage(0);
   };
 
+  const handlePrice = (item: PriceListInterface) => {
+    if (isModalOpen) closeModal();
+    else {
+      setModalData({
+        title: `Precios del producto`,
+        buttonText: 'Cerrar',
+        message: (
+          <>
+            <Typography variant="subtitle2">
+              <Text color="black">
+                {item.prices &&
+                  Object.keys(item.prices).map((key, index) => (
+                    <>
+                      <div>
+                        <Text color="black">Precio #{index + 1}:</Text>
+                      </div>
+                      <ul>
+                        {item.prices[key] &&
+                          item.prices[key].map((price2) =>
+                            Object.keys(price2).map((key2) => (
+                              <li>
+                                <Typography variant="subtitle2">
+                                  <Text color="black">
+                                    <b>
+                                      {key2}:{`${` `}`}
+                                    </b>
+                                    {price2[key2]}
+                                  </Text>
+                                </Typography>
+                              </li>
+                            ))
+                          )}
+                      </ul>
+                    </>
+                  ))}
+              </Text>
+            </Typography>
+          </>
+        )
+      });
+      openModal();
+    }
+  };
+
+  const handleDetails = (item: PriceListInterface) => {
+    if (isModalOpen) closeModal();
+    else {
+      setModalData({
+        title: `Detalles del producto`,
+        buttonText: 'Cerrar',
+        message: (
+          <>
+            <Typography variant="subtitle2">
+              <Text color="black">
+                <b>SKU:</b> {item.sku}
+              </Text>
+            </Typography>
+            <Typography variant="subtitle2">
+              <Text color="black">
+                <b>Proveedor:</b> {item.vendorName}
+              </Text>
+            </Typography>
+            <Typography variant="subtitle2">
+              <Text color="black">
+                <b>Región:</b> {item.region}
+              </Text>
+            </Typography>
+            <Typography variant="subtitle2">
+              <Text color="black">
+                <b>Servicio:</b> {item.service}
+              </Text>
+            </Typography>
+            <Typography variant="subtitle2">
+              <Text color="black">
+                <b>Familia de producto:</b> {item.productFamily}
+              </Text>
+            </Typography>
+            <Typography variant="subtitle2">
+              <Text color="black">
+                <b>Descripción:</b>{' '}
+                {item?.attributes?.description ?? 'Sin descripción'}
+              </Text>
+            </Typography>
+            <Typography variant="subtitle2">
+              <Text color="black">
+                <b>Detalles:</b>
+                <ul>
+                  {item.attributes &&
+                    Object.keys(item.attributes).map((key, index) => (
+                      <li>
+                        {key}: {item.attributes[key]}
+                      </li>
+                    ))}
+                </ul>
+              </Text>
+            </Typography>
+          </>
+        )
+      });
+      openModal();
+    }
+  };
+
   return (
     <>
       <FormControl variant="outlined" fullWidth>
@@ -124,8 +235,15 @@ function PriceCards() {
           }
         />
       </FormControl>
-      <Box py={3} display="flex" alignItems="center" justifyContent="stretch">
-        <Box>
+      <Grid
+        container
+        display="flex"
+        flexDirection="row"
+        alignItems="center"
+        rowGap={2}
+        py={3}
+      >
+        <Grid item xs={12} md={6}>
           <Typography variant="subtitle2">
             <Text color="black">
               Productos encontrados:{' '}
@@ -136,14 +254,18 @@ function PriceCards() {
               </b>
             </Text>
           </Typography>
-        </Box>
-        <Box display="flex" alignItems="center">
-          <Typography
-            variant="subtitle2"
-            sx={{
-              pr: 1
-            }}
-          >
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          md={6}
+          display="flex"
+          alignItems="center"
+          justifyContent="flex-end"
+          flexWrap={`wrap`}
+          gap={1}
+        >
+          <Typography variant="subtitle2" paddingRight={1}>
             Ordenar por:
           </Typography>
           <Button
@@ -216,26 +338,25 @@ function PriceCards() {
               </MenuItem>
             ))}
           </Menu>
-        </Box>
-      </Box>
+        </Grid>
+      </Grid>
       <Grid
         container
-        spacing={3}
-        alignItems={`center`}
+        spacing={2}
+        alignItems={`flex-start`}
         justifyContent={`center`}
       >
         {loading || !priceData ? (
-          <Box
-            sx={{
-              display: `flex`,
-              justifyItems: `center`,
-              alignItems: `center`,
-              minHeight: `440px`,
-              alignSelf: `center`
-            }}
+          <Grid
+            item
+            display="flex"
+            justifyItems="center"
+            alignItems="center"
+            minHeight="435px"
+            alignSelf="center"
           >
             <CircularProgress size={72} />
-          </Box>
+          </Grid>
         ) : (
           priceData[0].map((item) => (
             <Grid item xs={12} md={4}>
@@ -243,91 +364,83 @@ function PriceCards() {
                 variant="outlined"
                 sx={{
                   p: 3,
-                  background: `${theme.colors.alpha.black[5]}`
+                  background: `${theme.colors.alpha.black[5]}`,
+                  minHeight: 415,
+                  maxHeight: 415,
+                  display: 'flex',
+                  flexDirection: 'column'
                 }}
               >
-                <Box>
-                  <GetIcon tag={item.vendorName} />
-                </Box>
-                {/* <Box>
-                  <Rating value={4} defaultValue={5} precision={1} readOnly />
-                </Box> */}
-                <Typography variant="h3" sx={{ my: 2, minHeight: 80 }}>
-                  {item.service}
-                </Typography>
-                <Box
+                <CardContent
                   sx={{
-                    py: 2
+                    display: `flex`,
+                    flexDirection: `column`,
+                    justifyContent: `space-between`,
+                    padding: 0,
+                    flex: 1,
+                    overflow: 'auto'
                   }}
                 >
-                  <Chip
-                    sx={{
-                      mr: 0.5
-                    }}
+                  <Box
+                    display="flex"
+                    flexDirection="row"
+                    alignItems="center"
+                    gap={2}
+                  >
+                    <Box minWidth={48}>
+                      <GetIcon tag={item.vendorName} />
+                    </Box>
+                    <Typography fontSize={22}>{item.service}</Typography>
+                  </Box>
+
+                  {/* <Rating value={4} defaultValue={5} precision={1} readOnly /> */}
+                  <Box>
+                    <Chip
+                      size="small"
+                      label={item.productFamily}
+                      color="info"
+                      variant="outlined"
+                    />
+                  </Box>
+
+                  {item?.attributes?.description ?? 'Sin descripción'}
+
+                  <Button
+                    variant="contained"
                     size="small"
-                    label={item.productFamily}
-                    color="info"
-                    variant="outlined"
-                  />
-                </Box>
-                {
-                  <Typography
-                    sx={{
-                      pb: 2
-                    }}
-                    color="text.secondary"
+                    onClick={() => handleDetails(item)}
                   >
-                    {/* {item.prices &&
-                      Object.keys(item.prices).map((key) => (
-                        <ul>
-                          <li>
-                            {key}:{' '}
-                            {item.prices[key] &&
-                              item.prices[key].map((price2) => (
-                                {}
-                              )  
-                              )}
-                          </li>
-                        </ul>
-                      ))} */}
-                  </Typography>
-                }
-                {
-                  <Typography
-                    sx={{
-                      pb: 2
-                    }}
-                    color="text.secondary"
-                  >
-                    {JSON.stringify(item.attributes)}
-                  </Typography>
-                }
-                <Divider
-                  sx={{
-                    my: 2
-                  }}
-                />
+                    Ver más
+                  </Button>
+                </CardContent>
+                <Divider sx={{ mt: 4 }} />
                 <CardActions
                   sx={{
                     display: 'flex',
-                    alignItems: 'center',
+                    alignContent: 'baseline',
                     justifyContent: 'space-between'
                   }}
                 >
                   <Typography
-                    display="flex"
-                    alignItems="center"
                     variant="subtitle2"
+                    fontSize={16}
+                    display="flex"
+                    flexDirection="row"
+                    alignItems="center"
+                    gap={1}
                   >
-                    <TodayTwoToneIcon
-                      sx={{
-                        mr: 1
-                      }}
-                    />
-                    {formatDistance(subDays(new Date(), 24), new Date(), {
-                      addSuffix: true
-                    })}
+                    <BiWorld size={20} />
+                    {item.region}
                   </Typography>
+                  <Button
+                    size="small"
+                    variant="text"
+                    onClick={() => {
+                      handlePrice(item);
+                    }}
+                  >
+                    Ver precios
+                  </Button>
                 </CardActions>
               </Card>
             </Grid>
@@ -335,9 +448,7 @@ function PriceCards() {
         )}
       </Grid>
       <Box
-        sx={{
-          pt: 4
-        }}
+        paddingTop={2}
         display="flex"
         alignItems="center"
         justifyContent="center"

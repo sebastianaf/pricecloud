@@ -28,8 +28,8 @@ const paths = {
       countVendorProducts: `/price/count-vendor-products`,
       productFamilies: `/price/product-families`,
       resumeRegionsByVendor: `/price/resume-regions-by-vendor`,
-      countRegions: `/price/count-regions`,
-      findProductPrice: `/price/find-product-price`
+      findProductPrice: `/price/find-product-price`,
+      countRegions: `/price/count-regions`
     }
   },
   web: {
