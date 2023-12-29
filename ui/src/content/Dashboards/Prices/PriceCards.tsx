@@ -350,8 +350,8 @@ function PriceCards() {
       <Grid
         container
         spacing={2}
-        alignItems={`flex-start`}
-        justifyContent={`center`}
+        alignContent={`flex-start`}
+        justifyContent={`flex-start`}
       >
         {loading || !priceData ? (
           <Grid
@@ -366,7 +366,7 @@ function PriceCards() {
           </Grid>
         ) : (
           priceData[0].map((item) => (
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} sm={6} lg={4}>
               <Card
                 variant="outlined"
                 sx={{
@@ -408,7 +408,7 @@ function PriceCards() {
                     }}
                   />
                 </CardContent>
-                <Divider sx={{ my: 2 }} />
+                <Divider sx={{ my: 1 }} />
                 <CardContent
                   sx={{
                     display: `flex`,
@@ -420,7 +420,7 @@ function PriceCards() {
                   }}
                 >
                   <Box display="flex" flexDirection="row" alignItems="center">
-                    <Typography fontWeight={400} fontSize={20}>
+                    <Typography fontWeight={400} fontSize={20} marginTop={1}>
                       {item.service}
                     </Typography>
                   </Box>
@@ -445,7 +445,7 @@ function PriceCards() {
                     <IoIosArrowDown size={24} />
                   </Button>
                 </CardContent>
-                <Divider sx={{ my: 2 }} />
+                <Divider sx={{ mt: 2, mb: 1 }} />
                 <CardActions
                   sx={{
                     display: 'flex',
