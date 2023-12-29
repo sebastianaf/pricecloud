@@ -67,6 +67,7 @@ interface PriceListInterface {
     productName?: string;
     description?: string;
     servicename?: string;
+    instanceType?: string;
   };
   prices: Object;
 }
@@ -430,6 +431,7 @@ function PriceCards() {
                     {item?.attributes?.description ??
                       item?.attributes?.productName ??
                       item?.attributes?.servicename ??
+                      item?.attributes?.instanceType ??
                       'Sin descripción'}
                   </Typography>
 

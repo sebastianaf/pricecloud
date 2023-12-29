@@ -6,7 +6,7 @@ export function generateColor(seed: string) {
     .toString(16)
     .toUpperCase()}`;
 
-  const isDarkColor = chroma(colorHex).luminance() < 0.4;
+  const isDarkColor = chroma(colorHex).luminance() < 0.2;
 
-  return isDarkColor ? chroma(colorHex).brighten().hex() : colorHex;
+  return isDarkColor ? chroma(colorHex).brighten(2).hex() : colorHex;
 }
