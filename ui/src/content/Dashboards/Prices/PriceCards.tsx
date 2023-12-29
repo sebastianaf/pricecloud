@@ -246,7 +246,7 @@ function PriceCards() {
         container
         display="flex"
         flexDirection="row"
-        alignItems="center"
+        alignContent="center"
         rowGap={2}
         py={3}
       >
@@ -267,7 +267,7 @@ function PriceCards() {
           xs={12}
           md={6}
           display="flex"
-          alignItems="center"
+          alignContent="center"
           justifyContent="flex-end"
           flexWrap={`wrap`}
           gap={1}
@@ -347,25 +347,26 @@ function PriceCards() {
           </Menu>
         </Grid>
       </Grid>
-      <Grid
-        container
-        spacing={2}
-        alignContent={`flex-start`}
-        justifyContent={`flex-start`}
-      >
-        {loading || !priceData ? (
-          <Grid
-            item
-            display="flex"
-            justifyItems="center"
-            alignItems="center"
-            minHeight="435px"
-            alignSelf="center"
-          >
-            <CircularProgress size={72} />
-          </Grid>
-        ) : (
-          priceData[0].map((item) => (
+
+      {loading || !priceData ? (
+        <Grid
+          item
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          minHeight="415px"
+          flex={1}
+        >
+          <CircularProgress size={64} />
+        </Grid>
+      ) : (
+        <Grid
+          container
+          spacing={2}
+          alignContent={`flex-start`}
+          justifyContent={`flex-start`}
+        >
+          {priceData[0].map((item) => (
             <Grid item xs={12} sm={6} lg={4}>
               <Card
                 variant="outlined"
@@ -468,9 +469,10 @@ function PriceCards() {
                 </CardActions>
               </Card>
             </Grid>
-          ))
-        )}
-      </Grid>
+          ))}
+        </Grid>
+      )}
+
       <Box
         paddingTop={2}
         display="flex"
