@@ -6,7 +6,7 @@ interface ModalData {
   title?: string;
   buttonText?: string;
   link?: string;
-  message?: string;
+  message?: string | React.ReactNode;
   notificationType?: NotificationType;
 }
 
