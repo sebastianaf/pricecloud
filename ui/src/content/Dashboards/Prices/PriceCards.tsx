@@ -18,11 +18,9 @@ import {
   useTheme,
   CircularProgress,
   TablePagination,
-  CardContent,
-  CardHeader
+  CardContent
 } from '@mui/material';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
-import { BiWorld } from 'react-icons/bi';
 import { BiShowAlt } from 'react-icons/bi';
 import { IoIosArrowDown } from 'react-icons/io';
 
@@ -44,11 +42,12 @@ const OutlinedInputWrapper = styled(OutlinedInput)(
 `
 );
 const periods = [
-  { value: 'productFamily', text: `Familia de producto` },
+  { value: 'productHash', text: `Hash de producto` },
+  //To improve performance, the following options are disabled
+  /* { value: 'productFamily', text: `Familia de producto` },
   { value: 'vendorName', text: `Vendedor` },
   { value: 'service', text: `Servicio` },
-  { value: 'region', text: `Región` },
-  { value: 'price', text: `Precio` }
+  { value: 'region', text: `Región` } */
 ];
 
 const periods2 = [
@@ -78,8 +77,8 @@ function PriceCards() {
   const [loading, setLoading] = useState(true);
   const actionRef1 = useRef<any>(null);
   const actionRef2 = useRef<any>(null);
-  const [period, setPeriod] = useState<string>(periods[0].text);
-  const [period2, setPeriod2] = useState<string>(periods2[0].text);
+  const [period, setPeriod] = useState<string>(periods[0].value);
+  const [period2, setPeriod2] = useState<string>(periods2[0].value);
   const [openPeriod, setOpenMenuPeriod] = useState<boolean>(false);
   const [openPeriod2, setOpenMenuPeriod2] = useState<boolean>(false);
   const [priceData, setPriceData] =
@@ -95,7 +94,7 @@ function PriceCards() {
         const response = await customAxios.get<[PriceListInterface[], number]>(
           `${paths.api.price.findProductPrice}?offset=${
             page * rowsPerPage
-          }&limit=${rowsPerPage}`
+          }&limit=${rowsPerPage}&sortBy=${period}&sortOrder=${period2}`
         );
         if (response.status === HttpStatusCode.Ok) {
           setPriceData(response.data);
@@ -230,7 +229,13 @@ function PriceCards() {
           placeholder="¿Qué estás buscando?"
           endAdornment={
             <InputAdornment position="end">
-              <Button variant="contained" size="small">
+              <Button
+                variant="contained"
+                size="small"
+                onClick={(event) => {
+                  event.preventDefault();
+                }}
+              >
                 Buscar
               </Button>
             </InputAdornment>
@@ -282,7 +287,7 @@ function PriceCards() {
             onClick={() => setOpenMenuPeriod(true)}
             endIcon={<ExpandMoreTwoToneIcon fontSize="small" />}
           >
-            {period}
+            {periods.find((_period) => _period.value === period).text}
           </Button>
           <Menu
             disableScrollLock
@@ -302,7 +307,7 @@ function PriceCards() {
               <MenuItem
                 key={_period.value}
                 onClick={() => {
-                  setPeriod(_period.text);
+                  setPeriod(_period.value);
                   setOpenMenuPeriod(false);
                 }}
               >
@@ -317,7 +322,7 @@ function PriceCards() {
             onClick={() => setOpenMenuPeriod2(true)}
             endIcon={<ExpandMoreTwoToneIcon fontSize="small" />}
           >
-            {period2}
+            {periods2.find((_period) => _period.value === period2).text}
           </Button>
           <Menu
             disableScrollLock
@@ -337,7 +342,7 @@ function PriceCards() {
               <MenuItem
                 key={_period.value}
                 onClick={() => {
-                  setPeriod2(_period.text);
+                  setPeriod2(_period.value);
                   setOpenMenuPeriod2(false);
                 }}
               >
@@ -397,11 +402,11 @@ function PriceCards() {
                     gap={1}
                   >
                     <GetIcon tag={item.vendorName} size={24} />
-                    {item.region}
+                    {item.region ?? 'global'}
                   </Typography>
                   <Chip
                     size="small"
-                    label={item.productFamily}
+                    label={item.productFamily || 'Sin categoría'}
                     variant="outlined"
                     sx={{
                       color: generateColor(item.productFamily),

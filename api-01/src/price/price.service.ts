@@ -107,10 +107,10 @@ export class PriceService {
   async findProductPrice(findProductPriceDto: FindProductPriceDto) {
     const {
       sortOrder = OrderEnum.ASC,
-      sortBy = OrderByProductPriceEnum.service,
+      sortBy = OrderByProductPriceEnum.productHash,
       filter,
       filterBy = FilterByProductPriceEnum.product,
-      limit = 6,
+      limit = 3,
       offset = 0,
     } = findProductPriceDto;
     Logger.debug(findProductPriceDto);
