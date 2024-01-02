@@ -109,7 +109,7 @@ export class PriceService {
       sortOrder = OrderEnum.ASC,
       sortBy = OrderByProductPriceEnum.productHash,
       filter,
-      filterBy = FilterByProductPriceEnum.product,
+      filterBy = FilterByProductPriceEnum.service,
       limit = 3,
       offset = 0,
     } = findProductPriceDto;
@@ -119,7 +119,7 @@ export class PriceService {
       const query = this.productsRepository.createQueryBuilder('product');
 
       if (filter !== undefined && filterBy !== '') {
-        Logger.debug(`filter: ${filter}`);
+        Logger.verbose(`filter: ${filter}`);
         query.where(`product."${filterBy}" ILIKE :filter`, {
           filter: `%${filter}%`,
         });
@@ -134,8 +134,8 @@ export class PriceService {
       Logger.verbose(data[1]);
       Logger.debug(data[0].length);
 
-      if (filter !== undefined && filterBy !== '')
-        return [data.slice(offset, limit + offset), data[1]];
+      /* if (filter !== undefined && filterBy !== '')
+        return [data.slice(offset, limit + offset), data[1]]; */
       return data;
     } catch (error) {
       Logger.error(error);
