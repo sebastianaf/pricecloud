@@ -42,7 +42,7 @@ const OutlinedInputWrapper = styled(OutlinedInput)(
 `
 );
 const periods = [
-  { value: 'productHash', text: `Hash de producto` },
+  { value: 'productHash', text: `Hash de producto` }
   //To improve performance, the following options are disabled
   /* { value: 'productFamily', text: `Familia de producto` },
   { value: 'vendorName', text: `Vendedor` },
@@ -86,6 +86,8 @@ function PriceCards() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(3);
   const { isModalOpen, openModal, closeModal, setModalData } = useModal();
+  const [filter, setFilter] = useState<string>('');
+  const [searchValue, setSearchValue] = useState('');
 
   useEffect(() => {
     const handleRequest = async () => {
@@ -94,7 +96,7 @@ function PriceCards() {
         const response = await customAxios.get<[PriceListInterface[], number]>(
           `${paths.api.price.findProductPrice}?offset=${
             page * rowsPerPage
-          }&limit=${rowsPerPage}&sortBy=${period}&sortOrder=${period2}`
+          }&limit=${rowsPerPage}&sortBy=${period}&sortOrder=${period2}&filter=${filter}`
         );
         if (response.status === HttpStatusCode.Ok) {
           setPriceData(response.data);
@@ -105,7 +107,7 @@ function PriceCards() {
       }
     };
     handleRequest();
-  }, [rowsPerPage, page, period, period2]);
+  }, [rowsPerPage, page, period, period2, filter]);
 
   const handleChangePage = (_event: any, newPage: number) => {
     setPage(newPage);
@@ -114,6 +116,10 @@ function PriceCards() {
   const handleChangeRowsPerPage = (event: any) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+  };
+
+  const handleFilter = (event: any) => {
+    setFilter(searchValue);
   };
 
   const handlePrice = (item: PriceListInterface) => {
@@ -226,15 +232,18 @@ function PriceCards() {
       <FormControl variant="outlined" fullWidth>
         <OutlinedInputWrapper
           type="text"
-          placeholder="¿Qué estás buscando?"
+          placeholder="Buscar un producto..."
+          value={searchValue}
+          onChange={(event: any) => {
+            setSearchValue(event.target.value);
+          }}
           endAdornment={
             <InputAdornment position="end">
               <Button
+                disabled={loading}
                 variant="contained"
                 size="small"
-                onClick={(event) => {
-                  event.preventDefault();
-                }}
+                onClick={handleFilter}
               >
                 Buscar
               </Button>
