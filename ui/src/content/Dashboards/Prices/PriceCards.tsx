@@ -23,6 +23,7 @@ import {
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import { BiShowAlt } from 'react-icons/bi';
 import { IoIosArrowDown } from 'react-icons/io';
+import { MdOutlineAttachMoney } from 'react-icons/md';
 
 import Text from 'src/components/Text';
 import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
@@ -482,9 +483,14 @@ function PriceCards() {
                       handlePrice(item);
                     }}
                   >
-                    <BiShowAlt size={24} />
-                    {` `}
-                    Ver información de precios
+                    <MdOutlineAttachMoney size={24} />
+                    {`Desde `}
+                    {item.prices[Object.keys(item.prices)[0]][0]?.USD
+                      ? `${Number(
+                          item.prices[Object.keys(item.prices)[0]][0]?.USD
+                        ).toFixed(4)} USD x 
+                      ${item.prices[Object.keys(item.prices)[0]][0]?.unit}`
+                      : `Ver precios`}
                   </Button>
                 </CardActions>
               </Card>
