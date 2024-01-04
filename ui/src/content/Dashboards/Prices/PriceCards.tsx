@@ -31,7 +31,6 @@ import paths from '../../../helper/paths';
 import { HttpStatusCode } from 'axios';
 import numeral from 'numeral';
 import { GetIcon } from '../../../helper/GetIcon';
-import Modal from '../../../components/Modal';
 import { useModal } from '../../../contexts/ModalContext';
 import { generateColor } from '../../../helper/generateColor';
 
@@ -166,6 +165,12 @@ function PriceCards() {
     }
   };
 
+  const handleKeyDownEnter = (event: any) => {
+    if (event.key === 'Enter') {
+      handleFilter(event);
+    }
+  };
+
   const handleDetails = (item: PriceListInterface) => {
     if (isModalOpen) closeModal();
     else {
@@ -237,6 +242,7 @@ function PriceCards() {
           onChange={(event: any) => {
             setSearchValue(event.target.value);
           }}
+          onKeyDown={handleKeyDownEnter}
           endAdornment={
             <InputAdornment position="end">
               <Button
