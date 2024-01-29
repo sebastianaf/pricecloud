@@ -84,39 +84,39 @@ function HeaderMenu() {
 
   return (
     <>
-      {/* {user?.role?.id === RoleType.admin && ( */}
-      <ListWrapper
-        sx={{
-          display: {
-            md: 'block'
-          }
-        }}
-      >
-        <List disablePadding component={Box} display="flex">
-          <ListItem
-            classes={{ root: 'MuiListItem-indicators' }}
-            component={Link}
-            sx={{ textDecoration: 'none' }}
-            href={paths.web.management.users}
-          >
-            <ListItemText
-              primaryTypographyProps={{ noWrap: true }}
-              primary="Usuarios"
-            />
-          </ListItem>
-          <ListItem
-            classes={{ root: 'MuiListItem-indicators' }}
-            component={Link}
-            href={paths.web.management.console}
-          >
-            <ListItemText
-              primaryTypographyProps={{ noWrap: true }}
-              primary="Consola"
-            />
-          </ListItem>
-        </List>
-      </ListWrapper>
-      {/* )} */}
+      {user?.role?.id === RoleType.admin && (
+        <ListWrapper
+          sx={{
+            display: {
+              md: 'block'
+            }
+          }}
+        >
+          <List disablePadding component={Box} display="flex">
+            <ListItem
+              classes={{ root: 'MuiListItem-indicators' }}
+              component={Link}
+              sx={{ textDecoration: 'none' }}
+              href={paths.web.management.users}
+            >
+              <ListItemText
+                primaryTypographyProps={{ noWrap: true }}
+                primary="Usuarios"
+              />
+            </ListItem>
+            <ListItem
+              classes={{ root: 'MuiListItem-indicators' }}
+              component={Link}
+              href={paths.web.management.console}
+            >
+              <ListItemText
+                primaryTypographyProps={{ noWrap: true }}
+                primary="Consola"
+              />
+            </ListItem>
+          </List>
+        </ListWrapper>
+      )}
       <Menu anchorEl={ref.current} onClose={handleClose} open={isOpen}>
         <MenuItem sx={{ px: 3 }} component={Link} href="/">
           Overview
