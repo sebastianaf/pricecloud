@@ -34,18 +34,6 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Notes
-
-### ER | Simplified
-
-erDrawio
-
-### Update SKU info
-
-updateSKUDrawio
-
-## License
-
 This part of code is licensed by [MIT licensed](LICENSE).
 
 [pricecloud-api-01]: https://api.dev.pricecloud.org/docs
