@@ -52,12 +52,13 @@ Finalmente, si $score < 1$ entonces se dice que el $ccsp_1$ tiene preferencia so
 \subsubsection{\emph{Storage} o \emph{SQL}}
 Si $s$ es del tipo \emph{Storage} o \emph{SQL} la \emph{variable de costo} principal es la $cuota$ de almacenamiento. Si se conocen los \emph{rangos de costo} para la variable de disponibilidad del recurso llamada $disp$ entonces la \emph{función de costo} del servicio es:
 
-\[ costo_i(s,ccsp_i, cuota, disp) = costoDisponibilidad*cuota \]
+\[ costo_i(s,ccsp_i, cuota, disp) = costoDisponibilidad*demanda \]
 
 Donde:
 \begin{itemize}
     \item $ccsp_i:$ Se define como uno de los \acrfullpl{CCSP} comparados.
     \item $cuota:$ Es el espacio en GB que se requiere.
+    \item $demanda:$ Es el tiempo que se requiere el servicio.
     \item $disp:$ Es el tipo de disponibilidad del recurso (Ej: Modo frio, alta velocidad).
     \item $costoDisponibilidad(s,ccsp_i,cuota,disp)$ Es el costo del tamaño de la $cuota$ para una disponibilidad específica según el \emph{rango de costo} del $ccsp_i$.
 \end{itemize}

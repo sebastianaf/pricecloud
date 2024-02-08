@@ -66,6 +66,7 @@ Now is time to wake up the services and access it thought the `uv-pricecloud` do
 If you need to access it locally uncomment the local service's ports deleting the # charapter from the `docker-compose.yml` file and then run the app with:
 
 ```shell
+vagrant up
 docker compose -p uv-pricecloud -up -d --build
 ```
 
