@@ -66,7 +66,7 @@ function Overview() {
               <Box>
                 <NextLink href={paths.web.login}>
                   <Button variant="contained" size="large" sx={{ ml: 2 }}>
-                    Iniciar sesión
+                    Iniciar sesión 
                   </Button>
                 </NextLink>
               </Box>
