@@ -23,6 +23,7 @@ async function bootstrap() {
     }),
   );
 
+  //Dummy commit
   app.enableCors({
     origin: `https://${process.env.API_COOKIE_DOMAIN}`,
     credentials: true,
