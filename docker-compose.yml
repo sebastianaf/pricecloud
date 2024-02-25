@@ -42,8 +42,6 @@ services:
       args:
         API_PORT: ${API_PORT}
     depends_on:
-      - uv-pricecloud-db-01
-      - uv-pricecloud-db-02
       - uv-pricecloud-api-02
       - uv-pricecloud-api-03
     networks:
