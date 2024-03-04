@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { NestFactoryStatic } from '@nestjs/core/nest-factory';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as fs from 'fs';
 import * as path from 'path';
-import { mainDocs } from '.';
+import { join } from 'path';
+
 import { docsData } from './data/docs.data';
 import { EnvironmentInterface } from '../common/interfaces/environment.interface';
+import { readFileSync } from 'fs';
 
 @Injectable()
 export class DocsService {
@@ -73,6 +74,12 @@ export class DocsService {
     );
   }
 
+  async createMainDocs() {
+    let docs = readFileSync(join(__dirname, `..`, `..`, `README.md`), 'utf8');
+    docs += await this.generateMarkdown(join(__dirname, `docs`));
+    return docs;
+  }
+
   async createDocs(app: any) {
     if (process.env.ENV !== EnvironmentInterface.production) {
       SwaggerModule.setup(
@@ -82,7 +89,7 @@ export class DocsService {
           app,
           new DocumentBuilder()
             .setTitle('pricecloud')
-            .setDescription(`${mainDocs}`)
+            .setDescription(`${await this.createMainDocs()}`)
             .setVersion('1.0.0')
             .build(),
           { include: [null] },

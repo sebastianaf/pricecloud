@@ -1,0 +1,41 @@
+<svg host="65bd71144e" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="401px" height="311px" viewBox="-0.5 -0.5 401 311" content="&lt;mxfile&gt;&lt;diagram id=&quot;gpXtXChR1MKh9RJiGt7D&quot; name=&quot;Page-1&quot;&gt;xVZLb9swDP41PmbwI07a4+Ik7aXAgB7WHTWbsYXKoiHLSbxfPymW/G5SoMNyMcSPpER9fMhOEOXnJ0GK7AUTYI7vJmcn2Dq+v34I1VcDdQM8hm4DpIImDeR1wCv9Awa0ZhVNoBwYSkQmaTEEY+QcYjnAiBB4GpodkA1PLUhqTnQ74DUmDCZmP2kiswZ9CHvWz0DTzJ7suUaTE2tsgDIjCZ56ULBzgkggymaVnyNgmjvLS+O3/0DbBiaAy085hKvG5UhYZW5HCrpwA4U560h9t5SkguRE5wv0HTCpGJYmfllbUsoTzRnhStockMs9ySnT+X0GdgRJY2IUJp2eZ+QIGQoFJHAgFVNRb+xOe8rYVCuw4gno+PUO0wsbDo4gJJx7kCHgCTAHKWplYrSrwCTDVOPC5vHU5XZpM5j18hrYeiSmntJ2745ytTCsf5ABb5qBCPOikopspdKHBJsXTTpMOL/JRZveT7PRNlndFu+EDc+fYWP1L8jwlxMyXiUK3Y/3IGN1Ty68cK4wcuR3ocIbdUk7wv4LF7Yle1xMLg2JGtJGRCEzTJETtuvQjZq2hdaad0EPltE4gTOVb731L7V2v4VG2mouXCvUVuDqNm99oeelxc7tIlm/hJRZezAjv4FtSPyeXgKaGYpS4DtM8S/OWuDJd/0iKpDjZXgrRA9eE+SV2imxErF9EW2xSiJSkCNQZ+ZqjQlgRNLj8HmdK5iLqwqY1D2DAimXZW/nHxroSjcYtbEfjh7FG/a3zL9iPTJXi+Z2887h49A7WI+aq8mJ8boSxWJ5Y6Mmj5ONLo3aJm6ud5XY/b405t0/YLD7Cw==&lt;/diagram&gt;&lt;/mxfile&gt;">
+    <defs/>
+    <g>
+        <path d="M 400 23 L 400 10.35 Q 400 0 389.65 0 L 10.35 0 Q 0 0 0 10.35 L 0 23" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 0 23 L 0 299.65 Q 0 310 10.35 310 L 389.65 310 Q 400 310 400 299.65 L 400 23" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 0 23 L 400 23" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" font-weight="bold" text-anchor="middle" font-size="11px">
+            <text x="199.5" y="15.5">
+                api-03 | Diagrama de modulos
+            </text>
+        </g>
+        <rect x="210" y="110" width="120" height="60" rx="9" ry="9" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" text-anchor="middle" font-size="12px">
+            <text x="269.5" y="137.5">
+                Compute
+            </text>
+            <text x="269.5" y="151.5">
+                Module
+            </text>
+        </g>
+        <rect x="60" y="110" width="120" height="60" rx="9" ry="9" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" text-anchor="middle" font-size="12px">
+            <text x="119.5" y="137.5">
+                Storage
+            </text>
+            <text x="119.5" y="151.5">
+                Module
+            </text>
+        </g>
+        <rect x="130" y="220" width="120" height="60" rx="9" ry="9" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" text-anchor="middle" font-size="12px">
+            <text x="189.5" y="247.5">
+                Common
+            </text>
+            <text x="189.5" y="261.5">
+                Module
+            </text>
+        </g>
+        <path d="M 250 250 L 350 250 Q 360 250 360 240 L 360 60 Q 360 50 350 50 L 40 50 Q 30 50 30 60 L 30 240 Q 30 250 40 250 L 130 250" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="stroke"/>
+    </g>
+</svg>
