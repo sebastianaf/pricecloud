@@ -42,8 +42,6 @@ services:
       args:
         API_PORT: ${API_PORT}
     depends_on:
-      - uv-pricecloud-db-01
-      - uv-pricecloud-db-02
       - uv-pricecloud-api-02
       - uv-pricecloud-api-03
     networks:
@@ -78,12 +76,6 @@ services:
       DB02_PASSWORD: ${DB02_PASSWORD}
       DB02_NAME: ${DB02_NAME}
       TZ: ${TZ}
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:4000/health"]
-      interval: 60s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
     depends_on:
       - uv-pricecloud-db-02
     networks:

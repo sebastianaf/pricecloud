@@ -1,0 +1,131 @@
+<svg host="65bd71144e" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="771px" height="511px" viewBox="-0.5 -0.5 771 511" content="&lt;mxfile&gt;&lt;diagram id=&quot;gpXtXChR1MKh9RJiGt7D&quot; name=&quot;Page-1&quot;&gt;7VpLb+IwEP41HLvKy0CPLdD2sJUqodVuj27iBqtOjBzz2l+/NrHJwwFCSRO24oLi8Tixv5n5MjOh546i9SOD89kzDRDpOVaw7rnjnuMMhkD8SsEmFdwCKxWEDAepyM4EU/wXKaFWW+AAJQVFTinheF4U+jSOkc8LMsgYXRXV3ikpPnUOQ/VEKxNMfUiQofYbB3yWSocgp/2EcDjTT7YtNRNBrawEyQwGdJUTuZOeO2KU8vQqWo8QkdhpXNJ1D3tmdxtjKOa1FoB+umQJyUKdDs7xjSXuZPUGI/E7xjBkMILSXkiegQYLQhO1f77RoCQrHBEYi9H9O435A4wwkfZ9QmSJOPahmlDmtG01HlFCmRAE6B0uiNj1vb7TAybEnGV0EQdI7l/ewTywwmCJGEfrnEgB8IhohDjbCBU12/eUMZQ33vTVeJXZdjBQslnOrkD7I1T+FO7unUEuLhTqeyxgDwwLjCGHbzARaAvruOIp7v2zRB0ZoB8FY2ff+nAU0dgFXQ4N26lAo98EGI4JxhSJ810AEG6rQHjAAMKMuBmcy0tFczJOStGB1pj/EdfWD6BGr7mZsTyopQcbPYjFXnOL5PA1P5ct2470OgLfELmH/ke43UNFWHNGP5ApP5MtUBzcSU6XQBCYJNhPhZI99GEDQd8KN8r4jIY0hmSSSQ85TEIXzNfEr4OVQxYiramdVj7moGMxRCDHy+Jb5DzyGJrkQf3kEuLFazdeTCAmEcSkEyTAoEsodBpyiDqOR0R9crFz1JIRzTFyKVBLxjR7yCWAyWz34AtgmphuE52MZqwTSET7aoFEdCQ3RyLbpWLDcJNTmFMc8yR35xcpyFx34JZc1yslkEf0+4fVz9Iu7UVcpKfLwmIHU03SuDUi5ScNO6GMHUV0QxnulTIumzJuKyjDa5wy6ucdZtk4otF8wbupWcov3HZzdcczwJgK75dNhEugkpbBcAwwXhj2u4Gi/AZpuYazDShMVtUV2gmMWGC2Ywyzo0/7NPpsrmbSpy6mO43XTHvyExsUPQCULJvuSq3KjHtq3uSUg+5I3lTWd5rObRzzlX63ED5/CYzUbk/JrdFKOe7tbbZSakeWWxFZ+nQdZAWumRV8a6S97pA2+6TfGWmdbnaAtNeITx8vjS6gQtnXPv1fgwSYPcEvMd1ncrjPpmXfqqqtjvUOu+lmIfcrQewicia73dKlkffL9QNVwwyrHbTIsG53DNu2m1wZ9jSGrXSYL6q9zy2Z7a5LZmC2rr7Um69d8P3eXOXLoMKXdWO8i2zB7CuMaBTRuIF84dRsYVhugIM2swVQp9F5DZzOAqfyezNoKXDEMPs/Y0rL2Z9C3ck/&lt;/diagram&gt;&lt;/mxfile&gt;">
+    <defs/>
+    <g>
+        <path d="M 770 23 L 770 10.35 Q 770 0 759.65 0 L 10.35 0 Q 0 0 0 10.35 L 0 23" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 0 23 L 0 499.65 Q 0 510 10.35 510 L 759.65 510 Q 770 510 770 499.65 L 770 23" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 0 23 L 770 23" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" font-weight="bold" text-anchor="middle" font-size="11px">
+            <text x="384.5" y="15.5">
+                api-01 | Diagrama de modulos
+            </text>
+        </g>
+        <rect x="60" y="210" width="120" height="60" rx="9" ry="9" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" text-anchor="middle" font-size="12px">
+            <text x="119.5" y="237.5">
+                Database
+            </text>
+            <text x="119.5" y="251.5">
+                Module
+            </text>
+        </g>
+        <rect x="60" y="310" width="120" height="60" rx="9" ry="9" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" text-anchor="middle" font-size="12px">
+            <text x="119.5" y="337.5">
+                Seed
+            </text>
+            <text x="119.5" y="351.5">
+                Module
+            </text>
+        </g>
+        <path d="M 120 270 L 120 303.63" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 120 308.88 L 116.5 301.88 L 120 303.63 L 123.5 301.88 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <rect x="60" y="410" width="120" height="60" rx="9" ry="9" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" text-anchor="middle" font-size="12px">
+            <text x="119.5" y="437.5">
+                Docs
+            </text>
+            <text x="119.5" y="451.5">
+                Module
+            </text>
+        </g>
+        <rect x="570" y="410" width="120" height="60" rx="9" ry="9" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" text-anchor="middle" font-size="12px">
+            <text x="629.5" y="437.5">
+                Email
+            </text>
+            <text x="629.5" y="451.5">
+                Module
+            </text>
+        </g>
+        <path d="M 690 440 L 720 440 Q 730 440 730 430 L 730 70 Q 730 60 720 60 L 40 60 Q 30 60 30 70 L 30 430 Q 30 440 40 440 L 60 440" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="stroke"/>
+        <rect x="410" y="410" width="120" height="60" rx="9" ry="9" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" text-anchor="middle" font-size="12px">
+            <text x="469.5" y="437.5">
+                Log
+            </text>
+            <text x="469.5" y="451.5">
+                Module
+            </text>
+        </g>
+        <path d="M 530 440 L 570 440" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="stroke"/>
+        <rect x="570" y="310" width="120" height="60" rx="9" ry="9" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" text-anchor="middle" font-size="12px">
+            <text x="629.5" y="337.5">
+                Compute
+            </text>
+            <text x="629.5" y="351.5">
+                Module
+            </text>
+        </g>
+        <rect x="410" y="310" width="120" height="60" rx="9" ry="9" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" text-anchor="middle" font-size="12px">
+            <text x="469.5" y="337.5">
+                Storage
+            </text>
+            <text x="469.5" y="351.5">
+                Module
+            </text>
+        </g>
+        <rect x="230" y="310" width="120" height="60" rx="9" ry="9" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" text-anchor="middle" font-size="12px">
+            <text x="289.5" y="337.5">
+                Price
+            </text>
+            <text x="289.5" y="351.5">
+                Module
+            </text>
+        </g>
+        <path d="M 230 340 L 220 340 Q 210 340 210 330 L 210 250 Q 210 240 200 240 L 180 240" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="stroke"/>
+        <rect x="410" y="210" width="120" height="60" rx="9" ry="9" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" text-anchor="middle" font-size="12px">
+            <text x="469.5" y="237.5">
+                Auth
+            </text>
+            <text x="469.5" y="251.5">
+                Module
+            </text>
+        </g>
+        <path d="M 470 270 L 470 280 Q 470 290 460 290 L 300 290 Q 290 290 290 296.82 L 290 303.63" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 290 308.88 L 286.5 301.88 L 290 303.63 L 293.5 301.88 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 470 270 L 470 303.63" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 470 308.88 L 466.5 301.88 L 470 303.63 L 473.5 301.88 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 470 270 L 470 280 Q 470 290 480 290 L 620 290 Q 630 290 630 296.82 L 630 303.63" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 630 308.88 L 626.5 301.88 L 630 303.63 L 633.5 301.88 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 470 270 L 470 303.63" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 470 308.88 L 466.5 301.88 L 470 303.63 L 473.5 301.88 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 410 240 L 180 240" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="stroke"/>
+        <rect x="410" y="110" width="120" height="60" rx="9" ry="9" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" text-anchor="middle" font-size="12px">
+            <text x="469.5" y="137.5">
+                User
+            </text>
+            <text x="469.5" y="151.5">
+                Module
+            </text>
+        </g>
+        <path d="M 470 170 L 470 203.63" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 470 208.88 L 466.5 201.88 L 470 203.63 L 473.5 201.88 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 410 140 L 220 140 Q 210 140 210 150 L 210 230 Q 210 240 200 240 L 180 240" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="stroke"/>
+        <path d="M 350 440 L 410 440" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="stroke"/>
+        <rect x="230" y="410" width="120" height="60" rx="9" ry="9" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" text-anchor="middle" font-size="12px">
+            <text x="289.5" y="437.5">
+                Common
+            </text>
+            <text x="289.5" y="451.5">
+                Module
+            </text>
+        </g>
+        <path d="M 180 440 L 230 440" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="stroke"/>
+    </g>
+</svg>

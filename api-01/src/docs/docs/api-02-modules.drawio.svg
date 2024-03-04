@@ -1,0 +1,48 @@
+<svg host="65bd71144e" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="441px" height="411px" viewBox="-0.5 -0.5 441 411" content="&lt;mxfile&gt;&lt;diagram id=&quot;gpXtXChR1MKh9RJiGt7D&quot; name=&quot;Page-1&quot;&gt;7VjJbtswEP0aH1NojZ1jbWe5FCgQFE2OE3EiEaFEg6K3fn1Ji9RGJXKzOAXai6F5HEp8s7whPAkX+e5awCr7xgmySeCR3SRcToJgOovVrwb2FXARexWQCkoqyG+AW/oLDWjd1pRg2XGUnDNJV10w4UWBiexgIATfdt0eOet+dQWp+aLXALcJMHTcflIiswqdxS3vG6RpZr/se2YlB+tsgDIDwrctKLychAvBuaye8t0CmY6djUu17+qZ1fpgAgt51Ib4vNqyAbY27GBFzzyNTaYL9bukkArIQecLNQdO1oyX5vxyb4NSbmnOoFDW/JEX8gpyynR+b5BtUNIEzIJJp+8be8EZFwog+Ahrpk49t2+6ooy5q4KvC4L6/PoNLmETgw0KibsWZAJwjTxHKfbKxaye27yZajyz9rbJbRQZLGvlNbL1CKae0vrdTcjVg4n6Mxnwp04GliDhAUp0YjzKvU7n0eynXfL+hUveDwbIn78H98DlfitBusX1AcSDMO4wD4NTMvdnDvMfkrKTMO+l/LTEbXO1iDuckSi5NSYXMuMpL4BdNuhc6eZKrxqF1xLREwbcUXnXer5Xz96X2FhLHQrPGntrFIrNXdto7dJms+1g2X0Eyqz+MIMHZHNIntLDgQbkTQr+hC7+RtXEgnzVs02BBT/IsEK0hJpDvlA6JV+LxM4225MSRIr1BDPlqjPzYokJZCDppjsohwrmsFUdGPYthxWnRdX95s3fNdBUbuT1SjfujbcR/xH38C3evbOoh4rd8Oa4N3SisNdcVU7Mrl5/1fE+suVcrfnQlvNe03L+v9xy4VDLTd+75Y4fy6FTMIucfMZQPu11xI/c6whPnlB+BvWTMo/ci9jHSkQtC/etlbGp3KjCfUcUhiXiL1CFhEFZ0qQjDCMF0xEGW5AdYbDd+QnCEPvjZfL/avbHc2K8s44umNlQwbz7JBm+08x6V5qgp0zVoV5xpVFm85dI5d78rxRe/gY=&lt;/diagram&gt;&lt;/mxfile&gt;">
+    <defs/>
+    <g>
+        <path d="M 440 23 L 440 10.35 Q 440 0 429.65 0 L 10.35 0 Q 0 0 0 10.35 L 0 23" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 0 23 L 0 399.65 Q 0 410 10.35 410 L 429.65 410 Q 440 410 440 399.65 L 440 23" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 0 23 L 440 23" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" font-weight="bold" text-anchor="middle" font-size="11px">
+            <text x="219.5" y="15.5">
+                api-02 | Diagrama de modulos
+            </text>
+        </g>
+        <rect x="70" y="190" width="120" height="60" rx="9" ry="9" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" text-anchor="middle" font-size="12px">
+            <text x="129.5" y="224.5">
+                Database
+            </text>
+        </g>
+        <rect x="235" y="320" width="120" height="60" rx="9" ry="9" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" text-anchor="middle" font-size="12px">
+            <text x="294.5" y="354.5">
+                Stats
+            </text>
+        </g>
+        <rect x="70" y="320" width="120" height="60" rx="9" ry="9" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" text-anchor="middle" font-size="12px">
+            <text x="129.5" y="354.5">
+                Utils
+            </text>
+        </g>
+        <path d="M 355 350 L 390 350 Q 400 350 400 340 L 400 60 Q 400 50 390 50 L 40 50 Q 30 50 30 60 L 30 340 Q 30 350 40 350 L 70 350" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="stroke"/>
+        <path d="M 235 220 L 190 220" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="stroke"/>
+        <rect x="235" y="190" width="120" height="60" rx="9" ry="9" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" text-anchor="middle" font-size="12px">
+            <text x="294.5" y="224.5">
+                Cmd
+            </text>
+        </g>
+        <rect x="235" y="90" width="120" height="60" rx="9" ry="9" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g fill="rgb(0, 0, 0)" font-family="Helvetica" text-anchor="middle" font-size="12px">
+            <text x="294.5" y="124.5">
+                Socket
+            </text>
+        </g>
+        <path d="M 295 150 L 295 183.63" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/>
+        <path d="M 295 188.88 L 291.5 181.88 L 295 183.63 L 298.5 181.88 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/>
+        <path d="M 190 350 L 235 350" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="stroke"/>
+    </g>
+</svg>
