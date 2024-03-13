@@ -79,12 +79,6 @@ Vagrant.configure("2") do |config|
       docker compose down
       docker compose -p training-postgresql up -d --build || true
       
-      cd ..
-      echo "SESSION_COOKIE_SAMESITE = None" > config_system.py
-      echo "SESSION_COOKIE_SECURE = True" >> config_system.py
-      docker cp ./config_system.py org-postgresql-pgadmin:/pgadmin4/config_system.py
-      echo "CSRF Fix applied"
-
       echo "-------------------------------------------------------------------------------"
       echo "Happy coding !! Access http://localhost:#{pg_admin_port}" from your browser
       echo "-------------------------------------------------------------------------------"
