@@ -77,6 +77,11 @@ Vagrant.configure("2") do |config|
       echo "PG_ADMIN_PORT=#{pg_admin_port}" >> .env
       docker compose down
       docker compose -p training-postgresql up -d --build || true
+
+      echo "SESSION_COOKIE_SAMESITE = None" > config_system.py
+      echo "SESSION_COOKIE_SECURE = True" >> config_system.py
+      sudo docker cp ./config_system.py org-postgresql-pgadmin:/pgadmin4/config_system.py
+
       echo "-------------------------------------------------------------------------------"
       echo "Happy coding !! Access http://localhost:#{pg_admin_port}" from your browser
       echo "-------------------------------------------------------------------------------"
