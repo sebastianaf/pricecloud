@@ -50,7 +50,7 @@ services:
   uv-pricecloud-db-01:
     container_name: "uv-pricecloud-${ENV}-db-01"
     restart: always
-    image: postgres:latest
+    image: postgres:15
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
@@ -84,7 +84,7 @@ services:
   uv-pricecloud-db-02:
     restart: always
     container_name: "uv-pricecloud-${ENV}-db-02"
-    image: postgres:latest
+    image: postgres:15
     environment:
       POSTGRES_USER: ${DB02_USER}
       POSTGRES_PASSWORD: ${DB02_PASSWORD}
