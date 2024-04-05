@@ -3,10 +3,10 @@ desired_variables = [
   'DB_PASSWORD', 
   'DB_NAME', 
   'DB_PORT',
-  'DB2_USER', 
-  'DB2_PASSWORD', 
-  'DB2_NAME', 
-  'DB2_PORT', 
+  'DB02_USER', 
+  'DB02_PASSWORD', 
+  'DB02_NAME', 
+  'DB02_PORT', 
   'TZ', 
   'PG_ADMIN_EMAIL', 
   'PG_ADMIN_PASSWORD', 
@@ -27,10 +27,10 @@ Vagrant.configure("2") do |config|
   db_password = ENV['DB_PASSWORD']
   db_name = ENV['DB_NAME']
   db_port = ENV['DB_PORT']
-  db2_user = ENV['DB2_USER']
-  db2_password = ENV['DB2_PASSWORD']
-  db2_name = ENV['DB2_NAME']
-  db2_port = ENV['DB2_PORT']
+  db2_user = ENV['DB02_USER']
+  db2_password = ENV['DB02_PASSWORD']
+  db2_name = ENV['DB02_NAME']
+  db2_port = ENV['DB02_PORT']
   tz = ENV['TZ']
   pg_admin_email = ENV['PG_ADMIN_EMAIL']
   pg_admin_password = ENV['PG_ADMIN_PASSWORD']
@@ -67,10 +67,10 @@ Vagrant.configure("2") do |config|
       echo "DB_PASSWORD=#{db_password}" >> .env
       echo "DB_NAME=#{db_name}" >> .env
       echo "DB_PORT=#{db_port}" >> .env
-      echo "DB2_USER=#{db2_user}" >> .env
-      echo "DB2_PASSWORD=#{db2_password}" >> .env
-      echo "DB2_NAME=#{db2_name}" >> .env
-      echo "DB2_PORT=#{db2_port}" >> .env
+      echo "DB02_USER=#{db2_user}" >> .env
+      echo "DB02_PASSWORD=#{db2_password}" >> .env
+      echo "DB02_NAME=#{db2_name}" >> .env
+      echo "DB02_PORT=#{db2_port}" >> .env
       echo "TZ=#{tz}" >> .env
       echo "PG_ADMIN_EMAIL=#{pg_admin_email}" >> .env
       echo "PG_ADMIN_PASSWORD=#{pg_admin_password}" >> .env
