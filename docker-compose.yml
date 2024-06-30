@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   uv-pricecloud-api-01:
     container_name: "uv-pricecloud-${ENV}-api-01"
