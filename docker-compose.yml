@@ -123,4 +123,3 @@ services:
 networks:
   uv-pricecloud:
     name: uv-pricecloud-${ENV}
-
