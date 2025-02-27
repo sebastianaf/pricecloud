@@ -110,7 +110,7 @@ function Hero() {
         <Grid item md={10} lg={8} mx="auto">
           <LabelWrapper color="success">Version 1.0.0</LabelWrapper>
           <TypographyH1 sx={{ mb: 2 }} variant="h1">
-            La app para informarse de los precios del cloud
+          La aplicación para consultar precios de la nube
           </TypographyH1>
           <TypographyH2
             sx={{ lineHeight: 1.5, pb: 2 }}
