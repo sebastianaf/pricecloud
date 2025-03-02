@@ -6,6 +6,7 @@
   "private": true,
   "license": "GNU GPLv3",
   
+  
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build && npm run copyfiles",
