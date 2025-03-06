@@ -9,6 +9,8 @@ COPY package*.json ./
 COPY tsconfig*.json ./
 RUN npm ci
 
+
+
 COPY --chown=node:node . .
 RUN npm run build \
     && npm prune --production
