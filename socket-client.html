@@ -22,7 +22,7 @@
     </form>
 
     <script>
-      const socket = io('wss://api.dev.pricecloud.org/price');
+      const socket = io('ws://localhost:4000/price');
       const form = document.getElementById('form');
       const input = document.getElementById('input');
       const messages = document.getElementById('messages');

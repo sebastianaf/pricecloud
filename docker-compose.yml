@@ -18,11 +18,11 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       DB_SECRET: ${DB_SECRET}
       DB_IV: ${DB_IV}
-      DB02_HOST: ${DB02_HOST}
-      DB02_PORT: ${DB02_PORT}
+      DB2_HOST: ${DB2_HOST}
+      DB2_PORT: ${DB2_PORT}
       DB02_USER: ${DB02_USER}
-      DB02_PASSWORD: ${DB02_PASSWORD}
-      DB02_NAME: ${DB02_NAME}
+      DB2_PASSWORD: ${DB2_PASSWORD}
+      DB2_NAME: ${DB2_NAME}
       EMAIL_HOST: ${EMAIL_HOST}
       EMAIL_PORT: ${EMAIL_PORT}
       EMAIL_USER: ${EMAIL_USER}
@@ -68,10 +68,10 @@ services:
     environment:
       INFRACOST_API_KEY: ${INFRACOST_API_KEY}
       SELF_HOSTED_INFRACOST_API_KEY: ${SELF_HOSTED_INFRACOST_API_KEY}
-      DB02_HOST: ${DB02_HOST}
+      DB2_HOST: ${DB2_HOST}
       DB02_USER: ${DB02_USER}
-      DB02_PASSWORD: ${DB02_PASSWORD}
-      DB02_NAME: ${DB02_NAME}
+      DB2_PASSWORD: ${DB2_PASSWORD}
+      DB2_NAME: ${DB2_NAME}
       TZ: ${TZ}
     depends_on:
       - uv-pricecloud-db-02
@@ -84,8 +84,8 @@ services:
     image: postgres:15
     environment:
       POSTGRES_USER: ${DB02_USER}
-      POSTGRES_PASSWORD: ${DB02_PASSWORD}
-      POSTGRES_DB: ${DB02_NAME}
+      POSTGRES_PASSWORD: ${DB2_PASSWORD}
+      POSTGRES_DB: ${DB2_NAME}
       TZ: ${TZ}
     volumes:
       - "../uv-pricecloud-${ENV}-db-02:/var/lib/postgresql/data"

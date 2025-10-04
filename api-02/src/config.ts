@@ -27,10 +27,10 @@ async function pg(): Promise<Pool> {
   if (!pgPool) {
     let poolConfig: PoolConfig = {
       user: process.env.DB02_USER || 'postgres',
-      database: process.env.DB02_NAME || 'cloud_pricing',
-      password: process.env.DB02_PASSWORD || '',
-      port: Number(process.env.DB02_PORT) || 5432,
-      host: process.env.DB02_HOST || 'localhost',
+      database: process.env.DB2_NAME || 'cloud_pricing',
+      password: process.env.DB2_PASSWORD || '',
+      port: Number(process.env.DB2_PORT) || 5432,
+      host: process.env.DB2_HOST || 'localhost',
     };
 
     if (process.env.POSTGRES_URI) {
