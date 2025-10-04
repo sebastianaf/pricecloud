@@ -31,11 +31,11 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
       useFactory: async (configService: ConfigService) => {
         return {
           type: 'postgres',
-          host: configService.get('DB02_HOST'),
-          port: parseInt(configService.get('DB02_PORT')),
-          database: configService.get('DB02_NAME'),
+          host: configService.get('DB2_HOST'),
+          port: parseInt(configService.get('DB2_PORT')),
+          database: configService.get('DB2_NAME'),
           username: configService.get('DB02_USER'),
-          password: configService.get('DB02_PASSWORD'),
+          password: configService.get('DB2_PASSWORD'),
           entities: [__dirname + '/**/*.entity.db-02{.ts,.js}'],
           autoLoadEntities: true,
           synchronize: false,

@@ -3,7 +3,6 @@ import { NestFactory } from '@nestjs/core';
 import * as Express from 'express';
 import * as cookieParser from 'cookie-parser';
 import * as moment from 'moment';
-import { ExpressAdapter } from '@nestjs/platform-express';
 
 import { AppModule } from './app.module';
 import { DocsService } from './docs/docs.service';
@@ -12,7 +11,7 @@ const server = Express();
 server.set(`trust proxy`, 1);
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
+  const app = await NestFactory.create(AppModule);
 
   moment.locale('es');
 
