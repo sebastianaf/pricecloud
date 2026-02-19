@@ -140,8 +140,8 @@ async function downloadService(offer: Offer, prefix?: string) {
         `data/${prefix}-${offer.offerCode}-${region.regionCode}.json`
       );
       resp.data.pipe(writer);
-      await new Promise((resolve) => {
-        writer.on('finish', resolve);
+      await new Promise<void>((resolve) => {
+        writer.on('finish', () => resolve());
       });
     }
   } else {
@@ -155,8 +155,8 @@ async function downloadService(offer: Offer, prefix?: string) {
       `data/${prefix}-${offer.offerCode}.json`
     );
     resp.data.pipe(writer);
-    await new Promise((resolve) => {
-      writer.on('finish', resolve);
+    await new Promise<void>((resolve) => {
+      writer.on('finish', () => resolve());
     });
   }
 }

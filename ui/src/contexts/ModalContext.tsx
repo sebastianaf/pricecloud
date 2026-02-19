@@ -30,7 +30,11 @@ const ModalContext = createContext<ModalContextProps | undefined>(undefined);
 
 export let ModalContextReference: ModalContextProps = {};
 
-export const ModalProvider: React.FC = ({ children }) => {
+type ModalProviderProps = {
+  children: React.ReactNode;
+};
+
+export const ModalProvider = ({ children }: ModalProviderProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState<ModalData>(defaultModalData);
 

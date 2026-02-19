@@ -1,5 +1,5 @@
-apache_libcloud==3.6.0
-flasgger
-Flask
-Flask-Classful
-waitress
+apache-libcloud==3.9.0
+flasgger==0.9.7.1
+Flask==3.1.3
+Flask-Classful==0.16.0
+waitress==3.0.2
