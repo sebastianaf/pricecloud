@@ -6,7 +6,7 @@ import {
   Button,
   styled
 } from '@mui/material';
-import { useEffect, type ReactElement } from 'react';
+import { type ReactElement } from 'react';
 import NextLink from 'next/link';
 
 import BaseLayout from 'src/layouts/BaseLayout';
@@ -14,9 +14,7 @@ import Link from 'src/components/Link';
 import Head from 'next/head';
 import Logo from 'src/components/LogoSign';
 import Hero from 'src/content/Overview/Hero';
-import { useAuth } from '../src/contexts/AuthContext';
-import { useRouter } from 'next/router';
-import paths from '../src/helper/paths';
+import paths from '@/helper/paths';
 
 const HeaderWrapper = styled(Card)(
   ({ theme }) => `
@@ -38,15 +36,6 @@ const OverviewWrapper = styled(Box)(
 );
 
 function Overview() {
-  const { check, isAuth } = useAuth();
-  const router = useRouter();
-
-  useEffect(() => {
-    const runCheck = async () => await check();
-    runCheck();
-    isAuth && router.push(paths.web.dashboard.root);
-  }, [isAuth]);
-
   return (
     <OverviewWrapper>
       <Head>
@@ -66,7 +55,7 @@ function Overview() {
               <Box>
                 <NextLink href={paths.web.login}>
                   <Button variant="contained" size="large" sx={{ ml: 2 }}>
-                    Iniciar sesión 
+                    Iniciar sesión
                   </Button>
                 </NextLink>
               </Box>

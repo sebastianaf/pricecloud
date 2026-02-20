@@ -67,10 +67,11 @@ export function AuthProvider({ children }: Props) {
 
   const check = async () => {
     const response = await customAxios.get(paths.api.auth.root);
-
-    if (response.data) {
+    if (response?.data) {
       setIsAuth(true);
+      return;
     }
+    setIsAuth(false);
   };
 
   const signin = async (data: LoginType) => {
