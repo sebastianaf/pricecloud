@@ -34,7 +34,7 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
           host: configService.get('DB2_HOST'),
           port: parseInt(configService.get('DB2_PORT')),
           database: configService.get('DB2_NAME'),
-          username: configService.get('DB02_USER'),
+          username: configService.get('DB2_USER'),
           password: configService.get('DB2_PASSWORD'),
           entities: [__dirname + '/**/*.entity.db-02{.ts,.js}'],
           autoLoadEntities: true,

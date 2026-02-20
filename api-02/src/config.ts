@@ -26,7 +26,7 @@ let pgPool: Pool;
 async function pg(): Promise<Pool> {
   if (!pgPool) {
     let poolConfig: PoolConfig = {
-      user: process.env.DB02_USER || 'postgres',
+      user: process.env.DB2_USER || 'postgres',
       database: process.env.DB2_NAME || 'cloud_pricing',
       password: process.env.DB2_PASSWORD || '',
       port: Number(process.env.DB2_PORT) || 5432,

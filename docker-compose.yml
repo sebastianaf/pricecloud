@@ -20,7 +20,7 @@ services:
       DB_IV: ${DB_IV}
       DB2_HOST: ${DB2_HOST}
       DB2_PORT: ${DB2_PORT}
-      DB02_USER: ${DB02_USER}
+      DB2_USER: ${DB2_USER}
       DB2_PASSWORD: ${DB2_PASSWORD}
       DB2_NAME: ${DB2_NAME}
       EMAIL_HOST: ${EMAIL_HOST}
@@ -69,7 +69,7 @@ services:
       INFRACOST_API_KEY: ${INFRACOST_API_KEY}
       SELF_HOSTED_INFRACOST_API_KEY: ${SELF_HOSTED_INFRACOST_API_KEY}
       DB2_HOST: ${DB2_HOST}
-      DB02_USER: ${DB02_USER}
+      DB2_USER: ${DB2_USER}
       DB2_PASSWORD: ${DB2_PASSWORD}
       DB2_NAME: ${DB2_NAME}
       TZ: ${TZ}
@@ -83,7 +83,7 @@ services:
     container_name: "uv-pricecloud-${ENV}-db-02"
     image: postgres:15
     environment:
-      POSTGRES_USER: ${DB02_USER}
+      POSTGRES_USER: ${DB2_USER}
       POSTGRES_PASSWORD: ${DB2_PASSWORD}
       POSTGRES_DB: ${DB2_NAME}
       TZ: ${TZ}

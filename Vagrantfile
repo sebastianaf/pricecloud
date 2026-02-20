@@ -3,7 +3,7 @@ desired_variables = [
   'DB_PASSWORD', 
   'DB_NAME', 
   'DB_PORT',
-  'DB02_USER', 
+  'DB2_USER', 
   'DB2_PASSWORD', 
   'DB2_NAME', 
   'DB2_PORT', 
@@ -27,7 +27,7 @@ Vagrant.configure("2") do |config|
   db_password = ENV['DB_PASSWORD']
   db_name = ENV['DB_NAME']
   db_port = ENV['DB_PORT']
-  db2_user = ENV['DB02_USER']
+  db2_user = ENV['DB2_USER']
   db2_password = ENV['DB2_PASSWORD']
   db2_name = ENV['DB2_NAME']
   db2_port = ENV['DB2_PORT']
@@ -67,7 +67,7 @@ Vagrant.configure("2") do |config|
       echo "DB_PASSWORD=#{db_password}" >> .env
       echo "DB_NAME=#{db_name}" >> .env
       echo "DB_PORT=#{db_port}" >> .env
-      echo "DB02_USER=#{db2_user}" >> .env
+      echo "DB2_USER=#{db2_user}" >> .env
       echo "DB2_PASSWORD=#{db2_password}" >> .env
       echo "DB2_NAME=#{db2_name}" >> .env
       echo "DB2_PORT=#{db2_port}" >> .env

@@ -1,5 +1,6 @@
 import React, {
   createContext,
+  ReactNode,
   useContext,
   useState,
   useEffect,
@@ -18,7 +19,11 @@ const SnackbarContext = createContext<SnackbarContextProps | undefined>(
 
 export let SnackbarContextReference: SnackbarContextProps = {};
 
-export const SnackbarProvider: React.FC = ({ children }) => {
+type SnackbarProviderProps = {
+  children: ReactNode;
+};
+
+export const SnackbarProvider = ({ children }: SnackbarProviderProps) => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarVariant, setSnackbarVariant] = useState<NotificationType>();
