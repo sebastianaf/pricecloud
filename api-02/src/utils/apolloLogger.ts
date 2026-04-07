@@ -3,9 +3,10 @@
 import prettier from 'prettier';
 import {
   ApolloServerPlugin,
+  BaseContext,
   GraphQLRequestContext,
   GraphQLRequestListener,
-} from 'apollo-server-plugin-base';
+} from '@apollo/server';
 import { Logger } from 'pino';
 
 const DEFAULT_TRUNCATE_LENGTH = 4096;
@@ -21,14 +22,15 @@ function truncate(str: string, l = DEFAULT_TRUNCATE_LENGTH): string {
   return `${str.slice(0, l)}...`;
 }
 
-export default class ApolloLogger implements ApolloServerPlugin {
+export default class ApolloLogger implements ApolloServerPlugin<BaseContext> {
   constructor(private logger: Logger) {}
 
   async requestDidStart(
-    requestContext: GraphQLRequestContext
-  ): Promise<GraphQLRequestListener> {
+    requestContext: GraphQLRequestContext<BaseContext>
+  ): Promise<GraphQLRequestListener<BaseContext>> {
     const { logger } = this;
-    const logProps = requestContext.context.logProps || {};
+    const logProps =
+      (requestContext.contextValue as Record<string, unknown>)?.logProps || {};
 
     if (requestContext.request.query?.startsWith('query IntrospectionQuery')) {
       return {};
@@ -54,17 +56,16 @@ export default class ApolloLogger implements ApolloServerPlugin {
     );
 
     return {
-      async didEncounterErrors(
-        requestContext: GraphQLRequestContext
-      ): Promise<void> {
+      async didEncounterErrors(requestContext): Promise<void> {
         const errors = truncate(JSON.stringify(requestContext.errors));
         logger.error(logProps, `GraphQL encountered errors:\n${errors}`);
       },
-      async willSendResponse(
-        requestContext: GraphQLRequestContext
-      ): Promise<void> {
+      async willSendResponse(requestContext): Promise<void> {
+        const body = requestContext.response.body;
         const respData = truncate(
-          JSON.stringify(requestContext.response?.data)
+          body.kind === 'single'
+            ? JSON.stringify(body.singleResult.data)
+            : '[incremental response]'
         );
         logger.debug(logProps, `GraphQL request completed:\n${respData}`);
       },
