@@ -1,6 +1,8 @@
 import express, { Request, Response, NextFunction } from 'express';
-import { ApolloServer, ApolloServerExpressConfig } from 'apollo-server-express';
-import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
+import { ApolloServer, ApolloServerOptions, BaseContext } from '@apollo/server';
+import { expressMiddleware } from '@as-integrations/express4';
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
+import cors from 'cors';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import pinoHttp from 'pino-http';
 import path from 'path';
@@ -20,7 +22,7 @@ import home from './home';
 import { Product } from './db/types';
 
 export type ApplicationOptions<TContext> = {
-  apolloConfigOverrides?: ApolloServerExpressConfig;
+  apolloConfigOverrides?: Partial<ApolloServerOptions<BaseContext>>;
   disableRequestLogging?: boolean;
   disableStats?: boolean;
   disableAuth?: boolean;
@@ -96,24 +98,26 @@ async function createApp<TContext>(
     app.use(stats);
   }
 
-  const apolloConfig: ApolloServerExpressConfig = {
+  const apolloConfig = {
     schema: makeExecutableSchema({
       typeDefs,
       resolvers: getResolvers<TContext>(opts),
     }),
     introspection: true,
     plugins: [
-      ApolloServerPluginLandingPageGraphQLPlayground(),
-      () => new ApolloLogger(logger),
+      ApolloServerPluginLandingPageLocalDefault(),
+      new ApolloLogger(logger),
     ],
-    cache: 'bounded',
     ...opts.apolloConfigOverrides,
   };
 
-  const apollo = new ApolloServer(apolloConfig);
+  const apollo = new ApolloServer<BaseContext>(
+    apolloConfig as ApolloServerOptions<BaseContext>
+  );
+
   await apollo.start();
 
-  apollo.applyMiddleware({ app });
+  app.use('/graphql', cors<cors.CorsRequest>(), expressMiddleware(apollo));
 
   return { httpServer, io };
 }

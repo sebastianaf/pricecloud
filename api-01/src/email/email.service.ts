@@ -2,14 +2,13 @@
 
 import { Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
-import Mail from 'nodemailer/lib/mailer';
 
 import { SendEmailDto } from './dto/send-email.dto';
 import { EnvironmentInterface } from '../common/interfaces/environment.interface';
 
 @Injectable()
 export class EmailService {
-  private transporter: Mail;
+  private transporter: nodemailer.Transporter;
 
   private readonly emailHost: string;
   private readonly emailPort: number;

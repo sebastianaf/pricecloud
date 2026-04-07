@@ -1,4 +1,4 @@
-import { gql } from 'apollo-server-express';
+import { gql } from 'graphql-tag';
 import { CURRENCY_CODES } from './utils/currency';
 
 const typeDefs = gql`
