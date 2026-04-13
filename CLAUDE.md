@@ -57,6 +57,39 @@ Si `npm audit` reporta vulnerabilidades en `lodash`, `path-to-regexp` o `minimat
 
 ---
 
+## npm workspaces — quirks conocidos
+
+### Estructura del workspace
+`package.json` en la raíz define los workspaces `api-01`, `api-02`, `ui`. `api-03` (Flask) está **excluido** — es Python puro. Siempre ejecutar `npm install` desde la raíz para mantener el lockfile consistente.
+
+### postinstall: minimatch@3 en eslint-plugin-import
+El workspace root tiene un script `postinstall` que instala `minimatch@^3.1.2` dentro de `node_modules/eslint-plugin-import/node_modules/`. Esto es necesario porque:
+- `typeorm → glob → minimatch@9` se hoistea al root
+- `eslint-plugin-import@2.x` requiere `minimatch@^3.1.2` y es incompatible con v9 (usa `require('minimatch').default` que no existe en v9)
+- npm overrides no crean el módulo anidado en este caso concreto
+Sin el postinstall, `npm run lint -w api-02` falla con `TypeError: (0, _minimatch2.default) is not a function`.
+
+### overrides en api-01 vs root
+- **Root** `overrides`: `path-to-regexp ^8.3.1` (transitiva de @nestjs/swagger) y `lodash ^4.18.1` (transitiva de @nestjs/config y @nestjs/swagger) — seguros de aplicar globalmente.
+- **api-01** `overrides`: `minimatch ^9.0.7` (transitiva de @typescript-eslint) — se mantiene a nivel workspace porque aplicarlo globalmente rompería `eslint-plugin-import` (ver arriba).
+
+### TypeScript versions: api-02 usa v4.x, los demás v5.x
+Con hoisting, TypeScript 5.x de api-01/ui se hoistea al root. api-02 conserva TypeScript 4.x en su propio `node_modules`. La consecuencia no obvia: los tipos resueltos por tsc en api-02 a veces reflejan las APIs de la versión hoisted (e.g. `prettier.format` se tipea como `async` de v3 aunque api-02 instale prettier v2 localmente). Añadir `await` es la solución correcta y segura para ambas versiones.
+
+### Scripts de orquestación disponibles
+```bash
+npm run typecheck        # tsc --noEmit en api-01 y api-02
+npm run build            # build en los 3 workspaces
+npm run lint             # eslint en los 3 workspaces
+npm run test             # jest en api-01 (--passWithNoTests)
+npm run audit            # npm audit workspace-wide
+npm run dev:api-01       # nest start --watch
+npm run dev:api-02       # nodemon src/server.ts
+npm run dev:ui           # next dev -p 3001
+```
+
+---
+
 ## Comandos útiles
 
 ```bash

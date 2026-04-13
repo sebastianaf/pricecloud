@@ -1,0 +1,38 @@
+{
+  "name": "pricecloud",
+  "version": "1.0.0",
+  "description": "Plataforma para comparar precios del Cloud",
+  "private": true,
+  "workspaces": [
+    "api-01",
+    "api-02",
+    "ui"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "build:api-01": "npm run build -w api-01",
+    "build:api-02": "npm run build -w api-02",
+    "build:ui": "npm run build -w ui",
+
+    "dev:api-01": "npm run start:dev -w api-01",
+    "dev:api-02": "npm run dev -w api-02",
+    "dev:ui": "npm run dev -w ui",
+
+    "start:api-01": "npm run start:prod -w api-01",
+    "start:api-02": "npm run start -w api-02",
+    "start:ui": "npm run start -w ui",
+
+    "lint": "npm run lint --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "format": "npm run format --workspaces --if-present",
+
+    "audit": "npm audit --workspaces --include-workspace-root",
+
+    "postinstall": "node -e \"const {execSync}=require('child_process'),path=require('path'),fs=require('fs'); const d=path.resolve('node_modules/eslint-plugin-import'); if(fs.existsSync(d)){execSync('npm install minimatch@^3.1.2 --no-save --silent',{cwd:d,stdio:'inherit'})}\""
+  },
+  "overrides": {
+    "path-to-regexp": "^8.3.1",
+    "lodash": "^4.18.1"
+  }
+}

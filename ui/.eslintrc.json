@@ -6,7 +6,7 @@
     "@next/next/no-img-element": "off",
     "jsx-a11y/alt-text": "off",
     "react/display-name": "off",
-    "eslint-disable-next-line": "off",
+    "@typescript-eslint/no-redeclare": "off",
     "react-hooks/exhaustive-deps": "off",
     "react/no-unescaped-entities": "off",
     "react/jsx-max-props-per-line": [

@@ -2,7 +2,15 @@
   "permissions": {
     "allow": [
       "Bash(npm install:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(npm run:*)",
+      "Bash(npx next:*)",
+      "Bash(npx eslint:*)",
+      "Bash(npm explain:*)",
+      "Bash(node -e \"const m = require\\('C:/Users/sebas/Documents/GitHub/pricecloud/node_modules/minimatch'\\); console.log\\(typeof m, typeof m.default, typeof m.minimatch\\)\")",
+      "Bash(npm show:*)",
+      "Bash(node -e \"const v=JSON.parse\\(require\\('fs'\\).readFileSync\\(0,'utf8'\\)\\); const recent=v.filter\\(x=>x.startsWith\\('2.'\\)\\).slice\\(-5\\); console.log\\('Latest 2.x:', recent.join\\(', '\\)\\)\")",
+      "Bash(node -e \"const lock=JSON.parse\\(require\\('fs'\\).readFileSync\\('c:/Users/sebas/Documents/GitHub/pricecloud/package-lock.json','utf8'\\)\\); const entry=lock.packages['node_modules/eslint-plugin-import/node_modules/minimatch']; console.log\\(entry ? 'Found: '+entry.version : 'NOT in lockfile'\\)\")"
     ]
   }
 }
