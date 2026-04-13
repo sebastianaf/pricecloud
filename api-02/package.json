@@ -25,7 +25,8 @@
     "job:init:dev": "npm run db:setup:dev && npm run job:update:dev",
     "job:update:dev": "ts-node src/cmd/jobUpdate.ts",
     "lint": "eslint --ext .ts,.js --ignore-path .gitignore .",
-    "format": "prettier --write 'src/**/*.{js,ts}'"
+    "format": "prettier --write 'src/**/*.{js,ts}'",
+    "typecheck": "tsc --noEmit"
   },
   "author": "Infracost",
   "license": "Apache-2.0",
