@@ -1,127 +1,151 @@
+name: pricecloud-${ENV}
+
+networks:
+  pricecloud:
+    name: pricecloud-${ENV}
+
 services:
-  uv-pricecloud-api-01:
-    container_name: "uv-pricecloud-${ENV}-api-01"
-    image: "uv-pricecloud-${ENV}-api-01"
+  pricecloud-api-01:
+    container_name: pricecloud-${ENV}-api-01
+    image: pricecloud-${ENV}-api-01
     restart: always
-    environment:
-      ENV: ${ENV}
-      TZ: ${TZ}
-      API_PORT: ${API_PORT}
-      API_JWT_SECRET: ${API_JWT_SECRET}
-      API_JWT_EXPIRATION_TIME: ${API_JWT_EXPIRATION_TIME}
-      API_COOKIE_EXPIRATION_TIME: ${API_COOKIE_EXPIRATION_TIME}
-      API_COOKIE_DOMAIN: ${API_COOKIE_DOMAIN}
-      DB_HOST: ${DB_HOST}
-      DB_PORT: ${DB_PORT}
-      DB_NAME: ${DB_NAME}
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_SECRET: ${DB_SECRET}
-      DB_IV: ${DB_IV}
-      DB2_HOST: ${DB2_HOST}
-      DB2_PORT: ${DB2_PORT}
-      DB2_USER: ${DB2_USER}
-      DB2_PASSWORD: ${DB2_PASSWORD}
-      DB2_NAME: ${DB2_NAME}
-      EMAIL_HOST: ${EMAIL_HOST}
-      EMAIL_PORT: ${EMAIL_PORT}
-      EMAIL_USER: ${EMAIL_USER}
-      EMAIL_PASSWORD: ${EMAIL_PASSWORD}
-      COMMON_SECRET: ${COMMON_SECRET}
-      COMMON_IV: ${COMMON_IV}
-      API03_HOST: ${API03_HOST}
-      API03_PORT: ${API03_PORT}
-      API02_HOST: ${API02_HOST}
-      API02_PORT: ${API02_PORT}
     build:
-      context: ./api-01
-      dockerfile: Dockerfile
+      # Contexto en la raiz: el lockfile y los overrides de seguridad viven
+      # ahi (ver api-01/Dockerfile).
+      context: .
+      dockerfile: api-01/Dockerfile
       args:
         API_PORT: ${API_PORT}
+    # env_file reenvia el .env completo, asi que cualquier variable nueva que
+    # necesite la API llega sola, sin tener que acordarse de listarla aqui.
+    # `environment:` solo sobreescribe lo que dentro de la red Docker vale
+    # distinto: el .env trae los hosts y puertos vistos desde el anfitrion.
+    env_file:
+      - .env
+    environment:
+      DB_HOST: pricecloud-db-01
+      DB_PORT: 5432
+      DB2_HOST: pricecloud-db-02
+      DB2_PORT: 5432
+      API02_HOST: pricecloud-api-02
+      API02_PORT: ${API02_PORT}
+      API03_HOST: pricecloud-api-03
+      API03_PORT: ${API03_PORT}
     depends_on:
-      - uv-pricecloud-api-02
-      - uv-pricecloud-api-03
+      pricecloud-db-01:
+        condition: service_healthy
+      pricecloud-db-02:
+        condition: service_healthy
+      pricecloud-api-02:
+        condition: service_started
+      pricecloud-api-03:
+        condition: service_started
     networks:
-      - uv-pricecloud
+      - pricecloud
 
-  uv-pricecloud-db-01:
-    container_name: "uv-pricecloud-${ENV}-db-01"
-    restart: always
+  pricecloud-db-01:
+    container_name: pricecloud-${ENV}-db-01
     image: postgres:15
+    restart: always
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
       TZ: ${TZ}
+    # Ruta de datos heredada del compose anterior (prefijo uv-): se mantiene a
+    # proposito para no dejar huerfanos los datos de despliegues ya existentes
+    # al renombrar los servicios a pricecloud-*.
+    # Sin healthcheck, api-01 arranca antes de que Postgres acepte conexiones y
+    # se reinicia en bucle (unos 17 reintentos) hasta que la DB esta lista. El
+    # stage Migrate del pipeline corre justo despues de Deploy, asi que conviene
+    # que el arranque sea determinista.
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
     volumes:
-      - "../uv-pricecloud-${ENV}-db-01:/var/lib/postgresql/data"
+      - ../uv-pricecloud-${ENV}-db-01:/var/lib/postgresql/data
     networks:
-      - uv-pricecloud
+      - pricecloud
 
-  uv-pricecloud-api-02:
-    container_name: "uv-pricecloud-${ENV}-api-02"
+  pricecloud-api-02:
+    container_name: pricecloud-${ENV}-api-02
+    image: pricecloud-${ENV}-api-02
     restart: always
     build:
-      context: ./api-02
-      dockerfile: Dockerfile
-    image: "uv-pricecloud-${ENV}-api-02"
+      context: .
+      dockerfile: api-02/Dockerfile
+    env_file:
+      - .env
     environment:
-      INFRACOST_API_KEY: ${INFRACOST_API_KEY}
-      SELF_HOSTED_INFRACOST_API_KEY: ${SELF_HOSTED_INFRACOST_API_KEY}
-      DB2_HOST: ${DB2_HOST}
-      DB2_USER: ${DB2_USER}
-      DB2_PASSWORD: ${DB2_PASSWORD}
-      DB2_NAME: ${DB2_NAME}
-      TZ: ${TZ}
+      # api-02 hace listen en process.env.PORT || 4000; se ata a API02_PORT
+      # para que coincida con la URL que construye api-01.
+      PORT: ${API02_PORT}
+      DB2_HOST: pricecloud-db-02
+      DB2_PORT: 5432
     depends_on:
-      - uv-pricecloud-db-02
+      pricecloud-db-02:
+        condition: service_healthy
     networks:
-      - uv-pricecloud
+      - pricecloud
 
-  uv-pricecloud-db-02:
-    restart: always
-    container_name: "uv-pricecloud-${ENV}-db-02"
+  pricecloud-db-02:
+    container_name: pricecloud-${ENV}-db-02
     image: postgres:15
+    restart: always
     environment:
       POSTGRES_USER: ${DB2_USER}
       POSTGRES_PASSWORD: ${DB2_PASSWORD}
       POSTGRES_DB: ${DB2_NAME}
       TZ: ${TZ}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB2_USER} -d ${DB2_NAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
     volumes:
-      - "../uv-pricecloud-${ENV}-db-02:/var/lib/postgresql/data"
+      - ../uv-pricecloud-${ENV}-db-02:/var/lib/postgresql/data
     networks:
-      - uv-pricecloud
+      - pricecloud
 
-  uv-pricecloud-api-03:
-    container_name: "uv-pricecloud-${ENV}-api-03"
+  pricecloud-api-03:
+    container_name: pricecloud-${ENV}-api-03
+    image: pricecloud-${ENV}-api-03
     restart: always
-    image: "uv-pricecloud-${ENV}-api-03"
     build:
       context: ./api-03
       dockerfile: Dockerfile
-    networks:
-      - uv-pricecloud
-
-  uv-pricecloud-ui:
-    container_name: "uv-pricecloud-${ENV}-ui"
-    image: "uv-pricecloud-${ENV}-ui"
-    restart: always
+    env_file:
+      - .env
     environment:
-      NEXT_PUBLIC_API_HOST: ${NEXT_PUBLIC_API_HOST}
-      UI_PORT: ${UI_PORT}
-    build:
-      context: ./ui
-      dockerfile: Dockerfile
-      args:
-        NEXT_PUBLIC_API_HOST: ${NEXT_PUBLIC_API_HOST}
-        UI_PORT: ${UI_PORT}
-    depends_on:
-      - uv-pricecloud-api-01
+      API03_PORT: ${API03_PORT}
     networks:
-      - uv-pricecloud
+      - pricecloud
 
-networks:
-  uv-pricecloud:
-    name: uv-pricecloud-${ENV}
-
-
+  pricecloud-ui:
+    container_name: pricecloud-${ENV}-ui
+    image: pricecloud-${ENV}-ui
+    restart: always
+    build:
+      context: .
+      dockerfile: ui/Dockerfile
+      args:
+        # Toda NEXT_PUBLIC_* se congela en el bundle del navegador durante
+        # `next build`: tiene que llegar como build arg, en `environment:` no
+        # se leeria nunca.
+        NEXT_PUBLIC_API_HOST: ${NEXT_PUBLIC_API_HOST}
+        NEXT_PUBLIC_UI_PORT: ${NEXT_PUBLIC_UI_PORT}
+        NEXT_PUBLIC_ENV: ${NEXT_PUBLIC_ENV}
+        UI_PORT: ${UI_PORT}
+    env_file:
+      - .env
+    environment:
+      # `next start` lee PORT de forma nativa; sin esto el contenedor
+      # escucharia siempre en el 3000 por defecto.
+      PORT: ${UI_PORT}
+    depends_on:
+      pricecloud-api-01:
+        condition: service_started
+    networks:
+      - pricecloud

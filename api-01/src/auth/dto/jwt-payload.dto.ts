@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger/dist';
+import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsUUID } from 'class-validator';
 
 export class JwtPayloadDto {
