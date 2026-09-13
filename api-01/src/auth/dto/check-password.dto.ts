@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger/dist';
+import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsEmail } from 'class-validator';
 import { User } from '../../user/entities/user.entity';
 

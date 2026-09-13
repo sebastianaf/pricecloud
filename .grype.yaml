@@ -1,0 +1,9 @@
+# Configuracion de Grype para el stage "Security Scan" del Jenkinsfile.
+# Grype la carga sola desde la raiz del repo (el mismo cwd desde el que corre
+# `grype dir:.`), no hace falta pasar --config.
+#
+# Cada entrada de `ignore` es una excepcion puntual, nunca un silenciador
+# general: se documenta el motivo y se revisa cuando la dependencia raiz sube
+# su propia version de la libreria afectada.
+
+ignore: []

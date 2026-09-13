@@ -1,0 +1,42 @@
+# El contexto de build de api-01, api-02 y ui es la RAIZ del repo (hace falta
+# para copiar package-lock.json y que las imagenes hereden los overrides de
+# seguridad). Sin este archivo el contexto arrastraria los node_modules de
+# todos los workspaces: ~1.5 GB enviados al daemon en cada build.
+
+# Dependencias: las instala `npm ci` dentro de la imagen
+node_modules
+*/node_modules
+
+# Artefactos de build: se regeneran dentro de la imagen
+api-01/dist
+api-02/dist
+ui/build
+ui/.next
+
+# Datos y ejemplos de api-02 (venian de api-02/.dockerignore, que quedo
+# inerte al mover el contexto de build a la raiz)
+api-02/data
+api-02/examples
+api-02/tmp
+
+# Secretos y configuracion local
+.env
+.env.*
+!.env.example
+
+# Git y metadatos
+.git
+.gitignore
+.gitattributes
+.github
+
+# Herramientas locales que no pintan nada dentro de la imagen
+.claude
+.grype-bin
+Vagrantfile
+Jenkinsfile
+docker-compose*.yml
+latex
+socket-client.html
+coverage
+*.log
