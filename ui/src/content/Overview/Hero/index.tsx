@@ -1,4 +1,7 @@
 import { GitHub } from '@mui/icons-material';
+import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
+import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
+import TravelExploreIcon from '@mui/icons-material/TravelExplore';
 import {
   Box,
   Button,
@@ -38,65 +41,52 @@ const LabelWrapper = styled(Box)(
 `
 );
 
-const MuiAvatar = styled(Box)(
-  ({ theme }) => `
+// Un solo avatar parametrizado por color en vez de tres cajas casi identicas
+// con un color de fondo fijo. Los tokens del tema se adaptan al esquema activo;
+// los `#e5f7ff` que habia antes se veian mal sobre el tema oscuro.
+const FeatureAvatar = styled(Box)<{ accent: 'primary' | 'info' | 'success' }>(
+  ({ theme, accent }) => `
     width: ${theme.spacing(8)};
     height: ${theme.spacing(8)};
     border-radius: ${theme.general.borderRadius};
-    background-color: #e5f7ff;
+    background-color: ${theme.colors[accent].lighter};
+    color: ${theme.colors[accent].main};
     flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 0 auto ${theme.spacing(2)};
 
-    img {
-      width: 60%;
-      height: 60%;
-      display: block;
+    svg {
+      width: 55%;
+      height: 55%;
     }
 `
 );
 
-const TsAvatar = styled(Box)(
-  ({ theme }) => `
-    width: ${theme.spacing(8)};
-    height: ${theme.spacing(8)};
-    border-radius: ${theme.general.borderRadius};
-    background-color: #dfebf6;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto ${theme.spacing(2)};
-
-    img {
-      width: 60%;
-      height: 60%;
-      display: block;
-    }
-`
-);
-
-const NextJsAvatar = styled(Box)(
-  ({ theme }) => `
-  width: ${theme.spacing(8)};
-  height: ${theme.spacing(8)};
-  border-radius: ${theme.general.borderRadius};
-  background-color: #dfebf6;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto ${theme.spacing(2)};
-
-    img {
-      width: 60%;
-      height: 60%;
-      display: block;
-    }
-`
-);
+const features = [
+  {
+    accent: 'primary' as const,
+    icon: <TravelExploreIcon />,
+    title: 'Explora el catálogo',
+    description:
+      'Miles de servicios de AWS, Azure y Google Cloud en un mismo lugar, organizados por familia de producto y región.'
+  },
+  {
+    accent: 'info' as const,
+    icon: <CompareArrowsIcon />,
+    title: 'Compara lado a lado',
+    description:
+      'Pon los precios equivalentes de varios proveedores en una sola vista y decide con cifras, no con intuición.'
+  },
+  {
+    accent: 'success' as const,
+    icon: <RocketLaunchIcon />,
+    title: 'Aprovisiona desde aquí',
+    description:
+      'Conecta tus credenciales y crea instancias y almacenamiento en AWS sin salir de la aplicación.'
+  }
+];
 
 function Hero() {
   return (
@@ -110,7 +100,7 @@ function Hero() {
         <Grid item md={10} lg={8} mx="auto">
           <LabelWrapper color="success">Version 1.0.0</LabelWrapper>
           <TypographyH1 sx={{ mb: 2 }} variant="h1">
-          La aplicación para consultar precios de la nube
+            Elige la nube más rentable para cada servicio
           </TypographyH1>
           <TypographyH2
             sx={{ lineHeight: 1.5, pb: 2 }}
@@ -118,9 +108,10 @@ function Hero() {
             color="text.secondary"
             fontWeight="normal"
           >
-            Conoce cuáles son los precios para los principales servicios que
-            ofrecen los proveedores de cloud computing, compáralos y toma la
-            mejor decisión.
+            Compara los precios de AWS, Azure y Google Cloud sobre un catálogo
+            común, encuentra la región y el tipo de servicio que mejor encajan
+            con tu proyecto, y despliega la infraestructura sin cambiar de
+            herramienta.
           </TypographyH2>
           <Button
             component={Link}
@@ -137,54 +128,23 @@ function Hero() {
             </Button>
           </NextLink>
           <Grid container spacing={3} mt={5}>
-            <Grid item md={4}>
-              <MuiAvatar>
-                <img
-                  src="/static/images/logo/material-ui.svg"
-                  alt="Material-UI"
-                />
-              </MuiAvatar>
-              <Typography variant="h4">
-                <Box sx={{ pb: 2 }}>
-                  <b>Basado en (Material-UI)</b>
-                </Box>
-                <Typography component="span" variant="subtitle2">
-                  Es una librería de componentes personalizable para construir
-                  aplicaciones de React rápidas y accesibles.
+            {features.map((feature) => (
+              // xs={12} explicito: sin el, en movil las tres tarjetas quedan a
+              // ancho automatico en vez de apilarse.
+              <Grid item xs={12} md={4} key={feature.title}>
+                <FeatureAvatar accent={feature.accent}>
+                  {feature.icon}
+                </FeatureAvatar>
+                <Typography variant="h4">
+                  <Box sx={{ pb: 2 }}>
+                    <b>{feature.title}</b>
+                  </Box>
+                  <Typography component="span" variant="subtitle2">
+                    {feature.description}
+                  </Typography>
                 </Typography>
-              </Typography>
-            </Grid>
-            <Grid item md={4}>
-              <NextJsAvatar>
-                <img src="/static/images/logo/next-js.svg" alt="NextJS" />
-              </NextJsAvatar>
-              <Typography variant="h4">
-                <Box sx={{ pb: 2 }}>
-                  <b>Construido con Next.js</b>
-                </Box>
-                <Typography component="span" variant="subtitle2">
-                  Next.js te da la mejor experiencia de desarrollo con todas las
-                  características que necesitas en producción.
-                </Typography>
-              </Typography>
-            </Grid>
-            <Grid item md={4}>
-              <TsAvatar>
-                <img
-                  src="/static/images/logo/typescript.svg"
-                  alt="Typescript"
-                />
-              </TsAvatar>
-              <Typography variant="h4">
-                <Box sx={{ pb: 2 }}>
-                  <b>Construido con Typescript</b>
-                </Box>
-                <Typography component="span" variant="subtitle2">
-                  Al igual que el backend Pricecloud usa Typescript en su
-                  front-end.
-                </Typography>
-              </Typography>
-            </Grid>
+              </Grid>
+            ))}
           </Grid>
         </Grid>
       </Grid>
