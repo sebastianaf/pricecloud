@@ -7,8 +7,6 @@ import Router from 'next/router';
 import nProgress from 'nprogress';
 import CssBaseline from '@mui/material/CssBaseline';
 import { CacheProvider, EmotionCache } from '@emotion/react';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import Fade from '@mui/material/Fade';
 
 /* 
@@ -74,12 +72,10 @@ function PricecloudApp(props: TokyoAppProps) {
           <AuthProvider>
             <SidebarProvider>
               <ThemeProvider>
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <ModalProvider>
-                    <CssBaseline />
-                    {getLayout(<Component {...pageProps} />)}
-                  </ModalProvider>
-                </LocalizationProvider>
+                <ModalProvider>
+                  <CssBaseline />
+                  {getLayout(<Component {...pageProps} />)}
+                </ModalProvider>
               </ThemeProvider>
             </SidebarProvider>
           </AuthProvider>

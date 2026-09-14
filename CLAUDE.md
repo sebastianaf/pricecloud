@@ -212,6 +212,31 @@ Los servicios de Postgres tienen `healthcheck` con `pg_isready` y api-01 depende
 
 ---
 
+## La pantalla en blanco del UI: `LocalizationProvider` de `@mui/lab`
+
+Durante semanas el frontend servia una pagina completamente en blanco, en produccion y en local, **en todas las rutas** (incluida la 404). Causa:
+
+```js
+// node_modules/@mui/lab/LocalizationProvider/LocalizationProvider.js
+const LocalizationProvider = React.forwardRef(function DeprecatedLocalizationProvider() {
+  warn();
+  return null;   // <-- descarta TODOS sus hijos
+});
+```
+
+En `@mui/lab@5.0.0-alpha.177` los componentes de fecha se movieron a `@mui/x-date-pickers` y lo que queda en `@mui/lab` es un **stub deprecado que hace `return null`**. En `_app.tsx` ese componente envolvia el arbol entero, asi que descartaba la aplicacion completa. `AdapterDateFns` del mismo paquete es igual de inutil: una clase vacia cuyo constructor solo avisa.
+
+Ambos se eliminaron de [_app.tsx](ui/pages/_app.tsx) sin sustituto, porque **el proyecto no usa ningun date picker** (`DatePicker`, `TimePicker`, etc. no aparecen en el codigo). Si algun dia se necesitan, hay que instalar `@mui/x-date-pickers` e importarlos de ahi, nunca de `@mui/lab`.
+
+`@mui/lab` sigue haciendo falta: `LoadingButton` viene de ahi y es un componente real.
+
+### Por que costo tanto encontrarlo
+El sintoma no deja rastro por ningun sitio: los bundles cargan con 200, no hay error de consola, ni de build, ni overlay de Next en modo dev; `#__next` simplemente queda con 0 hijos. La unica pista era un `console.warn` de MUI que parecia una deprecacion inocua.
+
+Lo que si funciono fue **bisecar `_app.tsx`**: sustituir su `return` por un `<div>` estatico (renderiza -> el problema esta en `_app`), luego reponer la cadena de providers completa con un hijo estatico (no renderiza -> es un provider), y de ahi ir quitando de uno en uno. Ante otro blanco silencioso, empezar por ahi en vez de leer codigo.
+
+---
+
 ## Desarrollo local: `npm run infra` + `npm run dev`
 
 Mismo patron que las apps hermanas (`motordetailcol`, `wedding-invitation`) y las convenciones de `enerfris-init`: un unico `.env` en la raiz, y todos los scripts de desarrollo lo inyectan con `dotenv -e .env --`.
@@ -229,16 +254,14 @@ npm run docker:up      # alternativa: stack entero en Docker
 ### Como se separa de produccion
 `docker-compose.local.yml` es el que publica puertos al anfitrion y anade pgAdmin. El compose base **no publica ningun puerto**: en produccion los servicios solo se hablan por la red interna de Docker.
 
-Compose combina ambos ficheros via `COMPOSE_FILE` en el `.env`. Produccion nunca carga el override porque el Jenkinsfile antepone `COMPOSE_FILE=docker-compose.yml` a cada comando, y **la variable de entorno gana sobre la del `.env`** (comprobado). O sea que el flujo local no puede filtrarse al despliegue ni aunque la credencial traiga el valor local.
+Los scripts npm pasan **`-f docker-compose.yml -f docker-compose.local.yml` de forma explicita**, no via `COMPOSE_FILE` del `.env` como hacen las apps hermanas. La razon es que esa variable tiene dos trampas que ya costaron un rato:
 
-### `COMPOSE_FILE`: el separador depende del sistema operativo
-```env
-# Windows
-COMPOSE_FILE=docker-compose.yml;docker-compose.local.yml
-# Linux/Mac
-COMPOSE_FILE=docker-compose.yml:docker-compose.local.yml
-```
-Con el separador equivocado Compose interpreta la cadena entera como un unico nombre de fichero y falla con `GetFileAttributesEx ...docker-compose.yml:docker-compose.local.yml: The system cannot find the file specified`.
+- Si falta, Compose carga solo el fichero base y `npm run infra` muere con `no such service: pricecloud-pgadmin`, que no dice nada de la causa.
+- El separador depende del SO (`;` en Windows, `:` en Linux). Con el equivocado, Compose interpreta la cadena entera como un unico nombre de fichero: `GetFileAttributesEx ...docker-compose.yml:docker-compose.local.yml: The system cannot find the file specified`.
+
+Con `-f` explicito, `npm run infra` funciona sin tocar el `.env` y es igual en Windows y en Linux. `COMPOSE_FILE` queda comentado en `.env.example`, util solo si se escriben comandos `docker compose` a mano.
+
+Produccion nunca carga el override: el Jenkinsfile antepone `COMPOSE_FILE=docker-compose.yml` a cada comando y **la variable de entorno gana sobre la del `.env`** (comprobado).
 
 ### Puertos en local
 Los servicios nativos (`npm run dev`) usan `API_PORT`, `API02_PORT` y `UI_PORT` del `.env`, y se conectan a las bases por `localhost:${DB_PORT}` / `localhost:${DB2_PORT}`. Por eso `DB_HOST` y compania en el `.env` apuntan al anfitrion: dentro de Docker el compose los sobreescribe con los nombres de servicio.
@@ -276,3 +299,4 @@ cd api-01 && npx tsc --noEmit
 - No canalizar a `grep` la salida de un comando cuyo exito importa — la tuberia se come el codigo de salida
 - No poner `overrides` en el `package.json` de un workspace — npm los ignora en silencio
 - No convertir `brace-expansion@^2` ni los `minimatch` anidados en overrides globales — rompen `minimatch@3` y `eslint-plugin-import`
+- No importar `LocalizationProvider` ni `AdapterDateFns` de `@mui/lab` — son stubs deprecados; el primero hace `return null` y deja la app entera en blanco
