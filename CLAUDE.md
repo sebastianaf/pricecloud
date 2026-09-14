@@ -141,6 +141,8 @@ Ademas del presente/no vacio, comprueba dos formatos que no se detectan de otra 
 - **`ENV`** tiene que ser `local`, `dev` o `prod`. `production` es el error clasico y api-01 no arranca.
 - **`NEXT_PUBLIC_API_HOST`** va como **host pelado, sin esquema** (`api.pricecloud.org`). El frontend hace `https://${NEXT_PUBLIC_API_HOST}` y `wss://${NEXT_PUBLIC_API_HOST}/price`, asi que con esquema queda `https://https://...` y las llamadas fallan en el navegador **sin que el build se entere**. Y como toda `NEXT_PUBLIC_*` se congela en el bundle durante `next build`, cambiarla obliga a reconstruir la imagen.
 
+Cualquier script que lea el `.env` tiene que hacer `tr -d ''`: la credencial se edita en Windows y llega con CRLF, asi que sin eso `ENV` vale `prod` y no casa con `prod`. Docker y Compose si limpian el CR por su cuenta, o sea que el fallo aparece solo en los scripts propios. **Y no se reproduce en Git Bash sobre Windows**, que normaliza al leer: hay que probarlo en Linux, que es donde corre el agente de Jenkins.
+
 `NEXT_PUBLIC_UI_PORT` y `NEXT_PUBLIC_ENV` se retiraron de los build args del compose: la primera solo alimenta un export de `ui/src/helper/environment.ts` que no importa ningun modulo, y la segunda no aparece en el codigo. Obligaban a configurarlas para nada.
 
 ### Lo que hay que configurar en Jenkins

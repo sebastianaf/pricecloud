@@ -22,6 +22,29 @@ if [ ! -f "$ENV_FILE" ]; then
   exit 2
 fi
 
+# Lee el valor de una variable del .env.
+#
+# El `tr -d '\r'` no es opcional: la credencial se edita en Windows y llega con
+# finales de linea CRLF, asi que sin el ENV valdria "prod\r" y no casaria con
+# "prod". (Docker y Compose si limpian el CR por su cuenta, o sea que el
+# problema era solo de este script.) Git Bash en Windows tampoco lo reproduce
+# porque normaliza al leer; el agente de Jenkins es Linux y ahi si aparece.
+#
+# El resto normaliza como lo hace Compose: quita un comentario inline solo si
+# va precedido de espacio (para no partir un valor que contenga '#', como una
+# contrasena), recorta espacios alrededor y quita las comillas envolventes.
+read_var() {
+  grep "^${1}=" "$ENV_FILE" 2>/dev/null \
+    | head -1 \
+    | cut -d= -f2- \
+    | tr -d '\r' \
+    | sed -e 's/[[:space:]][[:space:]]*#.*$//' \
+          -e 's/^[[:space:]]*//' \
+          -e 's/[[:space:]]*$//' \
+          -e 's/^"\(.*\)"$/\1/' \
+          -e "s/^'\\(.*\\)'\$/\\1/"
+}
+
 # Interpoladas por docker-compose.yml: si faltan, Compose las sustituye por
 # cadena vacia y el servicio arranca mal configurado.
 COMPOSE_VARS="ENV TZ API_PORT DB_USER DB_PASSWORD DB_NAME DB2_USER DB2_PASSWORD DB2_NAME API02_PORT API03_PORT UI_PORT NEXT_PUBLIC_API_HOST"
@@ -36,9 +59,7 @@ DEPLOY_VARS="DEPLOY_USER DEPLOY_DIR"
 
 MISSING=""
 for var in $COMPOSE_VARS $API01_VARS $DEPLOY_VARS; do
-  # Presente y con valor no vacio (ignorando comillas y espacios).
-  value="$(grep "^${var}=" "$ENV_FILE" | head -1 | cut -d= -f2- | tr -d '"'"'"' ' | sed 's/#.*//')"
-  if [ -z "$value" ]; then
+  if [ -z "$(read_var "$var")" ]; then
     MISSING="${MISSING} ${var}"
   fi
 done
@@ -56,7 +77,7 @@ fi
 # ENV tiene que ser uno de local|dev|prod: api-01 lo valida con Joi contra el
 # enum de src/common/interfaces/environment.interface.ts y no arranca con otro
 # valor (ojo: 'production' NO vale, el enum mapea production = 'prod').
-ENV_VALUE="$(grep '^ENV=' "$ENV_FILE" | head -1 | cut -d= -f2- | tr -d '"'"'"' ' | sed 's/#.*//')"
+ENV_VALUE="$(read_var ENV)"
 case "$ENV_VALUE" in
   local|dev|prod) ;;
   *)
@@ -69,7 +90,7 @@ esac
 # `wss://${NEXT_PUBLIC_API_HOST}/price`, o sea que el valor va como host pelado.
 # Con esquema queda "https://https://..." y las llamadas a la API fallan en el
 # navegador, sin que el build se entere.
-API_HOST_VALUE="$(grep '^NEXT_PUBLIC_API_HOST=' "$ENV_FILE" | head -1 | cut -d= -f2- | tr -d '"'"'"' ' | sed 's/#.*//')"
+API_HOST_VALUE="$(read_var NEXT_PUBLIC_API_HOST)"
 case "$API_HOST_VALUE" in
   http://*|https://*|ws://*|wss://*)
     echo "ERROR: NEXT_PUBLIC_API_HOST='${API_HOST_VALUE}' no debe llevar esquema." >&2
