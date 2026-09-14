@@ -141,7 +141,9 @@ Ademas del presente/no vacio, comprueba dos formatos que no se detectan de otra 
 - **`ENV`** tiene que ser `local`, `dev` o `prod`. `production` es el error clasico y api-01 no arranca.
 - **`NEXT_PUBLIC_API_HOST`** va como **host pelado, sin esquema** (`api.pricecloud.org`). El frontend hace `https://${NEXT_PUBLIC_API_HOST}` y `wss://${NEXT_PUBLIC_API_HOST}/price`, asi que con esquema queda `https://https://...` y las llamadas fallan en el navegador **sin que el build se entere**. Y como toda `NEXT_PUBLIC_*` se congela en el bundle durante `next build`, cambiarla obliga a reconstruir la imagen.
 
-Cualquier script que lea el `.env` tiene que hacer `tr -d ''`: la credencial se edita en Windows y llega con CRLF, asi que sin eso `ENV` vale `prod` y no casa con `prod`. Docker y Compose si limpian el CR por su cuenta, o sea que el fallo aparece solo en los scripts propios. **Y no se reproduce en Git Bash sobre Windows**, que normaliza al leer: hay que probarlo en Linux, que es donde corre el agente de Jenkins.
+Cualquier script que lea el `.env` tiene que hacer `tr -d '
+'`: la credencial se edita en Windows y llega con CRLF, asi que sin eso `ENV` vale `prod
+` y no casa con `prod`. Docker y Compose si limpian el CR por su cuenta, o sea que el fallo aparece solo en los scripts propios. **Y no se reproduce en Git Bash sobre Windows**, que normaliza al leer: hay que probarlo en Linux, que es donde corre el agente de Jenkins.
 
 `NEXT_PUBLIC_UI_PORT` y `NEXT_PUBLIC_ENV` se retiraron de los build args del compose: la primera solo alimenta un export de `ui/src/helper/environment.ts` que no importa ningun modulo, y la segunda no aparece en el codigo. Obligaban a configurarlas para nada.
 
@@ -207,6 +209,41 @@ Los servicios, contenedores, imagenes y la red se renombraron de `uv-pricecloud-
 Los servicios usan `env_file: .env` y `environment:` solo para lo que dentro de la red Docker vale distinto (`DB_HOST`, `DB2_HOST`, `API02_HOST`, `API03_HOST`, `PORT`). Antes cada variable se listaba una a una en `environment:`, asi que cualquier variable nueva no llegaba al contenedor hasta acordarse de anadirla ahi.
 
 Los servicios de Postgres tienen `healthcheck` con `pg_isready` y api-01 depende de ellos con `condition: service_healthy`. Sin eso api-01 arrancaba antes que la DB y se reiniciaba en bucle (~17 reintentos) en cada despliegue, justo antes de que el pipeline lance `Migrate`.
+
+---
+
+## Desarrollo local: `npm run infra` + `npm run dev`
+
+Mismo patron que las apps hermanas (`motordetailcol`, `wedding-invitation`) y las convenciones de `enerfris-init`: un unico `.env` en la raiz, y todos los scripts de desarrollo lo inyectan con `dotenv -e .env --`.
+
+```bash
+npm run infra    # Docker: db-01, db-02, api-03 y pgadmin
+npm run dev      # nativo con hot-reload: api-01 + api-02 + ui en paralelo
+npm run db:migrate && npm run db:seed
+npm run infra:down     # parar        (infra:reset borra tambien los volumenes)
+npm run docker:up      # alternativa: stack entero en Docker
+```
+
+`api-03` va en `infra` y no en `dev` porque es Flask: no es un workspace npm y no tiene flujo de hot-reload.
+
+### Como se separa de produccion
+`docker-compose.local.yml` es el que publica puertos al anfitrion y anade pgAdmin. El compose base **no publica ningun puerto**: en produccion los servicios solo se hablan por la red interna de Docker.
+
+Compose combina ambos ficheros via `COMPOSE_FILE` en el `.env`. Produccion nunca carga el override porque el Jenkinsfile antepone `COMPOSE_FILE=docker-compose.yml` a cada comando, y **la variable de entorno gana sobre la del `.env`** (comprobado). O sea que el flujo local no puede filtrarse al despliegue ni aunque la credencial traiga el valor local.
+
+### `COMPOSE_FILE`: el separador depende del sistema operativo
+```env
+# Windows
+COMPOSE_FILE=docker-compose.yml;docker-compose.local.yml
+# Linux/Mac
+COMPOSE_FILE=docker-compose.yml:docker-compose.local.yml
+```
+Con el separador equivocado Compose interpreta la cadena entera como un unico nombre de fichero y falla con `GetFileAttributesEx ...docker-compose.yml:docker-compose.local.yml: The system cannot find the file specified`.
+
+### Puertos en local
+Los servicios nativos (`npm run dev`) usan `API_PORT`, `API02_PORT` y `UI_PORT` del `.env`, y se conectan a las bases por `localhost:${DB_PORT}` / `localhost:${DB2_PORT}`. Por eso `DB_HOST` y compania en el `.env` apuntan al anfitrion: dentro de Docker el compose los sobreescribe con los nombres de servicio.
+
+`docker-compose.local.yml` tambien publica los puertos de api-01, api-02 y ui, pero solo se usan con `npm run docker:up`. Con `infra` + `dev` esos contenedores no se levantan y los puertos quedan libres para los procesos nativos.
 
 ---
 

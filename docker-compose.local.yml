@@ -1,0 +1,57 @@
+# Override SOLO para desarrollo local. Docker Compose lo carga automaticamente
+# via COMPOSE_FILE en el .env (ver .env.example).
+#
+# Produccion nunca lo ve: el Jenkinsfile antepone COMPOSE_FILE=docker-compose.yml
+# a cada comando, y esa variable de entorno gana sobre la del .env aunque el
+# fichero de la credencial traiga la version local (comprobado).
+#
+# Que aporta: el compose base no publica NINGUN puerto al anfitrion, porque en
+# produccion los servicios solo se hablan por la red interna de Docker. En local
+# hacen falta publicados para poder conectarse desde la maquina.
+
+services:
+  pricecloud-db-01:
+    ports:
+      - "${DB_PORT}:5432"
+
+  pricecloud-db-02:
+    ports:
+      - "${DB2_PORT}:5432"
+
+  # api-03 es Flask: no es un workspace npm y no tiene flujo de hot-reload, asi
+  # que en local tambien se levanta en Docker (forma parte de `npm run infra`).
+  pricecloud-api-03:
+    ports:
+      - "${API03_PORT}:${API03_PORT}"
+
+  # api-01, api-02 y ui solo se levantan con `npm run docker:up` (stack entero
+  # en Docker). Con `npm run infra` + `npm run dev` corren nativos en el
+  # anfitrion y estos puertos quedan libres para ellos.
+  pricecloud-api-01:
+    ports:
+      - "${API_PORT}:${API_PORT}"
+
+  pricecloud-api-02:
+    ports:
+      - "${API02_PORT}:${API02_PORT}"
+
+  pricecloud-ui:
+    ports:
+      - "${UI_PORT}:${UI_PORT}"
+
+  pricecloud-pgadmin:
+    container_name: pricecloud-${ENV}-pgadmin
+    image: dpage/pgadmin4:latest
+    restart: unless-stopped
+    ports:
+      - "${PG_ADMIN_PORT}:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PG_ADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PG_ADMIN_PASSWORD}
+      # Sin modo servidor no pide login cada vez que se abre.
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    depends_on:
+      - pricecloud-db-01
+      - pricecloud-db-02
+    networks:
+      - pricecloud
