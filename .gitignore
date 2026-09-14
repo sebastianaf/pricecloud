@@ -139,6 +139,7 @@ dist
 
 # Byte-compiled / optimized / DLL files
 .env
+.env.production
 
 __pycache__
 *.py[cod]

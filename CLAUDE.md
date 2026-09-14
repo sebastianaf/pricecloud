@@ -133,6 +133,16 @@ Solo **`main` despliega**, a `prod`. Cualquier otra rama del multibranch falla a
 
 `APP_ENV` tiene que ser `local`, `dev` o `prod` y nada mas: api-01 valida `ENV` con Joi contra el enum de [environment.interface.ts](api-01/src/common/interfaces/environment.interface.ts), donde `production = 'prod'`. Poner `production` hace que api-01 no arranque (`"ENV" must be one of [local, dev, prod]`). Ese mismo valor nombra la red, los contenedores y las imagenes: `pricecloud-prod`, `pricecloud-prod-api-01`, etc.
 
+### Variables del `.env`: el stage `Load Config` las valida antes de construir
+Una variable que falte no falla de forma ruidosa: Compose la sustituye por cadena vacia, avisa con `variable is not set. Defaulting to a blank string` y sigue adelante. Por eso [scripts/check-env.sh](scripts/check-env.sh) corre al principio del pipeline y aborta listando lo que falta.
+
+Ademas del presente/no vacio, comprueba dos formatos que no se detectan de otra forma:
+
+- **`ENV`** tiene que ser `local`, `dev` o `prod`. `production` es el error clasico y api-01 no arranca.
+- **`NEXT_PUBLIC_API_HOST`** va como **host pelado, sin esquema** (`api.pricecloud.org`). El frontend hace `https://${NEXT_PUBLIC_API_HOST}` y `wss://${NEXT_PUBLIC_API_HOST}/price`, asi que con esquema queda `https://https://...` y las llamadas fallan en el navegador **sin que el build se entere**. Y como toda `NEXT_PUBLIC_*` se congela en el bundle durante `next build`, cambiarla obliga a reconstruir la imagen.
+
+`NEXT_PUBLIC_UI_PORT` y `NEXT_PUBLIC_ENV` se retiraron de los build args del compose: la primera solo alimenta un export de `ui/src/helper/environment.ts` que no importa ningun modulo, y la segunda no aparece en el codigo. Obligaban a configurarlas para nada.
+
 ### Lo que hay que configurar en Jenkins
 1. Un job **Multibranch Pipeline** apuntando al repo; el Jenkinsfile esta en la raiz.
 2. Una credencial de tipo **Secret file** con id **`pricecloud-env-prod`**, cuyo contenido es el `.env` completo (usar [.env.example](.env.example) como plantilla). Tiene que incluir `DEPLOY_USER` y `DEPLOY_DIR`; `DEPLOY_HOST` no, se autodetecta.
@@ -148,6 +158,25 @@ No hay stage de tests de integracion: a diferencia de motordetailcol, este repo 
 El health check vive en un script y no embebido en el Jenkinsfile porque necesita tres niveles de anidamiento (sh de Jenkins -> ssh -> docker run) y escaparlo inline es una fuente segura de errores de comillas.
 
 Comprueba api-01 **por codigo HTTP y no con `curl -sf`**: api-01 no expone ningun endpoint de salud (`AppController` no declara rutas y Swagger solo se monta cuando `ENV != prod`, ver [docs.service.ts](api-01/src/docs/docs.service.ts)), asi que un 404 ya demuestra que el proceso escucha. El `ui` si se valida con un 200 en `/login`.
+
+### Migrate y Seed corren en contenedores efimeros, no con `docker exec`
+api-01 lleva `restart: always`. Si el contenedor se reinicia mientras hay un `docker exec` en marcha, Docker mata el proceso del exec con **SIGKILL y devuelve 137** (reproducido). O sea: con la app en bucle de reinicio, las migraciones morian con un codigo criptico que no decia nada de la causa real.
+
+Por eso [scripts/app-run.sh](scripts/app-run.sh) usa `docker compose run --rm --no-deps`: un contenedor efimero no hereda la politica de reinicio, no depende de que la app arranque bien y sobrevive a que api-01 se reinicie a mitad. Las migraciones solo necesitan la base de datos, que el compose ya espera con `condition: service_healthy`.
+
+No volver a `docker exec` para estas tareas. Y ojo con dos trampas que ya costaron un despliegue en verde falso:
+
+- **No canalizar la salida a `grep`.** El stage Migrate hacia `docker exec ... | grep -v "^query:" && exit 0`: el estado de una tuberia es el del ultimo comando, asi que grep devolvia 0 por haber impreso el banner de npm y el stage pasaba en verde **con la migracion muerta**.
+- **No capturar el codigo con `if cmd; then ... fi` y luego `$?`.** Tras un `if`, `$?` es el estado del propio `if` (siempre 0), no el de la condicion. Hay que usar `set +e; cmd; STATUS=$?; set -e`.
+
+Tampoco sirve esperar con `docker exec CONTAINER test -f dist/database/datasource.js`: ese fichero va horneado en la imagen, o sea que es cierto desde el milisegundo 0 del contenedor y el bucle de reintentos no espera nada.
+
+Cuando algo falla, `app-run.sh` y [scripts/health-check.sh](scripts/health-check.sh) vuelcan `RestartCount`, `OOMKilled` y los ultimos logs del contenedor: es lo que distingue un bucle de reinicio de una maquina sin memoria.
+
+### api-03 necesita `stop_signal: SIGINT`
+waitress **ignora SIGTERM aun siendo PID 1** (comprobado: sigue vivo tras recibirlo). Sin `stop_signal: SIGINT` en el compose, `docker compose down` esperaba los 30 s enteros de timeout y luego lo mataba, sumando esa espera a cada despliegue. Con SIGINT para en ~1 s (el `down` completo bajo de ~35 s a 3 s).
+
+El `CMD` de api-03 va como `["sh", "-c", "exec waitress-serve ..."]`: hace falta un shell para expandir `API03_PORT`, y el `exec` reemplaza al shell por waitress para que reciba la senal directamente en vez de quedar como su hijo.
 
 ### Builds Docker: el contexto es la RAIZ del repo
 api-01, api-02 y ui se construyen con `context: .` y `dockerfile: <ws>/Dockerfile`, no desde su propia carpeta. Es obligatorio: el repo es un npm workspace y tanto el `package-lock.json` como el bloque `overrides` — que es lo que mantiene el arbol sin vulnerabilidades — viven solo en la raiz.
@@ -204,5 +233,7 @@ cd api-01 && npx tsc --noEmit
 - No cambiar el contexto de build de api-01/api-02/ui a su propia carpeta — perderian el lockfile y los overrides, y las vulnerabilidades volverian dentro de las imagenes
 - No usar `production` como valor de `ENV`/`APP_ENV` — api-01 solo acepta `local`, `dev` o `prod`
 - No reintroducir un override global de `path-to-regexp` — rompe `express@4` en api-02
+- No usar `docker exec` sobre api-01 para migraciones ni seed — un reinicio del contenedor mata el exec con 137
+- No canalizar a `grep` la salida de un comando cuyo exito importa — la tuberia se come el codigo de salida
 - No poner `overrides` en el `package.json` de un workspace — npm los ignora en silencio
 - No convertir `brace-expansion@^2` ni los `minimatch` anidados en overrides globales — rompen `minimatch@3` y `eslint-plugin-import`

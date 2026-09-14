@@ -9,10 +9,15 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /app
 
-# Forma shell (no exec) a proposito: hace falta un shell para expandir
-# API03_PORT. Antes el puerto estaba fijo a 8080 aqui mientras api-01 llamaba
-# a http://${API03_HOST}:${API03_PORT}, asi que cualquier valor de API03_PORT
-# distinto de 8080 en el .env rompia la comunicacion en silencio.
 ENV API03_PORT=8080
 EXPOSE ${API03_PORT}
-CMD waitress-serve --port=${API03_PORT} run:app
+
+# Forma exec con `sh -c ... exec`: hace falta un shell para expandir API03_PORT
+# (antes el puerto estaba fijo a 8080 aqui mientras api-01 llamaba a
+# http://${API03_HOST}:${API03_PORT}), pero el `exec` reemplaza al shell por
+# waitress para que reciba SIGTERM directamente.
+#
+# Sin el `exec`, waitress queda como hijo de /bin/sh, que no reenvia la senal:
+# `docker compose down` esperaba los 30s completos de timeout y luego lo mataba,
+# anadiendo esa espera a cada despliegue.
+CMD ["sh", "-c", "exec waitress-serve --port=${API03_PORT} run:app"]

@@ -113,6 +113,11 @@ services:
     container_name: pricecloud-${ENV}-api-03
     image: pricecloud-${ENV}-api-03
     restart: always
+    # waitress ignora SIGTERM aun siendo PID 1 (comprobado: sigue vivo tras
+    # enviarselo), asi que `docker compose down` esperaba los 30s enteros de
+    # timeout y luego lo mataba, sumando esa espera a cada despliegue. Con
+    # SIGINT para en ~1s.
+    stop_signal: SIGINT
     build:
       context: ./api-03
       dockerfile: Dockerfile
@@ -134,9 +139,10 @@ services:
         # Toda NEXT_PUBLIC_* se congela en el bundle del navegador durante
         # `next build`: tiene que llegar como build arg, en `environment:` no
         # se leeria nunca.
+        # Ojo al formato: el codigo hace `https://${NEXT_PUBLIC_API_HOST}` y
+        # `wss://${NEXT_PUBLIC_API_HOST}/price`, asi que va el host pelado
+        # (api.pricecloud.org), sin esquema.
         NEXT_PUBLIC_API_HOST: ${NEXT_PUBLIC_API_HOST}
-        NEXT_PUBLIC_UI_PORT: ${NEXT_PUBLIC_UI_PORT}
-        NEXT_PUBLIC_ENV: ${NEXT_PUBLIC_ENV}
         UI_PORT: ${UI_PORT}
     env_file:
       - .env

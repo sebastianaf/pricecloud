@@ -18,10 +18,6 @@ COPY ui/ ./ui/
 # como build args y no basta con ponerlas en `environment:` del compose.
 ARG NEXT_PUBLIC_API_HOST
 ENV NEXT_PUBLIC_API_HOST=${NEXT_PUBLIC_API_HOST}
-ARG NEXT_PUBLIC_UI_PORT
-ENV NEXT_PUBLIC_UI_PORT=${NEXT_PUBLIC_UI_PORT}
-ARG NEXT_PUBLIC_ENV
-ENV NEXT_PUBLIC_ENV=${NEXT_PUBLIC_ENV}
 
 RUN npm run build -w pricecloud-ui
 

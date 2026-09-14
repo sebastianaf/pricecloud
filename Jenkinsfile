@@ -62,6 +62,10 @@ pipeline {
         stage('Load Config') {
             steps {
                 withCredentials([file(credentialsId: "${PROJECT_NAME}-env-${env.DEPLOY_ENV}", variable: 'ENV_FILE')]) {
+                    // Antes de construir nada: una variable que falte no falla de
+                    // forma ruidosa, Compose la sustituye por cadena vacia y sigue.
+                    sh 'sh scripts/check-env.sh "$ENV_FILE"'
+
                     script {
                         withEnv(["SECRET_PATH=${ENV_FILE}"]) {
                             env.DEPLOY_USER = sh(
@@ -209,23 +213,7 @@ pipeline {
             steps {
                 sh """
                     ssh ${SSH_OPTS} ${DEPLOY_USER}@${DEPLOY_HOST} '
-                        set -e
-                        CONTAINER="${PROJECT_NAME}-${env.APP_ENV}-api-01"
-                        MAX_RETRIES=15
-                        RETRY_DELAY=5
-
-                        echo "Waiting for api-01 container to be ready..."
-                        for i in \$(seq 1 \$MAX_RETRIES); do
-                            if docker exec \$CONTAINER test -f dist/database/datasource.js; then
-                                echo "Running migrations..."
-                                docker exec \$CONTAINER npm run migrations:run:prod 2>&1 | grep -v "^query:" && exit 0
-                            fi
-                            echo "Attempt \$i/\$MAX_RETRIES: waiting for the container... (retrying in \${RETRY_DELAY}s)"
-                            sleep \$RETRY_DELAY
-                        done
-
-                        echo "ERROR: Migration failed after \$MAX_RETRIES attempts"
-                        exit 1
+                        cd ${DEPLOY_DIR} && sh scripts/app-run.sh ${env.APP_ENV} npm run migrations:run:prod
                     '
                 """
             }
@@ -235,8 +223,7 @@ pipeline {
             steps {
                 sh """
                     ssh ${SSH_OPTS} ${DEPLOY_USER}@${DEPLOY_HOST} '
-                        set -e
-                        docker exec ${PROJECT_NAME}-${env.APP_ENV}-api-01 npm run seed:prod
+                        cd ${DEPLOY_DIR} && sh scripts/app-run.sh ${env.APP_ENV} npm run seed:prod
                     '
                 """
             }

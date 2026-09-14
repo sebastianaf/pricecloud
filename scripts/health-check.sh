@@ -61,8 +61,13 @@ while [ "$i" -le "$MAX_RETRIES" ]; do
 done
 
 echo "ERROR: los servicios no respondieron tras ${MAX_RETRIES} intentos" >&2
-echo "--- ultimas lineas de api-01 ---" >&2
-docker logs --tail 30 "$API_CONTAINER" >&2 2>&1 || true
-echo "--- ultimas lineas de ui ---" >&2
-docker logs --tail 30 "$UI_CONTAINER" >&2 2>&1 || true
+for c in "$API_CONTAINER" "$UI_CONTAINER"; do
+  echo "--- estado de ${c} ---" >&2
+  # Un RestartCount que sube entre despliegues significa bucle de reinicio, y
+  # OOMKilled=true que la maquina se quedo sin memoria. Sin esto solo se ve
+  # "no responde", que no distingue entre ambos casos.
+  docker inspect "$c"     --format 'RestartCount={{.RestartCount}} OOMKilled={{.State.OOMKilled}} Status={{.State.Status}} ExitCode={{.State.ExitCode}}' >&2 2>/dev/null     || echo "(no se pudo inspeccionar ${c})" >&2
+  echo "--- ultimas 40 lineas de ${c} ---" >&2
+  docker logs --tail 40 "$c" >&2 2>&1 || true
+done
 exit 1
