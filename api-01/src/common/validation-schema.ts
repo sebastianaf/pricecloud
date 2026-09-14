@@ -4,7 +4,7 @@ import { EnvironmentInterface } from './interfaces/environment.interface';
 export default Joi.object({
   API_PORT: Joi.number().min(100).max(65535).required(),
   API_JWT_SECRET: Joi.string().required(),
-  API_JWT_EXPIRATION_TIME: Joi.string().min(2).max(3).required(),
+  API_JWT_EXPIRATION_TIME: Joi.string().required(),
   API_COOKIE_EXPIRATION_TIME: Joi.number().required(),
   API_COOKIE_DOMAIN: Joi.string().required(),
   DB_HOST: Joi.string().hostname().required(),
