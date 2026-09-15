@@ -466,12 +466,18 @@ export const GreenFieldsTheme = createTheme({
           '& .MuiInputAdornment-positionEnd.MuiInputAdornment-outlined': {
             paddingRight: 6
           },
-          '&:hover .MuiOutlinedInput-notchedOutline': {
+          // `:not(.Mui-error)` en ambos: estos overrides se inyectan DESPUES
+          // de la regla `.Mui-error .notchedOutline` de MUI y con igual o mas
+          // especificidad, asi que sin el filtro se la comen y un campo en
+          // error pasaba a borde gris al pasar el raton y cian al enfocarlo,
+          // mientras el texto de ayuda seguia en rojo.
+          '&:hover:not(.Mui-error) .MuiOutlinedInput-notchedOutline': {
             borderColor: colors.alpha.black[50]
           },
-          '&.Mui-focused:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: colors.primary.main
-          }
+          '&.Mui-focused:hover:not(.Mui-error) .MuiOutlinedInput-notchedOutline':
+            {
+              borderColor: colors.primary.main
+            }
         }
       }
     },

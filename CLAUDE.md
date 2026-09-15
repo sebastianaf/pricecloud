@@ -253,6 +253,20 @@ Por eso el logo usa `color: inherit` y no `text.primary`: se pinta en el sidebar
 ### `MuiDialog` en el tema claro
 Los esquemas oscuros separan el dialogo del fondo con `darken(primaryAlt, 0.5)`. Con `primaryAlt: #ffffff` ese mismo calculo da `#808080` y los modales salian grises. En `PureLightTheme` la superficie del dialogo es `primaryAlt` tal cual.
 
+### Los `styleOverrides` del tema pisan los estados de MUI
+`MuiOutlinedInput` traia dos reglas de la plantilla que dejaban el borde de un campo **en error** gris al pasar el raton y cian al enfocarlo, mientras el label y el texto de ayuda si salian rojos:
+
+```js
+'&:hover .MuiOutlinedInput-notchedOutline': { borderColor: colors.alpha.black[50] },
+'&.Mui-focused:hover .MuiOutlinedInput-notchedOutline': { borderColor: colors.primary.main }
+```
+
+No era culpa del formulario: `error` y `helperText` estaban bien pasados. El problema es de cascada. MUI emite, en este orden, `:hover`, `.Mui-focused` y `.Mui-error`; su regla de error gana a las dos primeras por ir despues con la misma especificidad. Pero los `styleOverrides` del tema se inyectan **despues de todas ellas**, y `&.Mui-focused:hover` suma ademas un selector mas, asi que se la comian.
+
+La solucion es acotarlas con `:not(.Mui-error)` en los cuatro esquemas, para que un campo en error quede solo bajo la regla de MUI. Vale como norma general: **cualquier override de `:hover`/`.Mui-focused` sobre un componente con estado de error tiene que excluir `.Mui-error`**, o el estado de error deja de verse.
+
+Para depurar esto no sirve mirar el color computado: con `hover` sintetico el navegador no siempre activa `:hover`. Lo que lo destapo fue enumerar las reglas que casan con `notchedOutline` recorriendo `document.styleSheets` y mirar su orden.
+
 ### `global.css` no puede fijar colores
 Los enlaces estaban clavados en `#cfcfcf`, ilegible sobre el fondo del tema claro. Ahora usan `color: inherit`, que toma el color de texto del tema activo (`#CBCCD2` en oscuro, `#223354` en claro). Cualquier color nuevo en `global.css` tiene el mismo problema: o hereda, o hay que llevarlo a los esquemas.
 
@@ -350,5 +364,6 @@ cd api-01 && npx tsc --noEmit
 - No leer `matchMedia` ni `localStorage` durante el render del tema — rompe la hidratacion; va en un `useEffect`
 - No usar `colors.alpha.white`/`black` como blanco o negro literales — son superficie y texto, y se invierten segun el tema; para eso estan `trueWhite` y `'#000000'`
 - No inventar indices de `colors.alpha` — solo existen 5/10/30/50/70/100; otro valor da `color: undefined` sin avisar
+- No escribir overrides de `:hover`/`.Mui-focused` sin `:not(.Mui-error)` — tapan el estado de error, que se inyecta antes
 - No fijar colores en `global.css` — no se adaptan al tema; usar `inherit` o llevarlos a los esquemas
 - No importar `LocalizationProvider` ni `AdapterDateFns` de `@mui/lab` — son stubs deprecados; el primero hace `return null` y deja la app entera en blanco
