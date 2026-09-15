@@ -18,23 +18,16 @@ import { HttpStatusCode } from 'axios';
 
 const RootWrapper = styled(Card)(
   ({ theme }) => `
-    background: ${theme.colors.gradients.black2};
-    color: ${theme.colors.alpha.trueWhite[100]};
     padding: ${theme.spacing(2)};
 `
 );
 
-const AvatarSuccess = styled(Avatar)(
+// Antes eran dos definiciones identicas llamadas AvatarSuccess y AvatarError;
+// ni una era de exito ni la otra de error, solo iconos de ubicacion.
+const AvatarLocation = styled(Avatar)(
   ({ theme }) => `
-      color: ${theme.palette.text.primary};
-      width: ${theme.spacing(7)};
-      height: ${theme.spacing(7)};
-`
-);
-
-const AvatarError = styled(Avatar)(
-  ({ theme }) => `
-      color: ${theme.palette.text.primary};
+      background-color: ${theme.colors.primary.lighter};
+      color: ${theme.colors.primary.main};
       width: ${theme.spacing(7)};
       height: ${theme.spacing(7)};
 `
@@ -42,7 +35,7 @@ const AvatarError = styled(Avatar)(
 
 const TypographySecondary = styled(Typography)(
   ({ theme }) => `
-      color: ${theme.colors.alpha.trueWhite[70]};
+      color: ${theme.palette.text.secondary};
 `
 );
 
@@ -79,21 +72,21 @@ function Locations() {
             variant="h3"
             sx={{
               fontSize: `${theme.typography.pxToRem(23)}`,
-              color: `${theme.colors.alpha.trueWhite[70]}`
+              color: `${theme.palette.text.secondary}`
             }}
           >
             Ubicaciones
           </Typography>
         </Grid>
         <Grid item xs={12} sm={6} md={12} display="flex">
-          <AvatarSuccess
+          <AvatarLocation
             sx={{
               mr: 2
             }}
             variant="rounded"
           >
             <BiMap size={96} />
-          </AvatarSuccess>
+          </AvatarLocation>
           <Box>
             <Typography
               variant="h1"
@@ -103,24 +96,20 @@ function Locations() {
             >
               {countRegions}
             </Typography>
-            <TypographySecondary
-              color={`lightsteelblue`}
-              variant="caption"
-              noWrap
-            >
+            <TypographySecondary variant="caption" noWrap>
               Regiones
             </TypographySecondary>
           </Box>
         </Grid>
         <Grid item xs={12} sm={6} md={12} display="flex">
-          <AvatarError
+          <AvatarLocation
             sx={{
               mr: 2
             }}
             variant="rounded"
           >
             <BiWorld size={96} />
-          </AvatarError>
+          </AvatarLocation>
           <Box>
             <Typography
               variant="h1"
@@ -130,11 +119,7 @@ function Locations() {
             >
               5
             </Typography>
-            <TypographySecondary
-              variant="caption"
-              color={`lightsteelblue`}
-              noWrap
-            >
+            <TypographySecondary variant="caption" noWrap>
               Continentes
             </TypographySecondary>
           </Box>

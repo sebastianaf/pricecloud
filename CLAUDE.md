@@ -234,7 +234,14 @@ No hay selector de tema en la UI: nadie consume `ThemeContext`, asi que `setThem
 ### La trampa de `colors.alpha`: `white` no es blanco y `black` no es negro
 En estos esquemas `themeColors.white` es el color de **superficie** y `black` el de **texto**, asi que ambos cambian de sentido entre temas: en oscuro `alpha.white[100]` vale `#232a2e` y `alpha.black[100]` vale `#CBCCD2`. El blanco de verdad es `alpha.trueWhite`.
 
-Consecuencia practica: cualquier elemento que sea oscuro en **ambos** temas (la tarjeta de `gradients.black2`, la consola) tiene que colorear su texto con `trueWhite`, no con `alpha.white`. Y para un fondo negro real hay que escribir `'#000000'`, porque `alpha.black[100]` es texto claro en el tema oscuro.
+Consecuencia practica: cualquier elemento que sea oscuro en **ambos** temas (hoy solo la consola) tiene que colorear su texto con `trueWhite`, no con `alpha.white`. Y para un fondo negro real hay que escribir `'#000000'`, porque `alpha.black[100]` es texto claro en el tema oscuro.
+
+### Nada de fondos fijos en las tarjetas del dashboard
+La tarjeta de Ubicaciones era la unica con superficie propia: `background: gradients.black2`, un gradiente oscuro identico en los cuatro esquemas. Eso obligaba a pintar a mano en blanco todo su interior y la dejaba fuera del sistema de temas; se quito y ahora usa el `Card` normal, como sus vecinas.
+
+El idioma del repo para estas tarjetas lo marca [Categories.tsx](ui/src/content/Dashboards/Prices/Categories.tsx): `Card` sin fondo propio, y los avatares con `colors.<x>.lighter` de fondo y `colors.<x>.main` para el icono. Seguirlo es lo que hace que una tarjeta funcione en claro y oscuro sin tocar nada.
+
+Ojo tambien con la prop `color` de `Typography`: gana sobre el `styled()` del componente. Habia dos `color="lightsteelblue"` que anulaban el color del tema y quedaban ilegibles sobre fondo claro.
 
 Ademas la escala de `alpha` solo tiene **5, 10, 30, 50, 70 y 100**. Un indice inventado (`white[40]`, `black[80]`) no da error: produce `color: undefined`, el navegador descarta la regla y el elemento hereda un color cualquiera. Habia dos casos asi, y `alpha.white` sin indice (que renderiza el objeto entero). Al corregirlos aparecio que el titulo de la tarjeta de Ubicaciones llevaba tiempo roto **tambien en oscuro**.
 
