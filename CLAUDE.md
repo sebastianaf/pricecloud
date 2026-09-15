@@ -212,6 +212,32 @@ Los servicios de Postgres tienen `healthcheck` con `pg_isready` y api-01 depende
 
 ---
 
+## Tema claro/oscuro automatico
+
+Los tres esquemas que traia la plantilla (`GreenFieldsTheme`, `DarkSpacesTheme`, `NebulaFighterTheme`) son **todos `mode: 'dark'`**: variantes de acento sobre el mismo fondo oscuro. No habia tema claro que activar, asi que hubo que escribirlo.
+
+`PureLightTheme` se genero a partir de `GreenFieldsTheme`. Los esquemas tienen 1257 lineas cada uno pero **difieren entre si en solo ~34**, todas en la cabecera de color; el resto son overrides de componentes MUI identicos. Para anadir o retocar un esquema basta con tocar ese bloque:
+
+- `themeColors` — ojo con los nombres, estan invertidos respecto a lo que parece: `white` es el color de **superficie** (en oscuro vale `#232a2e`) y `black` el del **texto** (`text.primary` sale de `colors.alpha.black[100]`).
+- `shadows.card` / `cardSm` / `cardLg`, `layout.general.bodyBg`, `layout.sidebar.*`, `sidebar.boxShadow`, `header.boxShadow`, y el `alpha(darken(...))` del override de scrollbar.
+- `palette.mode`.
+
+### Como se elige el tema
+[ThemeProvider.tsx](ui/src/theme/ThemeProvider.tsx): una eleccion guardada en `localStorage` manda; si no hay ninguna, se sigue `prefers-color-scheme` y se escucha el evento `change` para repintar sin recargar.
+
+El render inicial (servidor y primer render de cliente) usa **siempre un valor fijo**, nunca `matchMedia` ni `localStorage`: leerlos durante el render produce un HTML distinto al del servidor y React tira la hidratacion entera. La preferencia se aplica en el `useEffect`.
+
+La consecuencia es un **parpadeo oscuro** para quien tenga el sistema en claro: el SSR pinta el tema por defecto y el cliente cambia tras hidratar. Quitarlo del todo exige `CssVarsProvider` de MUI o un script inline bloqueante en `_document`; se puede mitigar con un `@media (prefers-color-scheme: light)` sobre `body` en CSS.
+
+No hay selector de tema en la UI: nadie consume `ThemeContext`, asi que `setThemeName` existe pero no se llama desde ningun sitio. El modo automatico es hoy la unica via.
+
+### `global.css` no puede fijar colores
+Los enlaces estaban clavados en `#cfcfcf`, ilegible sobre el fondo del tema claro. Ahora usan `color: inherit`, que toma el color de texto del tema activo (`#CBCCD2` en oscuro, `#223354` en claro). Cualquier color nuevo en `global.css` tiene el mismo problema: o hereda, o hay que llevarlo a los esquemas.
+
+Sigue fija `.custom-alert` (fondo `#051d21`), el toast del Snackbar. Se deja a proposito: un toast oscuro sobre interfaz clara es un patron habitual y legible.
+
+---
+
 ## La pantalla en blanco del UI: `LocalizationProvider` de `@mui/lab`
 
 Durante semanas el frontend servia una pagina completamente en blanco, en produccion y en local, **en todas las rutas** (incluida la 404). Causa:
@@ -299,4 +325,6 @@ cd api-01 && npx tsc --noEmit
 - No canalizar a `grep` la salida de un comando cuyo exito importa — la tuberia se come el codigo de salida
 - No poner `overrides` en el `package.json` de un workspace — npm los ignora en silencio
 - No convertir `brace-expansion@^2` ni los `minimatch` anidados en overrides globales — rompen `minimatch@3` y `eslint-plugin-import`
+- No leer `matchMedia` ni `localStorage` durante el render del tema — rompe la hidratacion; va en un `useEffect`
+- No fijar colores en `global.css` — no se adaptan al tema; usar `inherit` o llevarlos a los esquemas
 - No importar `LocalizationProvider` ni `AdapterDateFns` de `@mui/lab` — son stubs deprecados; el primero hace `return null` y deja la app entera en blanco

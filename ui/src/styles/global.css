@@ -19,13 +19,16 @@ select:-webkit-autofill:focus,
   color: #cfcfcf !important;
 }
 
+/* `inherit` en vez de un gris fijo: el color sale del texto del tema activo
+   (#CBCCD2 en oscuro, #223354 en claro). Con el #cfcfcf anterior los enlaces
+   quedaban ilegibles sobre el fondo del tema claro. */
 a {
-  color: #cfcfcf;
+  color: inherit;
   text-decoration: none;
 }
 
 a:visited {
-  color: #cfcfcf;
+  color: inherit;
 }
 
 a:hover {
