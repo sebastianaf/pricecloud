@@ -19,7 +19,7 @@ import { HttpStatusCode } from 'axios';
 const RootWrapper = styled(Card)(
   ({ theme }) => `
     background: ${theme.colors.gradients.black2};
-    color: ${theme.colors.alpha.white[100]};
+    color: ${theme.colors.alpha.trueWhite[100]};
     padding: ${theme.spacing(2)};
 `
 );
@@ -42,7 +42,7 @@ const AvatarError = styled(Avatar)(
 
 const TypographySecondary = styled(Typography)(
   ({ theme }) => `
-      color: ${theme.colors.alpha.white};
+      color: ${theme.colors.alpha.trueWhite[70]};
 `
 );
 
@@ -79,7 +79,7 @@ function Locations() {
             variant="h3"
             sx={{
               fontSize: `${theme.typography.pxToRem(23)}`,
-              color: `${theme.colors.alpha.white[40]}`
+              color: `${theme.colors.alpha.trueWhite[70]}`
             }}
           >
             Ubicaciones

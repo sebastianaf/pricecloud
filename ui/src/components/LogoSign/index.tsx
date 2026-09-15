@@ -1,9 +1,16 @@
 import { Badge, styled, useTheme, Typography } from '@mui/material';
 import Link from 'src/components/Link';
 
+// `inherit` y no `text.primary`: este logo se pinta en dos contenedores con
+// fondos opuestos. En el sidebar, que es oscuro en AMBOS temas, el contenedor
+// fija `colors.alpha.trueWhite[70]`; en la cabecera del landing es un Card, que
+// lleva el `text.primary` del tema. Con `text.primary` fijo el texto quedaba
+// azul oscuro sobre el sidebar oscuro en tema claro, es decir, invisible.
+// Un ternario por `palette.mode` no sirve aqui: el problema no es el modo sino
+// el contenedor, y en claro los dos necesitan colores contrarios.
 const LogoWrapper = styled(Link)(
   ({ theme }) => `
-        color: ${theme.palette.text.primary};
+        color: inherit;
         display: flex;
         text-decoration: none;
         width: 53px;

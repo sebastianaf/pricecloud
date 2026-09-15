@@ -349,7 +349,11 @@ export const PureLightTheme = createTheme({
     MuiDialog: {
       styleOverrides: {
         paper: {
-          backgroundColor: darken(themeColors.primaryAlt, 0.5)
+          // Los esquemas oscuros usan darken(primaryAlt, 0.5) para separar el
+          // dialogo del fondo. Aqui primaryAlt es #ffffff, asi que ese mismo
+          // darken daba un gris #808080 y los modales salian grises sobre la
+          // interfaz clara. En claro la superficie del dialogo es la de papel.
+          backgroundColor: themeColors.primaryAlt
         }
       }
     },

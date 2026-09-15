@@ -5,7 +5,8 @@ import {
   Typography,
   TextField,
   Button,
-  CircularProgress
+  CircularProgress,
+  useTheme
 } from '@mui/material';
 import { SendSharp } from '@mui/icons-material';
 import Head from 'next/head';
@@ -20,6 +21,22 @@ import { protect } from '../../src/helper/protect';
 import { SocketEventType } from '../../src/types/socket-event.type';
 
 function Console() {
+  const theme = useTheme();
+
+  // Mismo patron que usa el Sidebar para resolver colores por modo. En oscuro
+  // la consola se queda negra; en claro se invierte, porque el texto sale del
+  // `text.primary` del tema y en claro es azul oscuro: sobre negro no se leia.
+  // Negro literal a proposito: `colors.alpha.black` NO es negro, es el color de
+  // texto del tema (vale #CBCCD2 en oscuro), asi que usarlo aqui dejaria la
+  // consola con fondo claro justo en el tema oscuro.
+  const consoleBg =
+    theme.palette.mode === 'dark'
+      ? '#000000'
+      : theme.colors.alpha.trueWhite[100];
+  const consoleColor =
+    theme.palette.mode === 'dark'
+      ? theme.colors.alpha.trueWhite[70]
+      : theme.palette.text.primary;
   const socket = io(`wss://${process.env.NEXT_PUBLIC_API_HOST}/price`);
 
   const { user, getUser } = useAuth();
@@ -96,7 +113,9 @@ function Console() {
                   p: 1,
                   flexGrow: 1,
                   borderRadius: 1,
-                  bgcolor: 'black',
+                  bgcolor: consoleBg,
+                  color: consoleColor,
+                  border: `1px solid ${theme.colors.alpha.black[10]}`,
                   overflow: 'auto',
                   fontFamily: 'monospace',
                   whiteSpace: 'pre-wrap',
@@ -131,10 +150,11 @@ function Console() {
               <TextField
                 variant="outlined"
                 sx={{
-                  bgcolor: 'black',
+                  bgcolor: consoleBg,
                   borderRadius: 1,
                   flexGrow: 1,
-                  p: 0
+                  p: 0,
+                  input: { color: consoleColor, fontFamily: 'monospace' }
                 }}
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}

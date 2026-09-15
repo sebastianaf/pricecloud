@@ -67,7 +67,7 @@ const TabsContainerWrapper = styled(Box)(
               position: relative;
               margin-right: ${theme.spacing(1)};
               font-size: ${theme.typography.pxToRem(14)};
-              color: ${theme.colors.alpha.black[80]};
+              color: ${theme.colors.alpha.black[70]};
               border-bottom-left-radius: 0;
               border-bottom-right-radius: 0;
 

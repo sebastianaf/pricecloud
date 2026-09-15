@@ -231,6 +231,21 @@ La consecuencia es un **parpadeo oscuro** para quien tenga el sistema en claro: 
 
 No hay selector de tema en la UI: nadie consume `ThemeContext`, asi que `setThemeName` existe pero no se llama desde ningun sitio. El modo automatico es hoy la unica via.
 
+### La trampa de `colors.alpha`: `white` no es blanco y `black` no es negro
+En estos esquemas `themeColors.white` es el color de **superficie** y `black` el de **texto**, asi que ambos cambian de sentido entre temas: en oscuro `alpha.white[100]` vale `#232a2e` y `alpha.black[100]` vale `#CBCCD2`. El blanco de verdad es `alpha.trueWhite`.
+
+Consecuencia practica: cualquier elemento que sea oscuro en **ambos** temas (la tarjeta de `gradients.black2`, la consola) tiene que colorear su texto con `trueWhite`, no con `alpha.white`. Y para un fondo negro real hay que escribir `'#000000'`, porque `alpha.black[100]` es texto claro en el tema oscuro.
+
+Ademas la escala de `alpha` solo tiene **5, 10, 30, 50, 70 y 100**. Un indice inventado (`white[40]`, `black[80]`) no da error: produce `color: undefined`, el navegador descarta la regla y el elemento hereda un color cualquiera. Habia dos casos asi, y `alpha.white` sin indice (que renderiza el objeto entero). Al corregirlos aparecio que el titulo de la tarjeta de Ubicaciones llevaba tiempo roto **tambien en oscuro**.
+
+### El sidebar es oscuro en los dos temas
+No es un descuido: `Sidebar/index.tsx` resuelve su fondo con `theme.palette.mode === 'dark' ? ... : darken(colors.alpha.black[100], 0.5)`, o sea panel oscuro sobre interfaz clara. Ese es tambien el idioma del repo para colores por modo; se reutiliza en la consola.
+
+Por eso el logo usa `color: inherit` y no `text.primary`: se pinta en el sidebar (oscuro siempre, con `trueWhite[70]` heredado) y en la cabecera del landing (un Card, con `text.primary`). Un ternario por `palette.mode` no vale ahi, porque en claro esos dos contenedores necesitan colores contrarios.
+
+### `MuiDialog` en el tema claro
+Los esquemas oscuros separan el dialogo del fondo con `darken(primaryAlt, 0.5)`. Con `primaryAlt: #ffffff` ese mismo calculo da `#808080` y los modales salian grises. En `PureLightTheme` la superficie del dialogo es `primaryAlt` tal cual.
+
 ### `global.css` no puede fijar colores
 Los enlaces estaban clavados en `#cfcfcf`, ilegible sobre el fondo del tema claro. Ahora usan `color: inherit`, que toma el color de texto del tema activo (`#CBCCD2` en oscuro, `#223354` en claro). Cualquier color nuevo en `global.css` tiene el mismo problema: o hereda, o hay que llevarlo a los esquemas.
 
@@ -326,5 +341,7 @@ cd api-01 && npx tsc --noEmit
 - No poner `overrides` en el `package.json` de un workspace — npm los ignora en silencio
 - No convertir `brace-expansion@^2` ni los `minimatch` anidados en overrides globales — rompen `minimatch@3` y `eslint-plugin-import`
 - No leer `matchMedia` ni `localStorage` durante el render del tema — rompe la hidratacion; va en un `useEffect`
+- No usar `colors.alpha.white`/`black` como blanco o negro literales — son superficie y texto, y se invierten segun el tema; para eso estan `trueWhite` y `'#000000'`
+- No inventar indices de `colors.alpha` — solo existen 5/10/30/50/70/100; otro valor da `color: undefined` sin avisar
 - No fijar colores en `global.css` — no se adaptan al tema; usar `inherit` o llevarlos a los esquemas
 - No importar `LocalizationProvider` ni `AdapterDateFns` de `@mui/lab` — son stubs deprecados; el primero hace `return null` y deja la app entera en blanco
