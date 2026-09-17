@@ -16,7 +16,6 @@ import { VisibilityOff, Visibility } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import type { ReactElement } from 'react';
 
-import Head from 'next/head';
 import BaseLayout from 'src/layouts/BaseLayout';
 import { LoginType } from '../src/types/FormStates';
 import { emailRegex, passwordRegex } from '../src/helper/regex';
@@ -24,6 +23,7 @@ import paths from '../src/helper/paths';
 import { useRouter } from 'next/router';
 import { useAuth } from '../src/contexts/AuthContext';
 import MultiFactorAuthenticationModal from '../src/components/MultiFactorAuthenticationModal';
+import Seo from '../src/components/Seo';
 
 const MainContent = styled(Box)(
   () => `
@@ -95,9 +95,7 @@ function Signin() {
         open={showMultiFactorAuthenticationModal}
         loginData={loginData}
       />
-      <Head>
-        <title>Pricecloud | Iniciar sesión</title>
-      </Head>
+      <Seo title="Iniciar sesión" path="/login" noindex />
       <MainContent>
         <TopWrapper>
           <Container maxWidth="md">

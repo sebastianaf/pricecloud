@@ -1,7 +1,7 @@
 import { Box, Typography, Container, Button, styled } from '@mui/material';
-import Head from 'next/head';
 import type { ReactElement } from 'react';
 import BaseLayout from 'src/layouts/BaseLayout';
+import Seo from '../src/components/Seo';
 
 const MainContent = styled(Box)(
   () => `
@@ -26,9 +26,7 @@ const TopWrapper = styled(Box)(
 function Status404() {
   return (
     <>
-      <Head>
-        <title>Pricecloud | No encontrado</title>
-      </Head>
+      <Seo title="No encontrado" noindex />
       <MainContent>
         <TopWrapper>
           <Container maxWidth="md">

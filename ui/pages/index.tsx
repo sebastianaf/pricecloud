@@ -11,10 +11,16 @@ import NextLink from 'next/link';
 
 import BaseLayout from 'src/layouts/BaseLayout';
 import Link from 'src/components/Link';
-import Head from 'next/head';
 import Logo from 'src/components/LogoSign';
 import Hero from 'src/content/Overview/Hero';
 import paths from '@/helper/paths';
+import Seo from 'src/components/Seo';
+import {
+  faqJsonLd,
+  organizationJsonLd,
+  webApplicationJsonLd,
+  webSiteJsonLd
+} from 'src/helper/structured-data';
 
 const HeaderWrapper = styled(Card)(
   ({ theme }) => `
@@ -38,9 +44,18 @@ const OverviewWrapper = styled(Box)(
 function Overview() {
   return (
     <OverviewWrapper>
-      <Head>
-        <title>Pricecloud</title>
-      </Head>
+      {/* Unica pagina indexable del sitio: el resto son formularios de acceso
+          o areas privadas. Aqui van los datos estructurados, que es lo que
+          leen tanto los resultados enriquecidos como los motores generativos. */}
+      <Seo
+        path="/"
+        jsonLd={[
+          organizationJsonLd(),
+          webSiteJsonLd(),
+          webApplicationJsonLd(),
+          faqJsonLd()
+        ]}
+      />
       <HeaderWrapper>
         <Container maxWidth="lg">
           <Box display="flex" alignItems="center">

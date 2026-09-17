@@ -12,7 +12,6 @@ import {
   TextField
 } from '@mui/material';
 import NextLink from 'next/link';
-import Head from 'next/head';
 import { VisibilityOff, Visibility } from '@mui/icons-material';
 import type { ReactElement } from 'react';
 import { useForm } from 'react-hook-form';
@@ -24,6 +23,7 @@ import { SignupType } from '../src/types/signup.type';
 import paths from '../src/helper/paths';
 import { emailRegex, passwordRegex } from '../src/helper/regex';
 import { useAuth } from '../src/contexts/AuthContext';
+import Seo from '../src/components/Seo';
 
 const MainContent = styled(Box)(
   () => `
@@ -75,9 +75,7 @@ function Signup() {
 
   return (
     <>
-      <Head>
-        <title>Pricecloud | Registro</title>
-      </Head>
+      <Seo title="Registro" path="/signup" noindex />
       <MainContent>
         <TopWrapper>
           <Container maxWidth="md">

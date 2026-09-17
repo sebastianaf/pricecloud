@@ -14,13 +14,13 @@ import {
 import { VisibilityOff, Visibility } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import type { ReactElement } from 'react';
-import Head from 'next/head';
 
 import BaseLayout from 'src/layouts/BaseLayout';
 
 import { passwordRegex } from '../src/helper/regex';
 import { PasswordResetType } from '../src/types/password-reset.type';
 import { useAuth } from '../src/contexts/AuthContext';
+import Seo from '../src/components/Seo';
 
 const MainContent = styled(Box)(
   () => `
@@ -76,9 +76,7 @@ function PasswordReset() {
 
   return (
     <>
-      <Head>
-        <title>Pricecloud | Recuperar contraseña</title>
-      </Head>
+      <Seo title="Restablecer contraseña" path="/password-reset" noindex />
       <MainContent>
         <TopWrapper>
           <Container maxWidth="md">

@@ -44,6 +44,38 @@ function PricecloudApp(props: TokyoAppProps) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
   const getLayout = Component.getLayout ?? ((page) => page);
 
+  React.useEffect(() => {
+    // El service worker solo existe para que el navegador ofrezca instalar la
+    // PWA (Chrome exige uno con manejador `fetch`); no cachea nada. Se registra
+    // tras `load` para no competir con la primera pintada, y se omite en
+    // desarrollo, donde dejaria un worker activo entre recargas de Next.
+    if (
+      process.env.NODE_ENV !== 'production' ||
+      typeof window === 'undefined' ||
+      !('serviceWorker' in navigator)
+    ) {
+      return;
+    }
+
+    const register = () => {
+      navigator.serviceWorker.register('/sw.js').catch(() => {
+        // Un fallo al registrar no debe romper la app: la PWA es una mejora,
+        // no un requisito para usarla.
+      });
+    };
+
+    // Ojo con el orden: este efecto corre despues de la hidratacion, que suele
+    // ser posterior al evento `load`. Suscribirse a `load` sin mas dejaba el
+    // service worker sin registrar porque el evento ya habia pasado.
+    if (document.readyState === 'complete') {
+      register();
+      return;
+    }
+
+    window.addEventListener('load', register);
+    return () => window.removeEventListener('load', register);
+  }, []);
+
   Router.events.on('routeChangeStart', nProgress.start);
   Router.events.on('routeChangeError', nProgress.done);
   Router.events.on('routeChangeComplete', nProgress.done);
@@ -60,11 +92,38 @@ function PricecloudApp(props: TokyoAppProps) {
   return (
     <CacheProvider value={emotionCache}>
       <Head>
-        <title>Pricecloud</title>
+        {/* Sin <title> aqui: cada pagina lo pone con <Seo />. Dejarlo tambien
+            en _app hacia que Next emitiera dos <title> en el head. */}
         <link rel="manifest" href="/manifest.json" />
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no"
+        />
+        {/* Safari no lee el manifest para "Agregar a inicio": necesita estos
+            meta puntuales para abrir como app y no como pestana. */}
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta
+          name="apple-mobile-web-app-status-bar-style"
+          content="black-translucent"
+        />
+        <meta name="apple-mobile-web-app-title" content="Pricecloud" />
+        <link rel="apple-touch-icon" href="/icon-192x192.png" />
+        <link rel="icon" href="/favicon.ico" />
+        {/* Dos theme-color: el navegador pinta su barra segun el tema del
+            sistema, igual que hace la app desde que hay tema claro.
+            El `key` es imprescindible: next/head deduplica los <meta> por
+            `name`, asi que sin el solo sobrevivia el ultimo de los dos. */}
+        <meta
+          key="theme-color-light"
+          name="theme-color"
+          media="(prefers-color-scheme: light)"
+          content="#f2f5f9"
+        />
+        <meta
+          key="theme-color-dark"
+          name="theme-color"
+          media="(prefers-color-scheme: dark)"
+          content="#141c23"
         />
       </Head>
       {/* <AppProvider> */}

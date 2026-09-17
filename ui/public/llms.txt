@@ -1,0 +1,34 @@
+# Pricecloud
+
+> Aplicacion web para comparar precios de servicios en la nube entre Amazon Web
+> Services (AWS), Microsoft Azure y Google Cloud, y para aprovisionar
+> infraestructura en AWS sin cambiar de herramienta.
+
+Pricecloud reune el catalogo de servicios de los tres proveedores sobre una
+estructura comun (familia de producto y region), de modo que precios que cada
+proveedor publica con nombres y unidades distintas se puedan poner uno al lado
+del otro. Los datos de precios provienen de fuentes publicas de cada proveedor
+y se gestionan con una base propia derivada del proyecto de codigo abierto
+cloud-pricing-api de Infracost.
+
+## Que se puede hacer
+
+- **Explorar el catalogo**: servicios de AWS, Azure y Google Cloud filtrables
+  por familia de producto y por region.
+- **Comparar lado a lado**: precios equivalentes de varios proveedores en una
+  sola vista, para decidir con cifras.
+- **Aprovisionar**: crear instancias de computo y almacenamiento en AWS con
+  credenciales propias del usuario, desde la misma aplicacion.
+
+## Alcance y limites
+
+- La comparacion cubre **AWS, Azure y Google Cloud**.
+- El aprovisionamiento esta disponible **solo para AWS**.
+- El uso de la aplicacion requiere cuenta; la portada es la unica pagina
+  publica.
+- Es un proyecto de codigo abierto: https://github.com/sebastianaf/pricecloud
+
+## Enlaces
+
+- Portada: https://pricecloud.org/
+- Codigo fuente: https://github.com/sebastianaf/pricecloud

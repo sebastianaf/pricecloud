@@ -17,7 +17,6 @@ import { VisibilityOff, Visibility } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import type { ReactElement } from 'react';
 
-import Head from 'next/head';
 import BaseLayout from 'src/layouts/BaseLayout';
 import { LoginType } from '../src/types/FormStates';
 import { emailRegex } from '../src/helper/regex';
@@ -25,6 +24,7 @@ import paths from '../src/helper/paths';
 import { RecoveryType } from '../src/types/recovery.type';
 import { useAuth } from '../src/contexts/AuthContext';
 import { useRouter } from 'next/router';
+import Seo from '../src/components/Seo';
 
 const MainContent = styled(Box)(
   () => `
@@ -67,9 +67,7 @@ function Recovery() {
 
   return (
     <>
-      <Head>
-        <title>Pricecloud | Recuperar contraseña</title>
-      </Head>
+      <Seo title="Recuperar contraseña" path="/recovery" noindex />
       <MainContent>
         <TopWrapper>
           <Container maxWidth="md">

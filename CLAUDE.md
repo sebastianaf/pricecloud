@@ -274,6 +274,49 @@ Sigue fija `.custom-alert` (fondo `#051d21`), el toast del Snackbar. Se deja a p
 
 ---
 
+## SEO, GEO y PWA
+
+El `ui` usa el **Pages Router**, no el App Router de las apps hermanas. Eso cambia todas las herramientas: aqui no existen `export const metadata`, `app/manifest.ts` ni `app/sitemap.ts`. El equivalente es `next/head`, `public/manifest.json` y paginas que escriben la respuesta en `getServerSideProps`.
+
+### Fuente de verdad unica: [site.ts](ui/src/helper/site.ts)
+Dominio, descripcion, rutas publicas, rutas `noindex` y prefijos privados viven ahi. Los consumen `<Seo>`, `/sitemap.xml` y `/robots.txt`. Anadir una seccion nueva es tocar **solo** ese fichero.
+
+`NEXT_PUBLIC_SITE_URL` es **opcional** y cae a `https://pricecloud.org`: asi desplegar esto no obliga a tocar la credencial de Jenkins ni `check-env.sh`.
+
+### SEO
+[`<Seo>`](ui/src/components/Seo/index.tsx) emite title, description, canonical, robots, Open Graph, Twitter Card y JSON-LD. Sustituye a los `<Head><title>…</title></Head>` sueltos que tenian las paginas y que no emitian nada mas.
+
+Detalles que costaron una iteracion cada uno:
+
+- **El `<title>` se quito de `_app.tsx`.** Dejarlo ahi ademas del de `<Seo>` hacia que Next emitiera dos `<title>`.
+- **`next/head` deduplica los `<meta>` por `name`.** Los dos `theme-color` (claro y oscuro) necesitan un `key` distinto; sin el solo sobrevivia el ultimo.
+- El canonical se limpia de query y hash, o cada enlace con `?utm_...` se indexaria como pagina distinta.
+
+Solo `/` se indexa. Los formularios de acceso llevan `noindex` y las areas privadas se bloquean en robots.
+
+### `/robots.txt` y `/sitemap.xml` son rutas, no ficheros estaticos
+Estan en `pages/robots.txt.ts` y `pages/sitemap.xml.ts` para leer las listas de `site.ts`. **Si alguien vuelve a crear `public/robots.txt`, el estatico gana y la ruta deja de ejecutarse en silencio** — el `public/robots.txt` original se elimino por eso.
+
+El tipo `GetServerSideProps` **no se reexporta desde `next`** en esta version; hay que importarlo de `next/types`.
+
+### GEO
+Lo que consumen los motores generativos son hechos declarados, no maquetado:
+
+- **JSON-LD** en la portada ([structured-data.ts](ui/src/helper/structured-data.ts)): `Organization`, `WebSite`, `WebApplication` y `FAQPage`. Solo se declara lo verificable en la propia app — nada de valoraciones inventadas, que ademas violan las guias de Google.
+- **[llms.txt](ui/public/llms.txt)**: descripcion en prosa de que hace la app, su alcance y sus limites (comparacion en los tres proveedores, aprovisionamiento **solo AWS**).
+
+### PWA
+Ya habia `manifest.json` e iconos; faltaban el service worker y los meta de iOS.
+
+- [sw.js](ui/public/sw.js) **no cachea nada**, igual que en las apps hermanas: los precios y el estado de la infraestructura son datos vivos. Existe porque **Chrome exige un service worker con manejador `fetch`** para ofrecer la instalacion, y deja el terreno listo por si algun dia se anade Web Push.
+- Se registra desde `_app.tsx` solo en produccion. **Ojo con el evento `load`**: el `useEffect` corre despues de la hidratacion, que suele ser posterior a `load`, asi que suscribirse sin mas dejaba el worker sin registrar. Hay que comprobar antes `document.readyState === 'complete'`.
+- Safari no lee el manifest para "Agregar a inicio": necesita los `apple-mobile-web-app-*` y el `apple-touch-icon` que se anadieron a `_app.tsx`.
+- **No se implemento Web Push.** La guia de enerfris-init lo cubre junto al manifest, pero exige llaves VAPID, validacion Joi y un modulo `push` en api-01; se dejo fuera a proposito.
+
+El registro del service worker **no se puede verificar en el panel embebido**: falla con `An unknown error occurred when fetching the script` aunque el script se sirva con 200 y sintaxis valida. Hay que comprobarlo en un navegador real.
+
+---
+
 ## La pantalla en blanco del UI: `LocalizationProvider` de `@mui/lab`
 
 Durante semanas el frontend servia una pagina completamente en blanco, en produccion y en local, **en todas las rutas** (incluida la 404). Causa:
@@ -365,5 +408,7 @@ cd api-01 && npx tsc --noEmit
 - No usar `colors.alpha.white`/`black` como blanco o negro literales — son superficie y texto, y se invierten segun el tema; para eso estan `trueWhite` y `'#000000'`
 - No inventar indices de `colors.alpha` — solo existen 5/10/30/50/70/100; otro valor da `color: undefined` sin avisar
 - No escribir overrides de `:hover`/`.Mui-focused` sin `:not(.Mui-error)` — tapan el estado de error, que se inyecta antes
+- No crear `public/robots.txt` — gana sobre `pages/robots.txt.ts` y lo desactiva sin avisar
+- No duplicar `<title>` en `_app.tsx` y en `<Seo>` — Next emite los dos
 - No fijar colores en `global.css` — no se adaptan al tema; usar `inherit` o llevarlos a los esquemas
 - No importar `LocalizationProvider` ni `AdapterDateFns` de `@mui/lab` — son stubs deprecados; el primero hace `return null` y deja la app entera en blanco
