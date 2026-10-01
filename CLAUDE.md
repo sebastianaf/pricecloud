@@ -274,6 +274,37 @@ Sigue fija `.custom-alert` (fondo `#051d21`), el toast del Snackbar. Se deja a p
 
 ---
 
+## La geolocalizacion del login no puede tumbar el login
+
+Un 429 de ipinfo.io dejaba a todo el mundo sin poder entrar:
+
+```
+ERROR Request failed with status code 429
+ERROR [ExceptionsHandler] TypeError: Cannot destructure property 'country'
+      of 'ipInfo.ipInfo' as it is null.  at AuthService.createLogin
+```
+
+`getIpInfo` ya degradaba a `null` en su `catch`, pero `IpInfo2Interface` declaraba `ipInfo: IpInfoInterface` **no nulable**, asi que nadie protegio el consumo y `createLogin` desestructuraba el null. Con `strictNullChecks: false` en `api-01/tsconfig.json`, el compilador no iba a avisar nunca.
+
+Norma: **la geolocalizacion es telemetria del registro de acceso, no parte de la autenticacion**. Cualquier dato que venga de un tercero tiene que poder faltar sin cortar el flujo principal.
+
+### Tres bugs que salieron al tirar del hilo
+
+1. **`getIpAddress` devolvia `"1"`.** La rama sin `x-forwarded-for` hacia `let [ipAddress] = '127.0.0.1'`, que no asigna la cadena sino su **primer caracter** (desestructuracion de array sobre un string). Se consultaba `https://ipinfo.io/1` en cada peticion sin proxy. Ahora cae a `request.socket.remoteAddress`.
+2. **La ubicacion guardaba la cadena `"null CO"`.** La plantilla era ``​`${`${city} ` || ``}${country || ``}`​``: cuando `city` es null, `` `${city} ` `` vale `"null "`, que es truthy, asi que el `||` no cortocircuita. Hay registros historicos con ese valor. Ahora es `[city, country].filter(Boolean).join(' ')`.
+3. **Sin timeout en axios.** Una consulta colgada dejaba el login colgado con ella. Ahora 2 s.
+
+### Contra el 429
+- Las IP privadas (loopback, 10/8, 192.168, 172.16-31, 169.254, `fc00::/7`) **ya no se consultan**: ipinfo.io no sabe nada de ellas y cada intento gastaba cuota.
+- `IPINFO_TOKEN` es **opcional** en el `.env`. Sin el se usa el limite anonimo por IP de origen, que en produccion se agota. No esta en el esquema Joi ni en `check-env.sh` a proposito; anadirlo al `.env` no rompe el arranque porque `ConfigModule.forRoot` usa el `allowUnknown: true` por defecto de Nest (ya llegan asi `INFRACOST_API_KEY`, `DEPLOY_USER` y otras).
+
+### Hay tests
+[auth.service.spec.ts](api-01/src/auth/auth.service.spec.ts) cubre los tres casos y **se verifico que fallan contra el codigo anterior** con el mensaje exacto de produccion. Eran los primeros tests del repo: `npm run test` llevaba `--passWithNoTests` porque no habia ninguno.
+
+Se instancian por prototipo (`Object.create(AuthService.prototype)`) en vez de montar el modulo de Nest: `createLogin` usa dos dependencias de las once del constructor.
+
+---
+
 ## SEO, GEO y PWA
 
 El `ui` usa el **Pages Router**, no el App Router de las apps hermanas. Eso cambia todas las herramientas: aqui no existen `export const metadata`, `app/manifest.ts` ni `app/sitemap.ts`. El equivalente es `next/head`, `public/manifest.json` y paginas que escriben la respuesta en `getServerSideProps`.
@@ -410,5 +441,7 @@ cd api-01 && npx tsc --noEmit
 - No escribir overrides de `:hover`/`.Mui-focused` sin `:not(.Mui-error)` — tapan el estado de error, que se inyecta antes
 - No crear `public/robots.txt` — gana sobre `pages/robots.txt.ts` y lo desactiva sin avisar
 - No duplicar `<title>` en `_app.tsx` y en `<Seo>` — Next emite los dos
+- No dejar que un dato de un tercero (geolocalizacion, etc.) corte la autenticacion — tiene que poder faltar
+- No fiarse de que un tipo no sea nulable en api-01 — `strictNullChecks` esta en `false` y el compilador no comprueba nada
 - No fijar colores en `global.css` — no se adaptan al tema; usar `inherit` o llevarlos a los esquemas
 - No importar `LocalizationProvider` ni `AdapterDateFns` de `@mui/lab` — son stubs deprecados; el primero hace `return null` y deja la app entera en blanco

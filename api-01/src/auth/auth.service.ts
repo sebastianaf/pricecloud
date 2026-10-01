@@ -233,15 +233,30 @@ export class AuthService {
   async createLogin(ipInfo: IpInfo2Interface, user: User) {
     await this.userService.addLoginCount(user);
 
-    const { country, timezone, ip, city } = ipInfo.ipInfo;
+    // La geolocalizacion es telemetria del registro de acceso, no parte de la
+    // autenticacion: si ipinfo.io falla (un 429 por cuota, por ejemplo) el
+    // login tiene que completarse igual, con los campos de ubicacion vacios.
+    // Antes se desestructuraba `ipInfo.ipInfo` directamente y un null tumbaba
+    // el login con un 500.
+    const { country, timezone, ip, city } = ipInfo?.ipInfo ?? {
+      country: null,
+      timezone: null,
+      ip: null,
+      city: null,
+    };
+
+    // Sin esta guarda, cuando city es null la plantilla producia la cadena
+    // literal "null" como ubicacion: `${`${city} `}` no cortocircuita porque
+    // "null " es truthy.
+    const location = [city, country].filter(Boolean).join(' ').trim() || null;
 
     await this.loginRepository.save({
       event: LoginEventInterface.login,
       user,
       ip: ip || null,
-      location: `${`${city} ` || ``}${country || ``}`.trim() || null,
+      location,
       timezone: timezone || null,
-      userAgent: ipInfo.userAgent || null,
+      userAgent: ipInfo?.userAgent || null,
     });
   }
 
