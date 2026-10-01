@@ -15,6 +15,7 @@
     "infra:logs": "dotenv -e .env -- docker compose -f docker-compose.yml -f docker-compose.local.yml logs -f pricecloud-db-01 pricecloud-db-02 pricecloud-api-03",
     "infra:ps": "dotenv -e .env -- docker compose -f docker-compose.yml -f docker-compose.local.yml ps",
     "dev": "dotenv -e .env -- concurrently --names api-01,api-02,ui --prefix-colors cyan,magenta,green \"npm:dev:api-01\" \"npm:dev:api-02\" \"npm:dev:ui\"",
+
     "dev:api-01": "dotenv -e .env -- npm run start:dev -w pricecloud-api",
     "dev:api-02": "dotenv -e .env -- npm run dev -w cloud-pricing-api",
     "dev:ui": "dotenv -e .env -- npm run dev -w pricecloud-ui",
@@ -29,13 +30,16 @@
     "build:api-01": "npm run build -w pricecloud-api",
     "build:api-02": "npm run build -w cloud-pricing-api",
     "build:ui": "npm run build -w pricecloud-ui",
+
     "start:api-01": "dotenv -e .env -- npm run start:prod -w pricecloud-api",
     "start:api-02": "dotenv -e .env -- npm run start -w cloud-pricing-api",
     "start:ui": "dotenv -e .env -- npm run start -w pricecloud-ui",
+
     "lint": "npm run lint --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "format": "npm run format --workspaces --if-present",
+
     "audit": "npm audit --workspaces --include-workspace-root",
     "check:env": "sh scripts/check-env.sh .env"
   },
@@ -43,7 +47,7 @@
     "lodash": "^4.18.1",
     "qs": "^6.16.0",
     "postcss": "^8.5.28",
-    "multer": "^2.3.0",
+    "multer": "^2.4.0",
     "uuid": "^11.1.1",
     "@typescript-eslint/eslint-plugin": {
       "minimatch": "^9.0.7"
@@ -51,7 +55,11 @@
     "@typescript-eslint/parser": {
       "minimatch": "^9.0.7"
     },
-    "brace-expansion@^2": "^2.1.4"
+    "brace-expansion@^2": "^2.1.7",
+    "brace-expansion@^1": "^1.1.21",
+    "brace-expansion@^5": "^5.0.12",
+    "fast-uri@^3": "^3.1.8",
+    "js-yaml@^5": "^5.4.2"
   },
   "devDependencies": {
     "concurrently": "^9.2.1",
