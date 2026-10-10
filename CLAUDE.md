@@ -29,7 +29,10 @@ Overrides activos en la raíz y por qué:
 | `postcss ^8.5.28` | `next@15` fija `postcss@8.4.31` (XSS + lectura arbitraria vía sourceMappingURL). Evita tener que migrar a Next 16 |
 | `multer ^2.3.0` | `@nestjs/platform-express@11` fija `multer@2.2.0` (varios DoS + bypass de límite de tamaño) |
 | `uuid ^11.1.1` | transitiva de `typeorm`, `@apollo/server` y `googleapis-common` (falta de bounds check en v3/v5/v6) |
-| `brace-expansion@^2` → `^2.1.4` | DoS. **Debe ir versionado a `^2`**: un override global forzaría v2 sobre `minimatch@3`, que espera v1 |
+| `multer ^2.4.0` | `@nestjs/platform-express` fija una version vulnerable (DoS por escrituras huerfanas en uploads abortados) |
+| `brace-expansion@^1` → `^1.1.21`<br>`brace-expansion@^2` → `^2.1.7`<br>`brace-expansion@^5` → `^5.0.12` | DoS (varios avisos). **Las tres ramas estan instaladas a la vez** y las tres estaban afectadas: v1 la usa `minimatch@3`, v2 `minimatch@9`, v5 `nodemon` y `@nestjs/cli`. **Deben ir versionados**: un override global forzaria v2 o v5 sobre `minimatch@3`, que espera v1 |
+| `fast-uri@^3` → `^3.1.8` | transitiva de `ajv`. Versionado a `^3` a proposito: la 4.x es un salto de major |
+| `js-yaml@^5` → `^5.4.2` | via `@nestjs/swagger`. Versionado: las ramas 3.x y 4.x que usa eslint no estan afectadas |
 | `@typescript-eslint/{eslint-plugin,parser}` → `minimatch ^9.0.7` | ReDoS. Anidado a propósito: un `minimatch` global rompería a quien depende de `minimatch@3` |
 
 ### El override de `path-to-regexp` se retiró (rompía express 4)
@@ -41,6 +44,17 @@ Existía un `path-to-regexp: ^8.3.1` global para cubrir a `@nestjs/swagger`. Ya 
 No reintroducirlo. Si algún día hace falta de nuevo, tiene que ir versionado (`path-to-regexp@^8`), nunca global.
 
 Si `npm audit` reporta algo en estos paquetes, no usar `npm audit fix --force` — degradaría paquetes de NestJS a versiones obsoletas. Los overrides ya los cubren.
+
+### `npm audit` en 0 no garantiza que pase el pipeline
+El stage `Security Scan` usa **grype**, que tiene su propia base de avisos y se actualiza a diario, asi que puede fallar un dia sin que haya cambiado una linea del repo. Ademas **excluye `node_modules`**: lee el `package-lock.json`, o sea que refrescar el lockfile es justo lo que arregla sus hallazgos.
+
+Para reproducir lo que corre Jenkins, sin esperar a un despliegue:
+
+```bash
+docker run --rm -v "$PWD:/w" -w /w anchore/grype:latest dir:.   --exclude '**/node_modules/**' --exclude '**/build/**'   --exclude '**/dist/**' --exclude '**/.grype-bin/**' --fail-on high
+```
+
+Con `--fail-on high` solo bloquean los avisos High, pero conviene arreglar tambien los Medium de paso: el lockfile se refresca una sola vez.
 
 ### Los overrides nuevos no se aplican sobre un `node_modules` existente
 npm reutiliza el árbol ya instalado y **no re-resuelve** un override recién añadido, aunque se borre el lockfile. Tras tocar `overrides` hay que limpiar de verdad:
@@ -103,7 +117,9 @@ Ya no hace falta: los overrides de `minimatch` están anidados bajo `@typescript
 Motivo para no revivirlo: ese `npm install` dentro de `node_modules/eslint-plugin-import` arrastraba también **todas las devDependencies del propio plugin** (~700 paquetes sin lockfile ni auditar) dentro de `node_modules/`.
 
 ### `npm run lint -w api-01` está roto (preexistente, no es de seguridad)
-El script usa el glob `"{src,apps,libs,test}/**/*.ts"`. ESLint 8 lo convierte a ruta absoluta Windows (`C:\...\src\**\*.ts`) y se la pasa a `minimatch@3`, que a su vez llama a `brace-expansion`. Desde `brace-expansion@1.1.18` (versión parcheada por los avisos de DoS) las barras invertidas se tratan como escapes y se eliminan, con lo que el patrón queda destruido y ESLint responde `No files matching the pattern`.
+El script usa el glob `"{src,apps,libs,test}/**/*.ts"` y ESLint responde `No files matching the pattern`.
+
+**La causa no esta confirmada.** Se atribuyo a que `brace-expansion` eliminaba las barras invertidas de la ruta absoluta Windows que ESLint 8 pasa a `minimatch@3`, pero eso quedo descartado: con `brace-expansion@1.1.21` el `braceExpand` devuelve el patron intacto (`["C:\Users\x\src\**\*.ts"]`) y el lint **sigue fallando igual**. Habra que depurarlo de verdad si alguna vez estorba.
 
 Workaround: pasar directorios en lugar de un glob — `eslint src test --ext .ts`. Ojo antes de añadir `--fix`: hay ~4000 errores `prettier/prettier` de fin de línea CRLF, o sea que reescribiría prácticamente todos los archivos.
 
@@ -200,7 +216,40 @@ En el arbol de desarrollo todo se hoistea a la raiz, asi que un workspace puede 
 - `dotenv`, usado por `src/database/datasource.ts`, resolvia por el de api-02.
 - `express`, importado en `src/main.ts`, resolvia por el de api-02 (v4). Ojo: `@nestjs/platform-express` trae express **5** anidado, que no es alcanzable desde el codigo de api-01.
 
-Ambos estan ya declarados en `api-01/package.json`. Antes de mover cualquier import entre workspaces, comprobar que el paquete este declarado en el `package.json` de ese workspace y no solo hoistado.
+Y una tercera que aparecio despues, al refrescar el lockfile:
+
+- `socket.io`, importado en `src/price/price.gateway.ts`. api-01 declaraba `socket.io-client` y `@nestjs/platform-socket.io`, **pero no el paquete servidor**. Resolvia por el de api-02, hoisteado a la raiz.
+
+Esta ultima es ilustrativa de lo traicionero del asunto: **la imagen llevaba meses construyendo bien**. `@nestjs/platform-socket.io` pinea `socket.io` en la version exacta `4.8.3`, y api-02 la pide como `^4.8.3`; mientras ambas coincidieron, la copia hoisteada en la raiz servia para todos. Al resolver api-02 a `4.8.4`, la de NestJS quedo anidada (inalcanzable desde el codigo de api-01) y la de la raiz desaparecio de la imagen, que solo instala el workspace api-01. **Un cambio de version de un tercero destapo el fallo, sin tocar una linea del repo.**
+
+Las tres estan ya declaradas en `api-01/package.json`. Antes de mover cualquier import entre workspaces, comprobar que el paquete este declarado en el `package.json` de ese workspace y no solo hoistado.
+
+Para detectarlas sin esperar a que falle un despliegue, este script compara los imports del codigo con lo declarado:
+
+```bash
+node - api-01 <<'EOF'
+const fs=require('fs'),path=require('path');
+const ws=process.argv[2];
+const pkg=JSON.parse(fs.readFileSync(path.join(ws,'package.json'),'utf8'));
+const declared=new Set([...Object.keys(pkg.dependencies||{}),...Object.keys(pkg.devDependencies||{})]);
+const builtin=new Set(require('module').builtinModules);
+const found=new Set();
+(function walk(d){for(const e of fs.readdirSync(d,{withFileTypes:true})){const p=path.join(d,e.name);
+  if(e.isDirectory())return walk(p);
+  if(!e.name.endsWith('.ts'))continue;
+  const re=/(?:from\s+|require\()\s*['"]([^'"]+)['"]/g;let m;
+  const src=fs.readFileSync(p,'utf8');
+  while((m=re.exec(src))){const spec=m[1];
+    if(/^[.]|^@\/|^src\//.test(spec))continue;
+    const parts=spec.split('/');
+    const name=spec.startsWith('@')?parts.slice(0,2).join('/'):parts[0];
+    if(builtin.has(name)||declared.has(name))continue;
+    found.add(name);}}})(path.join(ws,'src'));
+console.log(found.size?[...found]:'sin fantasmas');
+EOF
+```
+
+Comprobado al anadir `socket.io`: api-02 y ui no tienen ninguna.
 
 ### Nombres de los recursos y datos de Postgres
 Los servicios, contenedores, imagenes y la red se renombraron de `uv-pricecloud-*` a `pricecloud-*`. **Las rutas de datos de Postgres se dejaron con el prefijo viejo a proposito** (`../uv-pricecloud-${ENV}-db-01`), para no dejar huerfanos los datos de despliegues ya existentes. Si algun dia se renombran, hay que mover los directorios en el host a mano.
