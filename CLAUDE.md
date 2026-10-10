@@ -33,6 +33,8 @@ Overrides activos en la raíz y por qué:
 | `brace-expansion@^1` → `^1.1.21`<br>`brace-expansion@^2` → `^2.1.7`<br>`brace-expansion@^5` → `^5.0.12` | DoS (varios avisos). **Las tres ramas estan instaladas a la vez** y las tres estaban afectadas: v1 la usa `minimatch@3`, v2 `minimatch@9`, v5 `nodemon` y `@nestjs/cli`. **Deben ir versionados**: un override global forzaria v2 o v5 sobre `minimatch@3`, que espera v1 |
 | `fast-uri@^3` → `^3.1.8` | transitiva de `ajv`. Versionado a `^3` a proposito: la 4.x es un salto de major |
 | `js-yaml@^5` → `^5.4.2` | via `@nestjs/swagger`. Versionado: las ramas 3.x y 4.x que usa eslint no estan afectadas |
+| `handlebars ^4.7.10` | critica, transitiva de `ts-jest` |
+| `shell-quote ^1.12.0` | critica, transitiva de `concurrently` |
 | `@typescript-eslint/{eslint-plugin,parser}` → `minimatch ^9.0.7` | ReDoS. Anidado a propósito: un `minimatch` global rompería a quien depende de `minimatch@3` |
 
 ### El override de `path-to-regexp` se retiró (rompía express 4)
@@ -55,6 +57,22 @@ docker run --rm -v "$PWD:/w" -w /w anchore/grype:latest dir:.   --exclude '**/no
 ```
 
 Con `--fail-on high` solo bloquean los avisos High, pero conviene arreglar tambien los Medium de paso: el lockfile se refresca una sola vez.
+
+### Avisos sin correccion publicada: `braces` y `sprintf-js`
+`npm audit` reporta ambos con rango vulnerable `*`, o sea que **no existe version corregida en npm**: la ultima publicada es la afectada. No hay override que valga.
+
+Lo importante es que **ninguno llega a produccion**: comprobado con `npm ls <pkg> --all --omit=dev`, que devuelve vacio para los dos. Entran solo por herramienta de desarrollo (`nodemon`, `jest`, `ts-loader`), y las imagenes se construyen con `npm ci --omit=dev`. Tampoco los marca grype hoy, asi que el pipeline pasa.
+
+El recuento de `npm audit` asusta mas de lo que es: cuenta **rutas**, no paquetes. 46 avisos eran esos dos paquetes repetidos por todo el arbol de dependencias de desarrollo.
+
+Si algun dia grype empieza a marcarlos, la salida es una entrada `ignore` documentada en [.grype.yaml](.grype.yaml) — nunca bajar el `--fail-on`.
+
+### Como leer un hallazgo sin `FIXED IN`
+Cuando grype o npm no dan version corregida, hay tres salidas, en este orden:
+
+1. **Subir el padre que lo arrastra.** Fue el caso de `node-forge@1.4.0` (sin fix): venia por `googleapis@110 -> google-auth-library -> gtoken -> google-p12-pem`. Las versiones modernas de googleapis ya no usan claves p12, asi que subir a `^185.0.0` **elimino el paquete del arbol entero** en vez de parchearlo.
+2. **Comprobar si es solo de desarrollo** (`npm ls <pkg> --omit=dev`). Si no llega a la imagen, el riesgo real es otro.
+3. **Ignorar con justificacion** en `.grype.yaml`, documentando por que y que hay que revisar despues.
 
 ### Los overrides nuevos no se aplican sobre un `node_modules` existente
 npm reutiliza el árbol ya instalado y **no re-resuelve** un override recién añadido, aunque se borre el lockfile. Tras tocar `overrides` hay que limpiar de verdad:
@@ -122,6 +140,14 @@ El script usa el glob `"{src,apps,libs,test}/**/*.ts"` y ESLint responde `No fil
 **La causa no esta confirmada.** Se atribuyo a que `brace-expansion` eliminaba las barras invertidas de la ruta absoluta Windows que ESLint 8 pasa a `minimatch@3`, pero eso quedo descartado: con `brace-expansion@1.1.21` el `braceExpand` devuelve el patron intacto (`["C:\Users\x\src\**\*.ts"]`) y el lint **sigue fallando igual**. Habra que depurarlo de verdad si alguna vez estorba.
 
 Workaround: pasar directorios en lugar de un glob — `eslint src test --ext .ts`. Ojo antes de añadir `--fix`: hay ~4000 errores `prettier/prettier` de fin de línea CRLF, o sea que reescribiría prácticamente todos los archivos.
+
+### api-02 aguanta paquetes modernos pese a su TypeScript 4.x
+Se subieron de golpe `googleapis` 110 -> 185 (16 majors), `@graphql-tools/schema` 9 -> 10 y `@graphql-tools/utils` 9 -> 12, y **compila y arranca sin tocar una linea de codigo**. El motivo es que la superficie que usa api-02 es minima y estable:
+
+- de googleapis solo `google.auth.GoogleAuth`, `google.compute({version:'v1'})`, `.regions/.zones/.machineTypes.list` y el tipo `compute_v1.Schema$MachineType`;
+- de graphql-tools solo `makeExecutableSchema` y el tipo `IResolvers`.
+
+Antes de descartar un salto de major por su numero, mirar que se usa de verdad con un `grep`. Y comprobarlo **dentro de la imagen**, no solo con `tsc`: aqui se ejecuto la llamada real `makeExecutableSchema({typeDefs, resolvers})` mas una consulta de prueba en el contenedor de api-02.
 
 ### TypeScript versions: api-02 usa v4.x, los demás v5.x
 Con hoisting, TypeScript 5.x de api-01/ui se hoistea al root. api-02 conserva TypeScript 4.x en su propio `node_modules`. La consecuencia no obvia: los tipos resueltos por tsc en api-02 a veces reflejan las APIs de la versión hoisted (e.g. `prettier.format` se tipea como `async` de v3 aunque api-02 instale prettier v2 localmente). Añadir `await` es la solución correcta y segura para ambas versiones.
